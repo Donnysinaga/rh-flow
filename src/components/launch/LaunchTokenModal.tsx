@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useAccount, useSendTransaction, useSwitchChain, useChainId, useBalance } from 'wagmi';
 import { parseEther, encodeFunctionData, formatEther } from 'viem';
@@ -207,8 +208,13 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployedTxHash, setDeployedTxHash] = useState<string | null>(null);
   const [deployedTokenAddr, setDeployedTokenAddr] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const userEthBalance = balanceData ? parseFloat(formatEther(balanceData.value)) : 0;
   const launchFeeEth = 0.0005;
@@ -443,26 +449,26 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   };
 
   if (deployedTxHash) {
-    return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-        <div className="relative w-full max-w-md bg-[#121316] border border-emerald-500/40 rounded-2xl shadow-2xl p-6 font-mono text-xs space-y-4 text-center">
-          <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400 text-2xl">
+    return createPortal(
+      <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
+        <div className="relative w-full max-w-md bg-[#0e1014] border border-[#00C805]/40 rounded-2xl shadow-2xl p-6 font-mono text-xs space-y-4 text-center z-10">
+          <div className="w-14 h-14 bg-[#00C805]/10 border border-[#00C805]/30 rounded-full flex items-center justify-center mx-auto text-[#00C805] text-2xl">
             🚀
           </div>
           <div className="space-y-1">
             <h3 className="text-base font-bold text-zinc-100 uppercase">Token Deployed!</h3>
             <p className="text-zinc-400 text-[11px]">
-              <span className="text-emerald-400 font-bold">{name} ({symbol})</span> is now live on Robinhood Chain with 1B tokens in its fair bonding curve.
+              <span className="text-[#00C805] font-bold">{name} ({symbol})</span> is now live on Robinhood Chain with 1B tokens in its fair bonding curve.
             </p>
           </div>
 
-          <div className="p-3 bg-zinc-900/80 border border-zinc-800 rounded-lg text-left text-[11px] space-y-1 text-zinc-400 truncate">
+          <div className="p-3 bg-[#14161b] border border-zinc-800 rounded-lg text-left text-[11px] space-y-1 text-zinc-400 truncate">
             <div className="text-zinc-500 text-[10px] uppercase">Transaction Hash:</div>
             <a
               href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/tx/${deployedTxHash}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline block truncate font-mono"
+              className="text-[#00C805] hover:underline block truncate font-mono"
             >
               {deployedTxHash}
             </a>
@@ -472,29 +478,30 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             <button
               type="button"
               onClick={handleGoToTrade}
-              className="w-full py-2.5 bg-lime-400 hover:bg-lime-300 text-zinc-950 font-bold rounded-xl transition-colors cursor-pointer shadow-lg shadow-lime-400/20 text-xs"
+              className="w-full py-2.5 bg-[#00C805] hover:bg-[#00E806] text-black font-bold rounded-xl transition-colors cursor-pointer shadow-lg shadow-[#00C805]/20 text-xs"
             >
               Go to Token & Trade Now 🚀
             </button>
             <button
               type="button"
               onClick={() => { setDeployedTxHash(null); onClose(); }}
-              className="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded-xl transition-colors text-xs"
+              className="w-full py-2 bg-[#14161b] hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded-xl transition-colors text-xs"
             >
               Close
             </button>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   }
 
-  return (
-    <div className="fixed inset-0 z-[9999] overflow-y-auto p-3 sm:p-6 flex min-h-full items-center justify-center bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl max-h-[88vh] flex flex-col bg-[#121316] border border-zinc-800/90 rounded-2xl shadow-2xl overflow-hidden font-sans text-xs my-auto">
+  return createPortal(
+    <div className="fixed inset-0 z-[999999] overflow-y-auto p-3 sm:p-6 flex min-h-full items-center justify-center bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-4xl max-h-[88vh] flex flex-col bg-[#0e1014] border border-zinc-800 rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.95)] overflow-hidden font-sans text-xs my-auto z-10">
         
         {/* Modal Top Header (Fixed at top) */}
-        <div className="shrink-0 flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-zinc-800/80 bg-[#17181c]">
+        <div className="shrink-0 flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-zinc-800 bg-[#14161b]">
           <div className="flex items-center gap-2.5">
             <PonsLogo className="w-5 h-5" size={20} />
             <div>
@@ -509,23 +516,23 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="cursor-pointer p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60 transition-colors"
+            className="cursor-pointer p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
           >
             ✕
           </button>
         </div>
 
         {/* Modal Content: 2-Column Responsive Layout with Clean Scroll */}
-        <form onSubmit={handleLaunch} className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12">
+        <form onSubmit={handleLaunch} className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 bg-[#0e1014]">
           
           {/* Left Column: Form Inputs (7 Cols) */}
-          <div className="lg:col-span-7 p-5 sm:p-6 space-y-3.5 border-b lg:border-b-0 lg:border-r border-zinc-800/80">
+          <div className="lg:col-span-7 p-5 sm:p-6 space-y-3.5 border-b lg:border-b-0 lg:border-r border-zinc-800 bg-[#0e1014]">
             
             {/* Token Name & Symbol */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-[12px] font-medium text-zinc-300">
-                  Token Name <span className="text-lime-400">*</span>
+                  Token Name <span className="text-[#00C805]">*</span>
                 </label>
                 <input
                   type="text"
@@ -533,12 +540,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                   placeholder="e.g. Robinhood Flow"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs transition-colors"
                 />
               </div>
               <div className="space-y-1.5">
                 <label className="text-[12px] font-medium text-zinc-300">
-                  Symbol <span className="text-lime-400">*</span>
+                  Symbol <span className="text-[#00C805]">*</span>
                 </label>
                 <input
                   type="text"
@@ -546,7 +553,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                   placeholder="e.g. FLOW"
                   value={symbol}
                   onChange={(e) => setSymbol(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs uppercase transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs uppercase transition-colors"
                 />
               </div>
             </div>
@@ -559,7 +566,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 placeholder="What is this token about?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs resize-none transition-colors"
+                className="w-full px-3.5 py-2.5 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs resize-none transition-colors"
               />
             </div>
 
@@ -567,15 +574,15 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             <div className="space-y-1.5">
               <label className="text-[12px] font-medium text-zinc-300">Token image</label>
               {imagePreview ? (
-                <div className="p-3 bg-[#1a1b20] border border-lime-400/30 rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-[#181a20] border border-[#00C805]/30 rounded-xl flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden flex items-center justify-center">
+                    <div className="w-11 h-11 rounded-lg bg-black border border-zinc-800 overflow-hidden flex items-center justify-center">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={imagePreview} alt="Logo" className="w-full h-full object-cover" />
                     </div>
                     <div>
                       <div className="text-zinc-200 font-semibold text-xs">Image Attached</div>
-                      <div className="text-[10px] text-lime-400">Ready for token metadata</div>
+                      <div className="text-[10px] text-[#00C805]">Ready for token metadata</div>
                     </div>
                   </div>
                   <button
@@ -589,9 +596,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               ) : (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-4 px-4 border border-dashed border-zinc-750 hover:border-lime-400/50 bg-[#1a1b20]/60 hover:bg-[#1a1b20] rounded-xl flex items-center justify-center gap-2.5 cursor-pointer transition-all group"
+                  className="w-full py-4 px-4 border border-dashed border-zinc-750 hover:border-[#00C805]/50 bg-[#181a20]/60 hover:bg-[#181a20] rounded-xl flex items-center justify-center gap-2.5 cursor-pointer transition-all group"
                 >
-                  <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-lime-400">
+                  <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-[#00C805]">
                     🖼️
                   </div>
                   <span className="text-zinc-300 font-medium text-xs">Choose image</span>
@@ -622,7 +629,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     placeholder="handle"
                     value={twitter}
                     onChange={(e) => setTwitter(e.target.value)}
-                    className="w-full pl-14 pr-3 py-2 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                    className="w-full pl-14 pr-3 py-2 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
                   />
                 </div>
 
@@ -634,7 +641,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     placeholder="community"
                     value={telegram}
                     onChange={(e) => setTelegram(e.target.value)}
-                    className="w-full pl-12 pr-3 py-2 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                    className="w-full pl-12 pr-3 py-2 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
                   />
                 </div>
               </div>
@@ -653,7 +660,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     const val = e.target.value.trim();
                     setWebsite(val ? (val.startsWith('http') ? val : `https://${val}`) : '');
                   }}
-                  className="w-full pl-20 pr-3 py-2 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                  className="w-full pl-20 pr-3 py-2 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
                 />
               </div>
             </div>
@@ -666,7 +673,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               <button
                 type="button"
                 onClick={() => setIsPairDropdownOpen(!isPairDropdownOpen)}
-                className="w-full px-3.5 py-2.5 bg-[#1a1b20] hover:bg-[#202127] border border-zinc-800 focus:border-lime-400/60 rounded-xl flex items-center justify-between text-zinc-200 transition-colors cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-[#181a20] hover:bg-[#202228] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl flex items-center justify-between text-zinc-200 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   <div className="w-5 h-5 flex items-center justify-center shrink-0">
@@ -686,7 +693,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     className="fixed inset-0 z-40"
                     onClick={() => setIsPairDropdownOpen(false)}
                   />
-                  <div className="absolute left-0 right-0 top-[102%] z-50 bg-[#16171b] border border-zinc-750 rounded-xl shadow-2xl overflow-hidden py-1 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95 duration-150 font-sans">
+                  <div className="absolute left-0 right-0 top-[102%] z-50 bg-[#14161b] border border-zinc-750 rounded-xl shadow-2xl overflow-hidden py-1 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95 duration-150 font-sans">
                     {PAIRED_ASSETS.map((asset) => {
                       const isSelected = selectedPair.symbol === asset.symbol;
                       return (
@@ -699,8 +706,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                           }}
                           className={`w-full px-3.5 py-2.5 flex items-center justify-between text-left transition-colors cursor-pointer ${
                             isSelected
-                              ? 'bg-[#222329] text-zinc-100 font-semibold'
-                              : 'hover:bg-[#1e1f25] text-zinc-300'
+                              ? 'bg-[#22242c] text-zinc-100 font-semibold'
+                              : 'hover:bg-[#1a1c22] text-zinc-300'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
@@ -723,7 +730,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             {/* Developer Buy Box (Pons-Style) */}
             <div className="space-y-1.5">
               <label className="text-[12px] font-medium text-zinc-300">Developer buy</label>
-              <div className="p-3 bg-[#1a1b20] border border-zinc-800 rounded-xl space-y-2">
+              <div className="p-3 bg-[#181a20] border border-zinc-800 rounded-xl space-y-2">
                 <div className="flex items-center justify-between">
                   <input
                     type="number"
@@ -735,7 +742,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     className="w-2/3 bg-transparent text-lg sm:text-xl font-mono text-zinc-100 placeholder-zinc-600 focus:outline-none"
                   />
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 bg-[#131417] px-2.5 py-1 rounded-lg border border-zinc-800">
+                    <div className="flex items-center gap-1.5 bg-[#0e1014] px-2.5 py-1 rounded-lg border border-zinc-800">
                       <div className="w-4 h-4 flex items-center justify-center shrink-0">
                         {selectedPair.renderLogo('w-4 h-4')}
                       </div>
@@ -751,7 +758,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                   </div>
                 </div>
 
-                <div className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800/60 flex items-center justify-between">
+                <div className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800 flex items-center justify-between">
                   <span>
                     {userEthBalance > 0 ? userEthBalance.toFixed(4) : '0,00'} available, bought in the launch transaction
                   </span>
@@ -779,7 +786,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     <select
                       value={creatorTaxBps}
                       onChange={(e) => setCreatorTaxBps(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#1a1b20] border border-zinc-800 rounded-xl text-zinc-200 text-xs focus:outline-none"
+                      className="w-full px-3 py-2 bg-[#181a20] border border-zinc-800 rounded-xl text-zinc-200 text-xs focus:outline-none"
                     >
                       <option value="0">0.00% Tax (Zero Tax)</option>
                       <option value="50">0.50% Tax</option>
@@ -793,7 +800,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             </div>
 
             {/* Bottom Launch Button & Fee Subtext */}
-            <div className="pt-3 border-t border-zinc-800/80 space-y-2">
+            <div className="pt-3 border-t border-zinc-800 space-y-2">
               <div className="flex items-center justify-between text-[11px] text-zinc-400">
                 <span>
                   {selectedPair.symbol} pair, ETH {totalEthDue > 0 ? totalEthDue.toFixed(4) : '0,0005'} due
@@ -834,12 +841,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           </div>
 
           {/* Right Column: Live Token Preview Card (5 Cols) */}
-          <div className="lg:col-span-5 p-6 bg-[#17181c]/50 flex flex-col justify-start">
-            <div className="p-5 bg-[#121316] border border-zinc-800 rounded-2xl space-y-4 sticky top-6">
+          <div className="lg:col-span-5 p-5 sm:p-6 bg-[#14161b] flex flex-col justify-start">
+            <div className="p-5 bg-[#0e1014] border border-zinc-800 rounded-2xl space-y-4 sticky top-6">
               
               {/* Token Logo & Title Preview */}
               <div className="space-y-3">
-                <div className="w-16 h-16 rounded-xl bg-[#1c1d22] border border-zinc-800 flex items-center justify-center overflow-hidden">
+                <div className="w-16 h-16 rounded-xl bg-[#181a20] border border-zinc-800 flex items-center justify-center overflow-hidden">
                   {imagePreview ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
@@ -859,7 +866,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               </div>
 
               {/* Specs Table */}
-              <div className="pt-2 border-t border-zinc-800/80 space-y-2.5 text-[11px]">
+              <div className="pt-2 border-t border-zinc-800 space-y-2.5 text-[11px]">
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Launch fee</span>
                   <span className="text-zinc-200 font-medium">0.0005 ETH</span>
@@ -892,7 +899,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         </form>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
