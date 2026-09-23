@@ -24,32 +24,37 @@ const GitHubIcon = () => (
   </svg>
 );
 
+import { RobinhoodFeatherLogo } from '../ui/RobinhoodLogo';
+
 export function Header() {
   const [isLaunchModalOpen, setIsLaunchModalOpen] = useState(false);
 
   return (
-    <header className="h-14 border-b border-zinc-800 bg-[#09090b] flex items-center justify-between px-4 sticky top-0 z-40">
+    <header className="h-14 border-b border-zinc-800 bg-[#000000]/90 backdrop-blur-md flex items-center justify-between px-4 sticky top-0 z-40">
       {/* Brand Logo & Clean Network Pill */}
       <div className="flex items-center gap-4">
-        <Link href="/" className="font-bold text-zinc-100 text-lg tracking-tight flex items-center gap-2 group cursor-pointer">
-          <span className="text-emerald-400 font-mono text-xl font-black">RH</span>
-          <span className="tracking-wider">FLOW</span>
+        <Link href="/" className="font-bold text-zinc-100 text-lg tracking-tight flex items-center gap-2.5 group cursor-pointer">
+          <RobinhoodFeatherLogo className="w-6 h-6 transition-transform group-hover:scale-110" size={24} />
+          <div className="flex items-baseline gap-1 font-sans">
+            <span className="text-[#00C805] text-xl font-black tracking-tight">RH</span>
+            <span className="tracking-wider text-zinc-100 font-bold text-base">FLOW</span>
+          </div>
         </Link>
-        <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-xs font-mono text-zinc-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-[#12161a] border border-zinc-800 rounded-full text-xs font-mono text-zinc-300">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00C805] animate-pulse"></span>
           <span>Robinhood Chain</span>
         </div>
       </div>
 
       {/* Right Navigation, Launch Button & Wallet */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Launch Token Button */}
+        {/* Launch Token Button with Robinhood Neon Green */}
         <button
           type="button"
           onClick={() => setIsLaunchModalOpen(true)}
-          className="cursor-pointer px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-sm"
+          className="cursor-pointer px-3.5 py-1.5 bg-[#00C805] hover:bg-[#00E806] active:scale-95 text-black font-bold rounded-xl text-xs font-sans transition-all flex items-center gap-1.5 shadow-lg shadow-[#00C805]/20"
         >
-          <span className="text-emerald-400 font-bold">+</span>
+          <span className="text-black font-extrabold text-sm">+</span>
           <span>Launch Token</span>
         </button>
 

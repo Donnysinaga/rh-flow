@@ -744,7 +744,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     <button
                       type="button"
                       onClick={handleMaxBuy}
-                      className="px-2.5 py-1 bg-lime-400 hover:bg-lime-300 text-zinc-950 font-bold rounded-lg text-[11px] transition-colors cursor-pointer"
+                      className="px-2.5 py-1 bg-[#00C805] hover:bg-[#00E806] text-black font-bold rounded-lg text-[11px] transition-colors cursor-pointer"
                     >
                       Max
                     </button>
@@ -806,15 +806,15 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 disabled={isDeploying || !isFormValid || !isConnected}
                 className={`w-full py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
                   !isFormValid || !isConnected
-                    ? 'bg-[#404c26] text-zinc-400 cursor-not-allowed'
+                    ? 'bg-[#1a381e] text-zinc-500 cursor-not-allowed'
                     : isDeploying
-                    ? 'bg-lime-500 text-zinc-950 cursor-wait'
-                    : 'bg-lime-400 hover:bg-lime-300 text-zinc-950 shadow-lime-400/20 active:scale-[0.99]'
+                    ? 'bg-[#00C805] text-black cursor-wait'
+                    : 'bg-[#00C805] hover:bg-[#00E806] text-black shadow-[#00C805]/20 active:scale-[0.99]'
                 }`}
               >
                 {isDeploying ? (
                   <>
-                    <div className="w-3.5 h-3.5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                     <span>
                       {initialBuyNum > 0 ? 'Deploying & Buying Atomically...' : 'Deploying on Robinhood Chain...'}
                     </span>
@@ -878,11 +878,11 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Graduation</span>
-                  <span className="text-lime-400 font-medium">{selectedPair.target}</span>
+                  <span className="text-[#00C805] font-medium">{selectedPair.target}</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Liquidity</span>
-                  <span className="text-lime-400 font-medium">100% Locked</span>
+                  <span className="text-[#00C805] font-medium">100% Locked</span>
                 </div>
               </div>
 

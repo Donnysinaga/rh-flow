@@ -3,22 +3,28 @@
 @theme {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+  --color-robinhood-green: #00C805;
+  --color-robinhood-green-hover: #00E806;
+  --color-robinhood-green-dim: rgba(0, 200, 5, 0.15);
+  --color-robinhood-red: #FF5000;
+  --color-robinhood-dark: #000000;
+  --color-robinhood-surface: #101216;
 }
 
-/* Custom scrollbar for dark theme */
+/* Custom scrollbar for Robinhood dark theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
   background: #27272a;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #00C805;
 }
 
 /* Pulse animation for live indicator */
