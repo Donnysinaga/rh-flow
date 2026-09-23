@@ -115,30 +115,65 @@ export async function getPonsTokenDetails(tokenAddress: string): Promise<PonsLau
     const phaseLabel = phaseLabels[launch.phase] || 'Unknown';
 
     // Query Token Metadata & ERC-20 attributes
-    const [name, symbol, decimals, totalSupply, tokenInfoResult] = await Promise.all([
+    const [name, symbol, decimals, totalSupply, logoRes, descRes, socialsRes, tokenInfoResult] = await Promise.all([
       publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'name' }).catch(() => 'Unknown'),
       publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'symbol' }).catch(() => 'UNKNOWN'),
       publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'decimals' }).catch(() => 18),
       publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'totalSupply' }).catch(() => BigInt(0)),
+      publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'logo' }).catch(() => ''),
+      publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'description' }).catch(() => ''),
+      publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'socials' }).catch(() => null),
       publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: PONS_V2_TOKEN_ABI, functionName: 'getTokenInfo' }).catch(() => null),
     ]);
 
     let metadata: PonsTokenMetadata | undefined = undefined;
-    if (tokenInfoResult && Array.isArray(tokenInfoResult)) {
-      const [deployer, logo, description, socials] = tokenInfoResult;
-      metadata = {
-        tokenDeployer: deployer,
-        tokenLogo: formatIpfsUrl(logo),
-        tokenDescription: description,
-        tokenSocials: {
-          twitter: socials?.twitter || '',
-          telegram: socials?.telegram || '',
-          discord: socials?.discord || '',
-          website: socials?.website || '',
-          farcaster: socials?.farcaster || '',
-        },
-      };
+    
+    // Extract logo & description (from direct getters or tokenInfoResult fallback)
+    let rawLogo = (logoRes as string) || '';
+    let rawDesc = (descRes as string) || '';
+    let twitter = '';
+    let telegram = '';
+    let discord = '';
+    let website = '';
+    let farcaster = '';
+
+    if (Array.isArray(socialsRes)) {
+      twitter = socialsRes[0] || '';
+      telegram = socialsRes[1] || '';
+      discord = socialsRes[2] || '';
+      website = socialsRes[3] || '';
+      farcaster = socialsRes[4] || '';
+    } else if (socialsRes && typeof socialsRes === 'object') {
+      twitter = (socialsRes as any).twitter || '';
+      telegram = (socialsRes as any).telegram || '';
+      discord = (socialsRes as any).discord || '';
+      website = (socialsRes as any).website || '';
+      farcaster = (socialsRes as any).farcaster || '';
     }
+
+    if (tokenInfoResult && Array.isArray(tokenInfoResult)) {
+      const [deployer, infoLogo, infoDesc, infoSocials] = tokenInfoResult;
+      if (!rawLogo && infoLogo) rawLogo = infoLogo;
+      if (!rawDesc && infoDesc) rawDesc = infoDesc;
+      if (!twitter && infoSocials?.twitter) twitter = infoSocials.twitter;
+      if (!telegram && infoSocials?.telegram) telegram = infoSocials.telegram;
+      if (!discord && infoSocials?.discord) discord = infoSocials.discord;
+      if (!website && infoSocials?.website) website = infoSocials.website;
+      if (!farcaster && infoSocials?.farcaster) farcaster = infoSocials.farcaster;
+    }
+
+    metadata = {
+      tokenDeployer: launch.deployer,
+      tokenLogo: formatIpfsUrl(rawLogo),
+      tokenDescription: rawDesc,
+      tokenSocials: {
+        twitter,
+        telegram,
+        discord,
+        website,
+        farcaster,
+      },
+    };
 
     // Query Curve state if curve address exists
     let curve: PonsCurveState | undefined = undefined;

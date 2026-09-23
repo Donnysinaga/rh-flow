@@ -33,7 +33,7 @@ export const ERC20_ABI = parseAbi([
 // Official Pons v2 Protocol ABIs on Robinhood Chain
 export const PONS_V2_FACTORY_ABI = parseAbi([
   'struct Socials { string twitter; string telegram; string discord; string website; string farcaster; }',
-  'struct LaunchParams { string name; string symbol; string description; string logo; Socials socials; address creatorFeeRecipient; uint16 creatorTaxBps; bool buybackEnabled; bytes32 poolSalt; bytes32 tokenSalt; }',
+  'struct LaunchParams { string name; string symbol; string logo; string description; Socials socials; address creatorFeeRecipient; uint16 creatorTaxBps; bool buybackEnabled; bytes32 expectedEconomics; bytes32 salt; }',
   'struct LaunchConfig { uint256 supply; uint256 curveFeeBps; uint256 phantomQuote; uint256 graduationThreshold; uint24 poolFee; int24 tickSpacing; bool enabled; }',
   'struct LaunchedToken { address token; address curve; address deployer; address creatorFeeRecipient; address pairToken; uint256 graduationThreshold; uint24 poolFee; int24 tickSpacing; uint16 creatorTaxBps; bool buybackEnabled; uint8 phase; uint256 sweptQuote; uint256 sweptTokens; uint256 sweptAt; bool exists; }',
   'struct FeePolicy { address protocolFeeRecipient; uint16 protocolFeeShareBps; uint16 buybackBurnBps; uint16 hookFeeBps; uint16 maxInternalPriceImpactBps; }',
@@ -56,7 +56,7 @@ export const PONS_V2_FACTORY_ABI = parseAbi([
 
 export const PONS_V2_LAUNCH_AND_BUY_ABI = parseAbi([
   'struct Socials { string twitter; string telegram; string discord; string website; string farcaster; }',
-  'struct LaunchParams { string name; string symbol; string description; string logo; Socials socials; address creatorFeeRecipient; uint16 creatorTaxBps; bool buybackEnabled; bytes32 poolSalt; bytes32 tokenSalt; }',
+  'struct LaunchParams { string name; string symbol; string logo; string description; Socials socials; address creatorFeeRecipient; uint16 creatorTaxBps; bool buybackEnabled; bytes32 expectedEconomics; bytes32 salt; }',
   'function launchAndBuy(LaunchParams params, uint256 launchConfigId, address pairToken, uint256 amountIn, uint256 minTokensOut, address recipient, address[] snipeTaxExemptions) payable returns (address token, address curve, uint256 tokensBought)',
 ]);
 
@@ -84,11 +84,15 @@ export const PONS_V2_CURVE_ABI = parseAbi([
 export const PONS_V2_TOKEN_ABI = parseAbi([
   'struct Socials { string twitter; string telegram; string discord; string website; string farcaster; }',
   'function getTokenInfo() view returns (address tokenDeployer, string tokenLogo, string tokenDescription, Socials tokenSocials)',
+  'function logo() view returns (string)',
+  'function description() view returns (string)',
+  'function socials() view returns (string, string, string, string, string)',
   'function name() view returns (string)',
   'function symbol() view returns (string)',
   'function decimals() view returns (uint8)',
   'function totalSupply() view returns (uint256)',
   'function balanceOf(address account) view returns (uint256)',
+  'function curve() view returns (address)',
 ]);
 
 export const PONS_V2_BUYBACK_VAULT_ABI = parseAbi([

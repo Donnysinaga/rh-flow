@@ -325,68 +325,82 @@ export function TokenDetailView({ address }: TokenDetailProps) {
             </div>
           </div>
 
-          {/* Token Description & Socials */}
-          {(token.description || token.socials) && (
-            <div className="bg-zinc-900/30 p-3 rounded border border-zinc-800/50 text-xs space-y-2">
-              {token.description && (
-                <p className="text-zinc-300 leading-relaxed font-sans text-xs">{token.description}</p>
-              )}
-              {token.socials && (
-                <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-[11px]">
-                  {token.socials.website && (
-                    <a
-                      href={token.socials.website.startsWith('http') ? token.socials.website : `https://${token.socials.website}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded transition-colors"
-                    >
-                      Website ↗
-                    </a>
-                  )}
-                  {token.socials.twitter && (
-                    <a
-                      href={token.socials.twitter.startsWith('http') ? token.socials.twitter : `https://x.com/${token.socials.twitter.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded transition-colors"
-                    >
-                      Twitter / X ↗
-                    </a>
-                  )}
-                  {token.socials.telegram && (
-                    <a
-                      href={token.socials.telegram.startsWith('http') ? token.socials.telegram : `https://t.me/${token.socials.telegram.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded transition-colors"
-                    >
-                      Telegram ↗
-                    </a>
-                  )}
-                  {token.socials.discord && (
-                    <a
-                      href={token.socials.discord}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded transition-colors"
-                    >
-                      Discord ↗
-                    </a>
-                  )}
-                  {token.socials.farcaster && (
-                    <a
-                      href={token.socials.farcaster.startsWith('http') ? token.socials.farcaster : `https://warpcast.com/${token.socials.farcaster}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded transition-colors"
-                    >
-                      Farcaster ↗
-                    </a>
-                  )}
-                </div>
-              )}
+          {/* Token About, Description & Socials */}
+          <div className="bg-[#12141a] p-4 rounded-xl border border-zinc-800/80 text-xs space-y-2.5">
+            <div className="text-[13px] font-semibold text-zinc-200">About</div>
+            
+            <p className="text-zinc-300 leading-relaxed font-sans text-xs whitespace-pre-line">
+              {token.description || 'No description yet.'}
+            </p>
+
+            <div className="text-[11px] text-zinc-500 flex flex-wrap items-center gap-2 pt-0.5">
+              <span>
+                Creator <CopyableAddress address={token.pons.deployer || token.pons.creatorFeeRecipient} className="text-zinc-400 hover:text-zinc-200" />
+              </span>
+              <span>·</span>
+              <span>{(token.pons.creatorTaxBps / 100).toFixed(2)}% creator tax</span>
             </div>
-          )}
+
+            {token.socials && (token.socials.website || token.socials.twitter || token.socials.telegram || token.socials.discord || token.socials.farcaster) && (
+              <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-[11px]">
+                {token.socials.website && (
+                  <a
+                    href={token.socials.website.startsWith('http') ? token.socials.website : `https://${token.socials.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                  >
+                    <span>Website</span>
+                    <span className="text-[10px] text-zinc-400">↗</span>
+                  </a>
+                )}
+                {token.socials.twitter && (
+                  <a
+                    href={token.socials.twitter.startsWith('http') ? token.socials.twitter : `https://x.com/${token.socials.twitter.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                  >
+                    <span>Twitter / X</span>
+                    <span className="text-[10px] text-zinc-400">↗</span>
+                  </a>
+                )}
+                {token.socials.telegram && (
+                  <a
+                    href={token.socials.telegram.startsWith('http') ? token.socials.telegram : `https://t.me/${token.socials.telegram.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                  >
+                    <span>Telegram</span>
+                    <span className="text-[10px] text-zinc-400">↗</span>
+                  </a>
+                )}
+                {token.socials.discord && (
+                  <a
+                    href={token.socials.discord.startsWith('http') ? token.socials.discord : `https://${token.socials.discord}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                  >
+                    <span>Discord</span>
+                    <span className="text-[10px] text-zinc-400">↗</span>
+                  </a>
+                )}
+                {token.socials.farcaster && (
+                  <a
+                    href={token.socials.farcaster.startsWith('http') ? token.socials.farcaster : `https://warpcast.com/${token.socials.farcaster}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                  >
+                    <span>Farcaster</span>
+                    <span className="text-[10px] text-zinc-400">↗</span>
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
 

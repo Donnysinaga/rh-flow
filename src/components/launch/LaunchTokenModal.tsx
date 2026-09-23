@@ -318,20 +318,20 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       const launchParams = {
         name: name.trim(),
         symbol: symbol.trim().toUpperCase(),
-        description: description.trim(),
         logo: cleanLogo,
+        description: description.trim(),
         socials: {
           twitter: twitter.trim() ? (twitter.startsWith('http') ? twitter : `https://x.com/${twitter.replace('@', '')}`) : '',
           telegram: telegram.trim() ? (telegram.startsWith('http') ? telegram : `https://t.me/${telegram.replace('@', '')}`) : '',
           discord: '',
-          website: website.trim(),
+          website: website.trim() ? (website.startsWith('http') ? website : `https://${website}`) : '',
           farcaster: '',
         },
         creatorFeeRecipient: address as `0x${string}`,
         creatorTaxBps: parseInt(creatorTaxBps, 10) || 100,
         buybackEnabled: true,
-        poolSalt: '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`,
-        tokenSalt: randomSalt,
+        expectedEconomics: '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`,
+        salt: randomSalt,
       };
 
       let callData: `0x${string}`;
