@@ -12,7 +12,7 @@ export function TokenFilters({ activeFilter, onFilterChange, watchlistCount = 0 
   const filters = [
     { id: 'all', label: 'All Tokens', icon: null },
     { id: 'new-pairs', label: 'New Pairs', icon: <span className="text-emerald-400 font-bold">✨</span> },
-    { id: 'pons', label: 'Pons v2 Launches', icon: <PonsLogo className="w-3.5 h-3.5" size={14} /> },
+    { id: 'pons', label: 'Fair Flow Curves', icon: <PonsLogo className="w-3.5 h-3.5" size={14} /> },
     { id: 'watchlist', label: `Watchlist (${watchlistCount})`, icon: <span className="text-amber-400">★</span> },
     { id: 'top-volume', label: 'Top Volume', icon: null },
     { id: 'market-cap', label: 'Market Cap', icon: null },

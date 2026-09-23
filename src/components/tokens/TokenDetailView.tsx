@@ -235,25 +235,20 @@ export function TokenDetailView({ address }: TokenDetailProps) {
         </div>
       </div>
 
-      {/* Pons Family v2 Protocol Section */}
+      {/* Fair Flow Curve Protocol Section */}
       {token.isPonsV2 && token.pons && (
         <div className="bg-zinc-950 border border-emerald-500/30 rounded-lg p-4 sm:p-5 space-y-4 font-mono">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-3">
             <div className="flex items-center gap-2.5">
               <PonsLogo className="w-5 h-5 shrink-0" size={20} />
-              <span className="text-xs sm:text-sm font-bold text-emerald-400">Pons Family v2 Protocol</span>
+              <span className="text-xs sm:text-sm font-bold text-emerald-400">Fair Flow Bonding Curve</span>
               <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-300">
                 {token.pons.phaseLabel}
               </span>
             </div>
-            <a
-              href="https://docs.ponsfamily.com/v2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[11px] text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
-            >
-              Protocol Docs (docs.ponsfamily.com/v2) ↗
-            </a>
+            <div className="text-[11px] text-zinc-400 flex items-center gap-1">
+              <span>Robinhood Chain Verified Curve</span>
+            </div>
           </div>
 
           {/* Bonding Curve Progress Bar */}

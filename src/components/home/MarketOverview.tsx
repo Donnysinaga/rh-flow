@@ -41,25 +41,18 @@ export function MarketOverview({
         </div>
       </div>
 
-      {/* Metric 3: Pons v2 Launchpad */}
+      {/* Metric 3: RH Flow Engine */}
       <div className="bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-lg p-3 transition-colors flex flex-col justify-between">
         <div className="flex items-center justify-between text-zinc-500 text-[11px]">
           <span className="flex items-center gap-1.5">
             <PonsLogo className="w-3.5 h-3.5" size={14} />
-            <span className="text-zinc-300 font-medium">Pons Family v2</span>
+            <span className="text-zinc-300 font-medium">RH Flow Engine</span>
           </span>
-          <a
-            href="https://docs.ponsfamily.com/v2"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] text-emerald-400 hover:underline"
-          >
-            Docs ↗
-          </a>
+          <span className="text-[10px] text-emerald-400">Live</span>
         </div>
         <div className="mt-1.5 flex items-baseline justify-between">
           <span className="text-sm sm:text-base font-bold text-zinc-100">4.2 ETH</span>
-          <span className="text-[10px] text-zinc-400">Curve Target</span>
+          <span className="text-[10px] text-zinc-400">Graduation Target</span>
         </div>
       </div>
 

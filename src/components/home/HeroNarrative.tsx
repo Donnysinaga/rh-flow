@@ -10,7 +10,7 @@ export function HeroNarrative() {
   const stories = {
     launches: {
       tag: 'FAIR LAUNCH PROTOCOL',
-      title: 'Pons v2 Bonding Curve & Automated Graduation',
+      title: 'RH Flow Fair Curve & Automated Graduation',
       lead: 'Every new token begins on a transparent mathematical bonding curve where the entire 1 Billion supply is minted into the contract with zero hidden dev allocations.',
       details: [
         'Deterministic Pricing: Token value grows predictably based strictly on real on-chain liquidity demand.',
@@ -71,7 +71,7 @@ export function HeroNarrative() {
             }`}
           >
             <PonsLogo className="w-3 h-3" size={12} />
-            <span>Pons v2 Launches</span>
+            <span>Fair Flow Launches</span>
           </button>
           <button
             type="button"

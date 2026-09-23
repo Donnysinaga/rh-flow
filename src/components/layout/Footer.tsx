@@ -51,13 +51,13 @@ export function Footer() {
             <ul className="space-y-1 text-zinc-400 text-[11px]">
               <li>
                 <a
-                  href="https://docs.ponsfamily.com/v2"
+                  href="https://robinhoodchain.blockscout.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
                   <PonsLogo className="w-3 h-3" size={12} />
-                  <span>Pons v2 Documentation ↗</span>
+                  <span>RH Flow Protocol Architecture ↗</span>
                 </a>
               </li>
               <li>

@@ -498,8 +498,11 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           <div className="flex items-center gap-2.5">
             <PonsLogo className="w-5 h-5" size={20} />
             <div>
-              <h3 className="text-sm font-bold text-zinc-100 tracking-wide">
-                Launch Token on Robinhood Chain
+              <h3 className="text-sm font-bold text-zinc-100 tracking-wide flex items-center gap-2">
+                <span>Launch Token on Robinhood Chain</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-lime-400/10 text-lime-400 border border-lime-400/20 font-mono font-semibold">
+                  RH FLOW
+                </span>
               </h3>
             </div>
           </div>
