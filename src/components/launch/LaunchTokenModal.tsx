@@ -15,15 +15,118 @@ interface LaunchTokenModalProps {
   onClose: () => void;
 }
 
+// Authentic SVG Logos for Paired Assets
+function EthLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#627EEA" />
+      <path d="M16.498 4v8.87l7.497 3.35L16.498 4z" fill="#fff" fillOpacity="0.602" />
+      <path d="M16.498 4L9 16.22l7.498-3.35V4z" fill="#fff" />
+      <path d="M16.498 21.968v6.027L24 17.616l-7.502 4.352z" fill="#fff" fillOpacity="0.602" />
+      <path d="M16.498 27.995v-6.028L9 17.616l7.498 10.379z" fill="#fff" />
+      <path d="M16.498 20.573l7.497-4.353-7.497-3.348v7.701z" fill="#fff" fillOpacity="0.2" />
+      <path d="M9 16.22l7.498 4.353v-7.701L9 16.22z" fill="#fff" fillOpacity="0.602" />
+    </svg>
+  );
+}
+
+function NvdaLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#76B900" />
+      <path
+        d="M16 8.5C12.4 8.5 9.5 11.4 9.5 15c0 3.6 2.9 6.5 6.5 6.5 2.6 0 4.8-1.5 5.8-3.7h-2.5c-.8 1-2 1.6-3.3 1.6-2.4 0-4.4-2-4.4-4.4s2-4.4 4.4-4.4c1.3 0 2.5.6 3.3 1.6h2.5c-1-2.2-3.2-3.7-5.8-3.7zm4.2 6.5c0-.6-.1-1.1-.3-1.6h-3.9v3.2h2.2c-.2.6-.7 1.1-1.3 1.3v2c1.9-.4 3.3-2.3 3.3-4.9z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
+function SpcxLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#000000" stroke="#27272a" strokeWidth="1" />
+      <path
+        d="M7 21l6.5-6.5L7 8h3l4.5 4.5L19 8h3l-6.5 6.5L22 21h-3l-4.5-4.5L10 21H7z"
+        fill="#FFFFFF"
+      />
+      <path
+        d="M14 14.5c3.5-3.5 7.5-4.5 11-4.5-1.5 3-4.5 6.5-8.5 8.5"
+        stroke="#005288"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function GooglLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#FFFFFF" />
+      <path
+        d="M23.5 16.2c0-.5-.04-1.1-.14-1.6H16v3h4.2c-.18 1-.76 1.8-1.6 2.4v2h2.6c1.5-1.4 2.4-3.5 2.4-5.8z"
+        fill="#4285F4"
+      />
+      <path
+        d="M16 24c2.2 0 4-.7 5.4-2l-2.6-2c-.7.5-1.7.8-2.8.8-2.1 0-4-1.4-4.6-3.4H8.7v2.1C10.1 22.3 12.8 24 16 24z"
+        fill="#34A853"
+      />
+      <path
+        d="M11.4 17.4c-.1-.5-.2-1-.2-1.4s.1-.9.2-1.4V12.5H8.7c-.6 1.2-1 2.5-1 3.9s.4 2.7 1 3.9l2.7-2.9z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M16 10.6c1.2 0 2.3.4 3.1 1.2l2.3-2.3C20 8.2 18.2 7.5 16 7.5c-3.2 0-5.9 1.7-7.3 4.5l2.7 2.1c.6-2 2.5-3.5 4.6-3.5z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
+}
+
+function TslaLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#E82127" />
+      <path
+        d="M16 10.5c2.8 0 5.4.6 7.5 1.7l.8-2.2C21.8 8.8 19 8.2 16 8.2s-5.8.6-8.3 1.8l.8 2.2c2.1-1.1 4.7-1.7 7.5-1.7zm6.7 3.8c-1.9-.9-4.2-1.4-6.7-1.4s-4.8.5-6.7 1.4l-.5 1.3h2.6c1.4-.5 3-.8 4.6-.8s3.2.3 4.6.8h2.6l-.5-1.3zM15 15.8h2v8.5h-2v-8.5z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
+function GmeLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#000000" stroke="#dc2626" strokeWidth="1" />
+      <path
+        d="M15 7.5h2v6.5h-2V7.5zm5.5 3.5c2.8 1.6 4.5 4.6 4.5 7.8 0 4.9-4 8.9-8.9 8.9s-8.9-4-8.9-8.9c0-3.2 1.7-6.2 4.5-7.8l1 1.8c-2.2 1.2-3.5 3.6-3.5 6 0 3.8 3.1 6.9 6.9 6.9s6.9-3.1 6.9-6.9c0-2.4-1.3-4.8-3.5-6l1-1.8z"
+        fill="#FF0000"
+      />
+    </svg>
+  );
+}
+
+function AaplLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#18181b" />
+      <path
+        d="M19.7 15.8c0-2.1 1.7-3.2 1.8-3.3-1-1.4-2.5-1.6-3-1.7-1.3-.1-2.5.8-3.2.8-.7 0-1.7-.8-2.7-.7-1.4.1-2.7.9-3.4 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.1 1.1 0 1.5-.7 2.8-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5-.1-.1-2.7-1-2.7-3.3zm-2.2-6c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.5.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
 // Paired assets list matching Pons protocol
 interface PairedAsset {
   symbol: string;
   name: string;
   target: string;
   address: `0x${string}`;
-  logo: string;
-  badgeBg: string;
-  badgeTextColor: string;
+  renderLogo: (cls?: string) => React.ReactNode;
 }
 
 const PAIRED_ASSETS: PairedAsset[] = [
@@ -32,63 +135,49 @@ const PAIRED_ASSETS: PairedAsset[] = [
     name: 'Ether',
     target: '4,2 ETH',
     address: '0x0000000000000000000000000000000000000000',
-    logo: 'Ξ',
-    badgeBg: 'bg-blue-500/20',
-    badgeTextColor: 'text-blue-400',
+    renderLogo: (cls = "w-5 h-5") => <EthLogo className={cls} />,
   },
   {
     symbol: 'NVDA',
     name: 'NVIDIA',
     target: '1,000 NVDA',
     address: '0x0000000000000000000000000000000000000000',
-    logo: '🟢',
-    badgeBg: 'bg-[#76B900]/20',
-    badgeTextColor: 'text-[#76B900]',
+    renderLogo: (cls = "w-5 h-5") => <NvdaLogo className={cls} />,
   },
   {
     symbol: 'SPCX',
     name: 'SpaceX Class A',
     target: '500 SPCX',
     address: '0x0000000000000000000000000000000000000000',
-    logo: '🚀',
-    badgeBg: 'bg-zinc-800',
-    badgeTextColor: 'text-white',
+    renderLogo: (cls = "w-5 h-5") => <SpcxLogo className={cls} />,
   },
   {
     symbol: 'GOOGL',
     name: 'Alphabet Class A',
     target: '1,000 GOOGL',
     address: '0x0000000000000000000000000000000000000000',
-    logo: '🌐',
-    badgeBg: 'bg-red-500/20',
-    badgeTextColor: 'text-red-400',
+    renderLogo: (cls = "w-5 h-5") => <GooglLogo className={cls} />,
   },
   {
     symbol: 'TSLA',
     name: 'Tesla',
     target: '1,000 TSLA',
     address: '0x0000000000000000000000000000000000000000',
-    logo: '⚡',
-    badgeBg: 'bg-red-600/20',
-    badgeTextColor: 'text-red-500',
+    renderLogo: (cls = "w-5 h-5") => <TslaLogo className={cls} />,
   },
   {
     symbol: 'GME',
     name: 'GameStop',
     target: '2,500 GME',
     address: '0x0000000000000000000000000000000000000000',
-    logo: '🎮',
-    badgeBg: 'bg-red-500/20',
-    badgeTextColor: 'text-red-400',
+    renderLogo: (cls = "w-5 h-5") => <GmeLogo className={cls} />,
   },
   {
     symbol: 'AAPL',
     name: 'Apple',
     target: '1,000 AAPL',
     address: '0x0000000000000000000000000000000000000000',
-    logo: '🍎',
-    badgeBg: 'bg-zinc-800',
-    badgeTextColor: 'text-zinc-200',
+    renderLogo: (cls = "w-5 h-5") => <AaplLogo className={cls} />,
   },
 ];
 
@@ -514,37 +603,59 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               />
             </div>
 
-            {/* X Profile & Telegram */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-[12px] font-medium text-zinc-300">X profile</label>
+            {/* Social Links: X, Telegram, and Website */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-medium text-zinc-300 flex items-center justify-between">
+                <span>Social & Community Links</span>
+                <span className="text-[10px] text-zinc-500 font-normal">Optional</span>
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {/* X / Twitter */}
                 <div className="relative flex items-center">
-                  <span className="absolute left-3 text-zinc-500 text-xs">x.com/</span>
+                  <span className="absolute left-3 text-zinc-500 text-xs select-none">x.com/</span>
                   <input
                     type="text"
                     placeholder="handle"
                     value={twitter}
                     onChange={(e) => setTwitter(e.target.value)}
-                    className="w-full pl-14 pr-3 py-2.5 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                    className="w-full pl-14 pr-3 py-2 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
                   />
                 </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[12px] font-medium text-zinc-300">Telegram</label>
+
+                {/* Telegram */}
                 <div className="relative flex items-center">
-                  <span className="absolute left-3 text-zinc-500 text-xs">t.me/</span>
+                  <span className="absolute left-3 text-zinc-500 text-xs select-none">t.me/</span>
                   <input
                     type="text"
                     placeholder="community"
                     value={telegram}
                     onChange={(e) => setTelegram(e.target.value)}
-                    className="w-full pl-12 pr-3 py-2.5 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                    className="w-full pl-12 pr-3 py-2 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
                   />
                 </div>
               </div>
+
+              {/* Website Input (Full width) */}
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-zinc-500 text-xs select-none flex items-center gap-1">
+                  <span>🌐</span>
+                  <span>https://</span>
+                </span>
+                <input
+                  type="text"
+                  placeholder="yourproject.com"
+                  value={website.replace(/^https?:\/\//, '')}
+                  onChange={(e) => {
+                    const val = e.target.value.trim();
+                    setWebsite(val ? (val.startsWith('http') ? val : `https://${val}`) : '');
+                  }}
+                  className="w-full pl-20 pr-3 py-2 bg-[#1a1b20] border border-zinc-800 focus:border-lime-400/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                />
+              </div>
             </div>
 
-            {/* Paired Asset Dropdown (Pons-Style) */}
+            {/* Paired Asset Dropdown (Pons-Style with Official SVGs) */}
             <div className="space-y-1.5 relative">
               <label className="text-[12px] font-medium text-zinc-300">Paired asset</label>
               
@@ -555,8 +666,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 className="w-full px-3.5 py-2.5 bg-[#1a1b20] hover:bg-[#202127] border border-zinc-800 focus:border-lime-400/60 rounded-xl flex items-center justify-between text-zinc-200 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className={`w-5 h-5 rounded-full ${selectedPair.badgeBg} ${selectedPair.badgeTextColor} flex items-center justify-center font-bold text-xs`}>
-                    {selectedPair.logo}
+                  <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                    {selectedPair.renderLogo('w-5 h-5')}
                   </div>
                   <span className="font-semibold text-xs text-zinc-100">{selectedPair.symbol}</span>
                 </div>
@@ -583,15 +694,15 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                             setSelectedPair(asset);
                             setIsPairDropdownOpen(false);
                           }}
-                          className={`w-full px-3.5 py-2 flex items-center justify-between text-left transition-colors cursor-pointer ${
+                          className={`w-full px-3.5 py-2.5 flex items-center justify-between text-left transition-colors cursor-pointer ${
                             isSelected
                               ? 'bg-[#222329] text-zinc-100 font-semibold'
                               : 'hover:bg-[#1e1f25] text-zinc-300'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            <div className={`w-5 h-5 rounded-full ${asset.badgeBg} ${asset.badgeTextColor} flex items-center justify-center font-bold text-xs shrink-0`}>
-                              {asset.logo}
+                            <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                              {asset.renderLogo('w-5 h-5')}
                             </div>
                             <span className="text-xs font-semibold text-zinc-100">{asset.symbol}</span>
                           </div>
@@ -622,7 +733,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                   />
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1.5 bg-[#131417] px-2.5 py-1 rounded-lg border border-zinc-800">
-                      <span className={`text-xs ${selectedPair.badgeTextColor}`}>{selectedPair.logo}</span>
+                      <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                        {selectedPair.renderLogo('w-4 h-4')}
+                      </div>
                       <span className="text-xs font-bold text-zinc-200">{selectedPair.symbol}</span>
                     </div>
                     <button
@@ -671,16 +784,6 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                       <option value="200">2.00% Tax</option>
                       <option value="300">3.00% Tax (Max)</option>
                     </select>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-400">Website URL (Optional)</label>
-                    <input
-                      type="url"
-                      placeholder="https://..."
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#1a1b20] border border-zinc-800 rounded-xl text-zinc-200 text-xs focus:outline-none"
-                    />
                   </div>
                 </div>
               )}
