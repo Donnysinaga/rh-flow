@@ -130,11 +130,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         ],
       });
 
-      // Dispatch transaction directly via connected wallet
+      // Dispatch transaction directly via connected wallet with explicit gas limit buffer
       const hash = await sendTransactionAsync({
         to: PONS_FACTORY_ADDRESS,
         value: totalValue,
         data: callData,
+        gas: 4200000n,
       });
 
       toastSuccess(
