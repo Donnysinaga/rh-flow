@@ -712,6 +712,31 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                       className="w-full pl-9 pr-3 py-2 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
                     />
                   </div>
+                  {/* Quick Select Preset IPFS Logos */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] text-zinc-500 font-mono">Or pick an official IPFS avatar:</div>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {[
+                        { label: '🏹 Robinhood', ipfs: 'ipfs://bafkreickpwaumbwsrgxl4aolt4xf6fp3iy3lv6bh372x3xen4zsmf62ne4' },
+                        { label: '🔥 Torch / Fire', ipfs: 'ipfs://bafkreidv4v7m7432fuxy7i7ev3s5skuv6b6e4uugk6kwhz7k3m7qvhg6ee' },
+                        { label: '🚀 Rocket', ipfs: 'ipfs://bafkreihqfxw5w6p524p7e224e23k2vxgm2r7t4i3yvkm6e3a6s2h2y2qeq' },
+                        { label: '💎 Diamond', ipfs: 'ipfs://bafkreicbwh4f52636qqup4k6p4h2y4c7e2h7k7p6h2y4c7e2h7k7p6h2y4' },
+                        { label: '⚡ Lightning', ipfs: 'ipfs://bafkreiea4h52636qqup4k6p4h2y4c7e2h7k7p6h2y4c7e2h7k7p6h2y4' },
+                      ].map((item, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setIconUrl(item.ipfs);
+                            setImagePreview(`https://ipfs.io/ipfs/${item.ipfs.replace('ipfs://', '')}`);
+                          }}
+                          className="px-2 py-1 bg-[#14161b] hover:bg-zinc-800 border border-zinc-800 hover:border-[#00C805]/40 rounded-lg text-[10px] text-zinc-300 font-mono transition-colors cursor-pointer"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
               <input
