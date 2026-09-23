@@ -350,6 +350,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         }
       }
 
+      // If no custom logo was provided or upload failed, use standard official Robinhood Chain IPFS token logo
+      const DEFAULT_TOKEN_IPFS = 'ipfs://bafkreickpwaumbwsrgxl4aolt4xf6fp3iy3lv6bh372x3xen4zsmf62ne4';
+      if (!cleanLogo || (!cleanLogo.startsWith('ipfs://') && !cleanLogo.startsWith('http://') && !cleanLogo.startsWith('https://'))) {
+        cleanLogo = DEFAULT_TOKEN_IPFS;
+      }
+
       const launchParams = {
         name: name.trim(),
         symbol: symbol.trim().toUpperCase(),
