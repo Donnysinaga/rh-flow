@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { useAccount, useWalletClient } from 'wagmi';
-import { parseEther } from 'viem';
+import { useAccount, useSendTransaction, useSwitchChain, useChainId } from 'wagmi';
+import { parseEther, encodeFunctionData } from 'viem';
 import { PONS_FACTORY_ADDRESS, ROBINHOOD_CHAIN } from '@/config/network';
 import { PONS_V2_FACTORY_ABI } from '@/config/contracts';
 import { useToast } from '@/components/ui/ToastProvider';
@@ -15,7 +15,9 @@ interface LaunchTokenModalProps {
 
 export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const { isConnected, address } = useAccount();
-  const { data: walletClient } = useWalletClient();
+  const chainId = useChainId();
+  const { switchChainAsync } = useSwitchChain();
+  const { sendTransactionAsync } = useSendTransaction();
   const { toastSuccess, toastError, toastInfo } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,7 +48,6 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
     reader.onload = () => {
       const result = reader.result as string;
       setImagePreview(result);
-      setIconUrl(result);
     };
     reader.readAsDataURL(file);
   };
@@ -62,7 +63,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const handleLaunch = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isConnected || !address || !walletClient) {
+    if (!isConnected || !address) {
       toastError('Wallet Required', 'Please connect your Web3 wallet to deploy a token.');
       return;
     }
@@ -74,7 +75,14 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
 
     try {
       setIsDeploying(true);
-      toastInfo('Submitting Transaction', 'Please sign the contract deployment in your wallet...');
+
+      // Auto switch network if connected to wrong chain
+      if (chainId !== ROBINHOOD_CHAIN.id && switchChainAsync) {
+        toastInfo('Switching Network', 'Please switch your wallet to Robinhood Chain...');
+        await switchChainAsync({ chainId: ROBINHOOD_CHAIN.id });
+      }
+
+      toastInfo('Submitting Transaction', 'Please confirm the token launch in your wallet...');
 
       // Generate cryptographically unique salt for token address generation
       const saltBytes = new Uint8Array(32);
@@ -89,9 +97,13 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       const initialBuyWei = initialBuyEth && parseFloat(initialBuyEth) > 0 ? parseEther(initialBuyEth) : 0n;
       const totalValue = launchFeeWei + initialBuyWei;
 
-      // Dispatch direct on-chain call to verified Pons v2 Factory contract
-      const hash = await walletClient.writeContract({
-        address: PONS_FACTORY_ADDRESS,
+      // Safe clean logo URL (avoid huge base64 strings in on-chain calldata)
+      const cleanLogo = iconUrl.trim().startsWith('http://') || iconUrl.trim().startsWith('https://') || iconUrl.trim().startsWith('ipfs://')
+        ? iconUrl.trim()
+        : '';
+
+      // Encode function data for launchToken
+      const callData = encodeFunctionData({
         abi: PONS_V2_FACTORY_ABI,
         functionName: 'launchToken',
         args: [
@@ -99,7 +111,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             name: name.trim(),
             symbol: symbol.trim().toUpperCase(),
             description: description.trim(),
-            logo: iconUrl.trim() || imagePreview || '',
+            logo: cleanLogo,
             socials: {
               twitter: twitter.trim(),
               telegram: telegram.trim(),
@@ -107,7 +119,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               website: website.trim(),
               farcaster: '',
             },
-            creatorFeeRecipient: address,
+            creatorFeeRecipient: address as `0x${string}`,
             creatorTaxBps: parseInt(creatorTaxBps, 10) || 100,
             buybackEnabled: true,
             poolSalt: '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`,
@@ -116,18 +128,19 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           0n, // launchConfigId 0 (Standard 1B supply, 4.2 ETH target)
           '0x0000000000000000000000000000000000000000' as `0x${string}`, // native ETH pair
         ],
+      });
+
+      // Dispatch transaction directly via connected wallet
+      const hash = await sendTransactionAsync({
+        to: PONS_FACTORY_ADDRESS,
         value: totalValue,
-        chain: {
-          id: ROBINHOOD_CHAIN.id,
-          name: ROBINHOOD_CHAIN.name,
-          nativeCurrency: ROBINHOOD_CHAIN.nativeCurrency,
-          rpcUrls: { default: { http: [ROBINHOOD_CHAIN.rpcUrls.primary] } },
-        },
+        data: callData,
       });
 
       toastSuccess(
         'Token Deployed Successfully! 🚀',
-        `Transaction submitted: ${hash.slice(0, 10)}...${hash.slice(-8)}. Your curve is active on Robinhood Chain!`
+        `Transaction submitted: ${hash.slice(0, 10)}...${hash.slice(-8)}. Your curve is active on Robinhood Chain!`,
+        hash
       );
       onClose();
     } catch (err: any) {
