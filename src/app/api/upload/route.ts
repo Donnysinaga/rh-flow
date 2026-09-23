@@ -34,18 +34,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid image data' }, { status: 400 });
     }
 
-    // 1. Attempt upload to Pinata IPFS if JWT is configured
-    if (process.env.PINATA_JWT) {
+    // 1. Attempt upload to Pinata IPFS if JWT or API Key + Secret is configured
+    const pinataJwt = process.env.PINATA_JWT;
+    const pinataApiKey = process.env.PINATA_API_KEY || 'fef1373400a78e49d51a';
+    const pinataSecret = process.env.PINATA_API_SECRET;
+
+    if (pinataJwt || (pinataApiKey && pinataSecret)) {
       try {
         const ipfsFormData = new FormData();
         const blob = new Blob([new Uint8Array(fileBuffer)], { type: mimeType });
         ipfsFormData.append('file', blob, fileName);
 
+        const headers: Record<string, string> = {};
+        if (pinataJwt) {
+          headers['Authorization'] = `Bearer ${pinataJwt}`;
+        } else if (pinataApiKey && pinataSecret) {
+          headers['pinata_api_key'] = pinataApiKey;
+          headers['pinata_secret_api_key'] = pinataSecret;
+        }
+
         const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
           method: 'POST',
-          headers: {
-            Authorization: `Bearer ${process.env.PINATA_JWT}`,
-          },
+          headers,
           body: ipfsFormData,
         });
 
