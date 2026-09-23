@@ -650,9 +650,13 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               />
             </div>
 
-            {/* Token Image */}
-            <div className="space-y-1.5">
-              <label className="text-[12px] font-medium text-zinc-300">Token image</label>
+            {/* Token Image: File Upload or Direct IPFS/URL */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[12px] font-medium text-zinc-300">Token image / logo</label>
+                <span className="text-[10px] text-zinc-500 font-mono">Upload file or paste IPFS / URL</span>
+              </div>
+
               {imagePreview ? (
                 <div className="p-3 bg-[#181a20] border border-[#00C805]/30 rounded-xl flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -662,7 +666,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     </div>
                     <div>
                       <div className="text-zinc-200 font-semibold text-xs">Image Attached</div>
-                      <div className="text-[10px] text-[#00C805]">Ready for token metadata</div>
+                      <div className="text-[10px] text-[#00C805] font-mono truncate max-w-[200px]">
+                        {iconUrl ? (iconUrl.startsWith('ipfs://') ? iconUrl : 'Uploaded to CDN') : 'Ready for launch'}
+                      </div>
                     </div>
                   </div>
                   <button
@@ -674,14 +680,38 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                   </button>
                 </div>
               ) : (
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-4 px-4 border border-dashed border-zinc-750 hover:border-[#00C805]/50 bg-[#181a20]/60 hover:bg-[#181a20] rounded-xl flex items-center justify-center gap-2.5 cursor-pointer transition-all group"
-                >
-                  <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-[#00C805]">
-                    🖼️
+                <div className="space-y-2">
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full py-3.5 px-4 border border-dashed border-zinc-750 hover:border-[#00C805]/50 bg-[#181a20]/60 hover:bg-[#181a20] rounded-xl flex items-center justify-center gap-2.5 cursor-pointer transition-all group"
+                  >
+                    <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-[#00C805]">
+                      🖼️
+                    </div>
+                    <span className="text-zinc-300 font-medium text-xs">Click to upload image file</span>
                   </div>
-                  <span className="text-zinc-300 font-medium text-xs">Choose image</span>
+
+                  {/* Or paste direct IPFS / Image URL */}
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 text-zinc-500 text-xs select-none">🔗</span>
+                    <input
+                      type="text"
+                      placeholder="Or paste IPFS URI (ipfs://...) or Image URL"
+                      value={iconUrl}
+                      onChange={(e) => {
+                        const val = e.target.value.trim();
+                        setIconUrl(val);
+                        if (val.startsWith('http://') || val.startsWith('https://')) {
+                          setImagePreview(val);
+                        } else if (val.startsWith('ipfs://')) {
+                          setImagePreview(`https://ipfs.io/ipfs/${val.replace('ipfs://', '')}`);
+                        } else {
+                          setImagePreview(null);
+                        }
+                      }}
+                      className="w-full pl-9 pr-3 py-2 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none text-xs transition-colors"
+                    />
+                  </div>
                 </div>
               )}
               <input
