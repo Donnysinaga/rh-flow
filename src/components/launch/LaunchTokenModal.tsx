@@ -15,6 +15,83 @@ interface LaunchTokenModalProps {
   onClose: () => void;
 }
 
+// Paired assets list matching Pons protocol
+interface PairedAsset {
+  symbol: string;
+  name: string;
+  target: string;
+  address: `0x${string}`;
+  logo: string;
+  badgeBg: string;
+  badgeTextColor: string;
+}
+
+const PAIRED_ASSETS: PairedAsset[] = [
+  {
+    symbol: 'ETH',
+    name: 'Ether',
+    target: '4,2 ETH',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: 'Ξ',
+    badgeBg: 'bg-blue-500/20',
+    badgeTextColor: 'text-blue-400',
+  },
+  {
+    symbol: 'NVDA',
+    name: 'NVIDIA',
+    target: '1,000 NVDA',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: '🟢',
+    badgeBg: 'bg-[#76B900]/20',
+    badgeTextColor: 'text-[#76B900]',
+  },
+  {
+    symbol: 'SPCX',
+    name: 'SpaceX Class A',
+    target: '500 SPCX',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: '🚀',
+    badgeBg: 'bg-zinc-800',
+    badgeTextColor: 'text-white',
+  },
+  {
+    symbol: 'GOOGL',
+    name: 'Alphabet Class A',
+    target: '1,000 GOOGL',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: '🌐',
+    badgeBg: 'bg-red-500/20',
+    badgeTextColor: 'text-red-400',
+  },
+  {
+    symbol: 'TSLA',
+    name: 'Tesla',
+    target: '1,000 TSLA',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: '⚡',
+    badgeBg: 'bg-red-600/20',
+    badgeTextColor: 'text-red-500',
+  },
+  {
+    symbol: 'GME',
+    name: 'GameStop',
+    target: '2,500 GME',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: '🎮',
+    badgeBg: 'bg-red-500/20',
+    badgeTextColor: 'text-red-400',
+  },
+  {
+    symbol: 'AAPL',
+    name: 'Apple',
+    target: '1,000 AAPL',
+    address: '0x0000000000000000000000000000000000000000',
+    logo: '🍎',
+    badgeBg: 'bg-zinc-800',
+    badgeTextColor: 'text-zinc-200',
+  },
+];
+
 export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const router = useRouter();
   const { isConnected, address } = useAccount();
@@ -34,6 +111,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [telegram, setTelegram] = useState('');
   const [website, setWebsite] = useState('');
   const [creatorTaxBps, setCreatorTaxBps] = useState('100'); // 1% default
+  const [selectedPair, setSelectedPair] = useState<PairedAsset>(PAIRED_ASSETS[0]);
+  const [isPairDropdownOpen, setIsPairDropdownOpen] = useState(false);
   const [initialBuyEth, setInitialBuyEth] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
@@ -465,19 +544,66 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               </div>
             </div>
 
-            {/* Paired Asset */}
-            <div className="space-y-1.5">
+            {/* Paired Asset Dropdown (Pons-Style) */}
+            <div className="space-y-1.5 relative">
               <label className="text-[12px] font-medium text-zinc-300">Paired asset</label>
-              <div className="w-full px-3.5 py-2.5 bg-[#1a1b20] border border-zinc-800 rounded-xl flex items-center justify-between text-zinc-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-[10px]">
-                    Ξ
+              
+              {/* Dropdown Toggle Button */}
+              <button
+                type="button"
+                onClick={() => setIsPairDropdownOpen(!isPairDropdownOpen)}
+                className="w-full px-3.5 py-2.5 bg-[#1a1b20] hover:bg-[#202127] border border-zinc-800 focus:border-lime-400/60 rounded-xl flex items-center justify-between text-zinc-200 transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-5 h-5 rounded-full ${selectedPair.badgeBg} ${selectedPair.badgeTextColor} flex items-center justify-center font-bold text-xs`}>
+                    {selectedPair.logo}
                   </div>
-                  <span className="font-semibold text-xs">ETH</span>
+                  <span className="font-semibold text-xs text-zinc-100">{selectedPair.symbol}</span>
                 </div>
-                <span className="text-zinc-500 text-xs">▼</span>
-              </div>
-              <p className="text-[11px] text-zinc-500">Graduates once the curve raises 4,2 ETH.</p>
+                <span className={`text-zinc-400 text-xs transition-transform duration-200 ${isPairDropdownOpen ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
+
+              {/* Dropdown Menu Modal/Overlay */}
+              {isPairDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsPairDropdownOpen(false)}
+                  />
+                  <div className="absolute left-0 right-0 top-[102%] z-50 bg-[#16171b] border border-zinc-750 rounded-xl shadow-2xl overflow-hidden py-1 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95 duration-150 font-sans">
+                    {PAIRED_ASSETS.map((asset) => {
+                      const isSelected = selectedPair.symbol === asset.symbol;
+                      return (
+                        <button
+                          key={asset.symbol}
+                          type="button"
+                          onClick={() => {
+                            setSelectedPair(asset);
+                            setIsPairDropdownOpen(false);
+                          }}
+                          className={`w-full px-3.5 py-2 flex items-center justify-between text-left transition-colors cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#222329] text-zinc-100 font-semibold'
+                              : 'hover:bg-[#1e1f25] text-zinc-300'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className={`w-5 h-5 rounded-full ${asset.badgeBg} ${asset.badgeTextColor} flex items-center justify-center font-bold text-xs shrink-0`}>
+                              {asset.logo}
+                            </div>
+                            <span className="text-xs font-semibold text-zinc-100">{asset.symbol}</span>
+                          </div>
+                          <span className="text-[11px] text-zinc-400 font-normal">{asset.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
+              <p className="text-[11px] text-zinc-500">Graduates once the curve raises {selectedPair.target}.</p>
             </div>
 
             {/* Developer Buy Box (Pons-Style) */}
@@ -495,9 +621,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                     className="w-2/3 bg-transparent text-lg sm:text-xl font-mono text-zinc-100 placeholder-zinc-600 focus:outline-none"
                   />
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 bg-[#131417] px-2 py-1 rounded-lg border border-zinc-800">
-                      <span className="text-blue-400 text-xs">Ξ</span>
-                      <span className="text-xs font-bold text-zinc-200">ETH</span>
+                    <div className="flex items-center gap-1.5 bg-[#131417] px-2.5 py-1 rounded-lg border border-zinc-800">
+                      <span className={`text-xs ${selectedPair.badgeTextColor}`}>{selectedPair.logo}</span>
+                      <span className="text-xs font-bold text-zinc-200">{selectedPair.symbol}</span>
                     </div>
                     <button
                       type="button"
@@ -564,7 +690,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             <div className="pt-3 border-t border-zinc-800/80 space-y-2">
               <div className="flex items-center justify-between text-[11px] text-zinc-400">
                 <span>
-                  ETH pair, ETH {totalEthDue > 0 ? totalEthDue.toFixed(4) : '0,0005'} due
+                  {selectedPair.symbol} pair, ETH {totalEthDue > 0 ? totalEthDue.toFixed(4) : '0,0005'} due
                 </span>
                 <span className="text-zinc-600">🔒 100% On-chain</span>
               </div>
@@ -634,7 +760,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Paired with</span>
-                  <span className="text-zinc-200 font-medium">ETH</span>
+                  <span className="text-zinc-200 font-medium">{selectedPair.symbol}</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Trade fee</span>
@@ -646,7 +772,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Graduation</span>
-                  <span className="text-lime-400 font-medium">4.2 ETH</span>
+                  <span className="text-lime-400 font-medium">{selectedPair.target}</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Liquidity</span>
