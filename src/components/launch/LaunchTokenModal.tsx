@@ -801,11 +801,10 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
 
             {/* Bottom Launch Button & Fee Subtext */}
             <div className="pt-3 border-t border-zinc-800 space-y-2">
-              <div className="flex items-center justify-between text-[11px] text-zinc-400">
+              <div className="text-[11px] text-zinc-400">
                 <span>
                   {selectedPair.symbol} pair, ETH {totalEthDue > 0 ? totalEthDue.toFixed(4) : '0,0005'} due
                 </span>
-                <span className="text-zinc-600">🔒 100% On-chain</span>
               </div>
 
               <button
