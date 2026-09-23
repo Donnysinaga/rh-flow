@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ROBINHOOD_CHAIN } from '@/config/network';
 import { isValidAddress } from '@/lib/utils/format';
 import { fetchToken } from '@/lib/api/blockscout';
-import { getPonsTokenDetails } from '@/lib/rpc/pons';
+import { getPonsTokenDetails, formatIpfsUrl } from '@/lib/rpc/pons';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,7 +72,7 @@ export async function GET(
     const symbol = pons?.symbol || token?.symbol || 'UNKNOWN';
     const decimals = pons?.decimals || (token?.decimals ? parseInt(token.decimals, 10) : 18);
     const totalSupply = pons?.totalSupply || token?.total_supply || null;
-    const iconUrl = pons?.metadata?.tokenLogo || token?.icon_url || null;
+    const iconUrl = pons?.metadata?.tokenLogo || formatIpfsUrl(token?.icon_url) || null;
     const description = pons?.metadata?.tokenDescription || null;
     const socials = pons?.metadata?.tokenSocials || null;
 

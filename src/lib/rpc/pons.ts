@@ -89,10 +89,15 @@ const TokenLaunchedEvent = parseAbiItem(
  */
 export function formatIpfsUrl(url: string): string {
   if (!url) return '';
-  if (url.startsWith('ipfs://')) {
-    return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+  const trimmed = url.trim();
+  if (trimmed.startsWith('ipfs://')) {
+    const cid = trimmed.replace('ipfs://', '').replace(/^ipfs\//, '');
+    return `https://ipfs.io/ipfs/${cid}`;
   }
-  return url;
+  if (trimmed.startsWith('baf') || (trimmed.startsWith('Qm') && trimmed.length >= 44)) {
+    return `https://ipfs.io/ipfs/${trimmed}`;
+  }
+  return trimmed;
 }
 
 /**

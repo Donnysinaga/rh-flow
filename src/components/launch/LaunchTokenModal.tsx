@@ -233,7 +233,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
     }
   };
 
-  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -248,6 +250,26 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       setImagePreview(result);
     };
     reader.readAsDataURL(file);
+
+    try {
+      setIsUploadingImage(true);
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.ipfsUri || data.url) {
+          setIconUrl(data.ipfsUri || data.url);
+        }
+      }
+    } catch (err) {
+      console.error('Error uploading image to IPFS:', err);
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const handleRemoveImage = () => {
@@ -311,9 +333,22 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       const randomSalt = (`0x` + Array.from(saltBytes, (b) => b.toString(16).padStart(2, '0')).join('')) as `0x${string}`;
 
       // Clean logo URL
-      const cleanLogo = iconUrl.trim().startsWith('http://') || iconUrl.trim().startsWith('https://') || iconUrl.trim().startsWith('ipfs://')
-        ? iconUrl.trim()
-        : '';
+      let cleanLogo = iconUrl.trim();
+      if (!cleanLogo && imagePreview) {
+        try {
+          const uploadRes = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dataUrl: imagePreview }),
+          });
+          if (uploadRes.ok) {
+            const upData = await uploadRes.json();
+            cleanLogo = upData.ipfsUri || upData.url || '';
+          }
+        } catch (e) {
+          console.error('Pre-launch image upload fallback error:', e);
+        }
+      }
 
       const launchParams = {
         name: name.trim(),

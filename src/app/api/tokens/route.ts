@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchTokens } from '@/lib/api/blockscout';
-import { getRecentPonsLaunches, getPonsTokenDetails } from '@/lib/rpc/pons';
+import { getRecentPonsLaunches, getPonsTokenDetails, formatIpfsUrl } from '@/lib/rpc/pons';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       address: t.address_hash,
       name: t.name,
       symbol: t.symbol,
-      icon_url: t.icon_url,
+      icon_url: formatIpfsUrl(t.icon_url) || null,
       price: t.exchange_rate ? parseFloat(t.exchange_rate) : null,
       market_cap: t.circulating_market_cap ? parseFloat(t.circulating_market_cap) : null,
       volume_24h: t.volume_24h ? parseFloat(t.volume_24h) : null,
