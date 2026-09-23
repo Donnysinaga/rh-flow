@@ -335,10 +335,10 @@ export function TokenDetailView({ address }: TokenDetailProps) {
 
             <div className="text-[11px] text-zinc-500 flex flex-wrap items-center gap-2 pt-0.5">
               <span>
-                Creator <CopyableAddress address={token.pons.deployer || token.pons.creatorFeeRecipient} className="text-zinc-400 hover:text-zinc-200" />
+                Creator <CopyableAddress address={token.pons?.deployer || token.pons?.creatorFeeRecipient || token.address} className="text-zinc-400 hover:text-zinc-200" />
               </span>
               <span>·</span>
-              <span>{(token.pons.creatorTaxBps / 100).toFixed(2)}% creator tax</span>
+              <span>{(((token.pons?.creatorTaxBps ?? 100)) / 100).toFixed(2)}% creator tax</span>
             </div>
 
             {token.socials && (token.socials.website || token.socials.twitter || token.socials.telegram || token.socials.discord || token.socials.farcaster) && (
