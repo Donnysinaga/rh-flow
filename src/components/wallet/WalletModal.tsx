@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useConnect, Connector } from 'wagmi';
 import { 
   EIP6963ProviderDetail, 
@@ -52,6 +53,11 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'extension' | 'mobile'>('extension');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Multi-injected EIP-6963 Discovery listener
   useEffect(() => {
@@ -376,6 +382,8 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
     }
   };
 
+  if (!isOpen || !mounted) return null;
+
   const handleReset = () => {
     reset();
     setIsConnecting(false);
@@ -386,14 +394,14 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 font-mono text-xs">
+  return createPortal(
+    <div className="fixed inset-0 z-[999999] overflow-y-auto p-4 sm:p-6 flex min-h-full items-center justify-center bg-black/85 backdrop-blur-md animate-in fade-in duration-200 font-mono text-xs">
       <div 
-        className="w-full max-w-md bg-[#0e0e11] border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden text-zinc-100"
+        className="relative w-full max-w-md max-h-[85vh] flex flex-col bg-[#0e0e11] border border-zinc-800 rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] overflow-hidden text-zinc-100 my-auto z-10"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-zinc-800/80 flex items-center justify-between bg-zinc-900/40">
+        <div className="shrink-0 px-5 py-4 border-b border-zinc-800/80 flex items-center justify-between bg-zinc-900/40">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-100">
@@ -414,7 +422,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
         {/* Tab Toggle */}
         {!isConnecting && !errorMessage && (
-          <div className="flex border-b border-zinc-800/80 bg-zinc-950/60 p-1">
+          <div className="shrink-0 flex border-b border-zinc-800/80 bg-zinc-950/60 p-1">
             <button
               type="button"
               onClick={() => setActiveTab('extension')}
@@ -443,7 +451,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         )}
 
         {/* Body Content */}
-        <div className="p-5 max-h-[70vh] overflow-y-auto space-y-4">
+        <div className="flex-1 p-5 overflow-y-auto space-y-4">
           {/* Connecting State */}
           {isConnecting ? (
             <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
@@ -748,6 +756,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
