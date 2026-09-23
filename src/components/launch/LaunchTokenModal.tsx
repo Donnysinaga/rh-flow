@@ -490,17 +490,17 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl bg-[#131417] border border-zinc-800/90 rounded-2xl shadow-2xl overflow-hidden font-sans text-xs">
+    <div className="fixed inset-0 z-[9999] overflow-y-auto p-3 sm:p-6 flex min-h-full items-center justify-center bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-4xl max-h-[88vh] flex flex-col bg-[#121316] border border-zinc-800/90 rounded-2xl shadow-2xl overflow-hidden font-sans text-xs my-auto">
         
-        {/* Modal Top Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800/80 bg-[#17181c]">
+        {/* Modal Top Header (Fixed at top) */}
+        <div className="shrink-0 flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-zinc-800/80 bg-[#17181c]">
           <div className="flex items-center gap-2.5">
             <PonsLogo className="w-5 h-5" size={20} />
             <div>
               <h3 className="text-sm font-bold text-zinc-100 tracking-wide flex items-center gap-2">
                 <span>Launch Token on Robinhood Chain</span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-lime-400/10 text-lime-400 border border-lime-400/20 font-mono font-semibold">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 font-mono font-semibold">
                   RH FLOW
                 </span>
               </h3>
@@ -515,11 +515,11 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           </button>
         </div>
 
-        {/* Modal Content: 2-Column Responsive Layout */}
-        <form onSubmit={handleLaunch} className="grid grid-cols-1 lg:grid-cols-12 max-h-[82vh] overflow-y-auto">
+        {/* Modal Content: 2-Column Responsive Layout with Clean Scroll */}
+        <form onSubmit={handleLaunch} className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12">
           
           {/* Left Column: Form Inputs (7 Cols) */}
-          <div className="lg:col-span-7 p-6 space-y-4 border-b lg:border-b-0 lg:border-r border-zinc-800/80">
+          <div className="lg:col-span-7 p-5 sm:p-6 space-y-3.5 border-b lg:border-b-0 lg:border-r border-zinc-800/80">
             
             {/* Token Name & Symbol */}
             <div className="grid grid-cols-2 gap-3">
