@@ -3,12 +3,25 @@
 @theme {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --color-robinhood-green: #00C805;
-  --color-robinhood-green-hover: #00E806;
-  --color-robinhood-green-dim: rgba(0, 200, 5, 0.15);
+
+  /* Official Robinhood Signature Brand Colors */
+  --color-robinhood: #00C805;
+  --color-robinhood-hover: #00E806;
+  --color-robinhood-dim: rgba(0, 200, 5, 0.15);
   --color-robinhood-red: #FF5000;
   --color-robinhood-dark: #000000;
-  --color-robinhood-surface: #101216;
+  --color-robinhood-surface: #0E1014;
+
+  /* Global mapping for all emerald & lime classes to Robinhood Green */
+  --color-emerald-300: #00E806;
+  --color-emerald-400: #00C805;
+  --color-emerald-500: #00C805;
+  --color-emerald-600: #009604;
+  --color-lime-300: #00E806;
+  --color-lime-400: #00C805;
+  --color-lime-500: #00C805;
+  --color-green-400: #00C805;
+  --color-green-500: #00C805;
 }
 
 /* Custom scrollbar for Robinhood dark theme */
@@ -44,3 +57,4 @@
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
+
