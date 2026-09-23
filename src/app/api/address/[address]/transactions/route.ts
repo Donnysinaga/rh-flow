@@ -1,39 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isValidAddress } from '@/lib/utils/format';
+import { fetchAddressTransactions } from '@/lib/api/blockscout';
 
-const BLOCKSCOUT_API = 'https://robinhoodchain.blockscout.com/api/v2';
-const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { address: string } }
+  context: { params: Promise<{ address: string }> | { address: string } }
 ) {
   try {
-    const { address } = params;
-    
-    if (!ADDRESS_REGEX.test(address)) {
-      return NextResponse.json({ error: 'Invalid address format' }, { status: 400 });
+    const params = await Promise.resolve(context.params);
+    const address = params.address;
+
+    if (!isValidAddress(address)) {
+      return NextResponse.json({ error: 'Invalid address format', items: [] }, { status: 400 });
     }
-    
-    const response = await fetch(`${BLOCKSCOUT_API}/addresses/${address}/transactions`, {
-      next: { revalidate: 15 }
-    });
-    
-    if (!response.ok) {
-      if (response.status === 404) {
-        return NextResponse.json({ error: 'Transactions not found', items: [] }, { status: 404 });
+
+    const data = await fetchAddressTransactions(address);
+    const rawItems = data?.items || [];
+
+    const items = rawItems.map((tx: any) => {
+      let ethVal = '0';
+      try {
+        if (tx.value) {
+          const valNum = parseFloat(tx.value) / 1e18;
+          ethVal = valNum > 0 ? valNum.toFixed(4) : '0';
+        }
+      } catch {
+        ethVal = '0';
       }
-      throw new Error(`Blockscout API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    return NextResponse.json(data, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30'
-      }
+
+      return {
+        hash: tx.hash,
+        from: tx.from?.hash || '',
+        to: tx.to?.hash || '',
+        value: ethVal,
+        timestamp: tx.timestamp || '',
+        block: tx.block_number || tx.block || 0,
+        status: tx.status || 'ok',
+        method: tx.method || null,
+      };
     });
+
+    return NextResponse.json({ items });
   } catch (error) {
-    console.error('Error fetching address transactions:', error);
-    return NextResponse.json({ error: 'Internal server error', items: [] }, { status: 500 });
+    console.error('Error in /api/address/[address]/transactions:', error);
+    return NextResponse.json({ items: [] });
   }
 }

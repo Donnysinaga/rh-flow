@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RH FLOW — Robinhood Chain Trading Terminal & Intelligence Hub
 
-## Getting Started
+**RH FLOW** is a high-performance, non-custodial decentralized trading terminal and intelligence hub built natively for **Robinhood Chain (Chain ID: 4663)**.
 
-First, run the development server:
+Designed for traders, creators, and DeFi participants, RH FLOW delivers sub-second transaction telemetry, fair-launch bonding curve integration (Pons Family v2), on-chain bytecode security audits, and multi-wallet connectivity.
+
+---
+
+## ⚡ Key Features
+
+- **Multi-Wallet Injected Hub (EIP-6963)**
+  - Seamless auto-detection and 1-click network switching for **MetaMask**, **Coinbase Wallet**, **OKX Wallet**, **Phantom**, **Bitget**, **Trust Wallet**, and standard browser extensions.
+  - Automatic balance synchronization for ETH and ERC-20 tokens.
+
+- **Pons Family v2 Token Launcher & Bonding Curves**
+  - Direct integration with verified on-chain factory (`0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e`).
+  - Fair-launch mathematical curves (1 Billion fixed supply, 4.2 ETH graduation milestone).
+  - Automated liquidity migration and locked LP creation.
+
+- **Real-Time Token Discovery & DEX Swaps**
+  - Indexing of newly launched and verified tokens across Robinhood Chain.
+  - Interactive Lightweight Candlestick Charts with multi-timeframe feeds (`1m`, `5m`, `15m`, `1h`, `1D`).
+  - Instant 1-click buy/sell routing supporting both standard AMM routers and active bonding curves with custom slippage protection.
+
+- **On-Chain Intelligence & Security Audits**
+  - Automated bytecode verification, honeypot heuristics, and top-holder concentration analysis.
+  - Smart Money activity classification based on sequencer transaction frequency.
+  - Personal portfolio overview with token balances and trade history.
+
+---
+
+## 🌐 Network Information
+
+| Parameter | Value |
+| :--- | :--- |
+| **Network Name** | Robinhood Chain |
+| **Chain ID** | `4663` (`0x1237`) |
+| **Currency Symbol** | `ETH` |
+| **Decimals** | `18` |
+| **Primary RPC** | `https://rpc-robinhood.blockmachine.io` |
+| **Fallback RPC** | `https://robinhood.rpc.blxrbdn.com` |
+| **Block Explorer (Robinscan)** | `https://robinscan.io` |
+| **Block Explorer (Blockscout)** | `https://robinhoodchain.blockscout.com` |
+| **Pons v2 Factory** | `0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e` |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Web3 / EVM**: [Wagmi v2](https://wagmi.sh/), [Viem](https://viem.sh/)
+- **Charts**: [Lightweight Charts](https://tradingview.github.io/lightweight-charts/)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone & Install Dependencies
+
+```bash
+git clone https://github.com/Donnysinaga/rh-flow.git
+cd rh-flow
+npm install
+```
+
+### 2. Run Local Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Deployment (Online)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy to Vercel (Recommended)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Push this repository to your GitHub account.
+2. Go to [Vercel](https://vercel.com) and import the `rh-flow` repository.
+3. Click **Deploy**. Vercel will automatically detect Next.js and build the production bundle.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License. Open-source and non-custodial.

@@ -1,53 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ROBINHOOD_CHAIN } from '@/config/network';
+import { isValidAddress } from '@/lib/utils/format';
+import { fetchAddress, fetchAddressTokenBalances } from '@/lib/api/blockscout';
+import { publicClient } from '@/lib/web3/client';
+import { formatUnits } from 'viem';
 
-const BLOCKSCOUT_API = 'https://robinhoodchain.blockscout.com/api/v2';
-const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { address: string } }
+  context: { params: Promise<{ address: string }> | { address: string } }
 ) {
   try {
-    const { address } = params;
-    
-    if (!ADDRESS_REGEX.test(address)) {
+    const params = await Promise.resolve(context.params);
+    const address = params.address;
+
+    if (!isValidAddress(address)) {
       return NextResponse.json({ error: 'Invalid address format' }, { status: 400 });
     }
-    
-    // Fetch address info
-    const addressRes = await fetch(`${BLOCKSCOUT_API}/addresses/${address}`, {
-      next: { revalidate: 15 }
-    });
-    
-    let addressData = null;
-    if (addressRes.ok) {
-      addressData = await addressRes.json();
-    } else if (addressRes.status === 404) {
-      return NextResponse.json({ error: 'Address not found' }, { status: 404 });
-    } else {
-      throw new Error(`Blockscout API error: ${addressRes.status}`);
-    }
-    
-    // Fetch token balances
-    const tokensRes = await fetch(`${BLOCKSCOUT_API}/addresses/${address}/token-balances`, {
-      next: { revalidate: 15 }
-    });
-    
-    let tokenBalances = [];
-    if (tokensRes.ok) {
-      tokenBalances = await tokensRes.json();
-    }
-    
-    return NextResponse.json({
-      ...addressData,
-      tokenBalances
-    }, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30'
+
+    const [addressData, tokenBalances, ethBalanceBigInt] = await Promise.allSettled([
+      fetchAddress(address),
+      fetchAddressTokenBalances(address),
+      publicClient.getBalance({ address: address as `0x${string}` }),
+    ]);
+
+    const addrInfo = addressData.status === 'fulfilled' ? addressData.value : null;
+    const rawTokens = tokenBalances.status === 'fulfilled' && tokenBalances.value ? (Array.isArray(tokenBalances.value) ? tokenBalances.value : (tokenBalances.value as any).items || []) : [];
+
+    let ethBalance = '0';
+    if (ethBalanceBigInt.status === 'fulfilled') {
+      ethBalance = formatUnits(ethBalanceBigInt.value, 18);
+    } else if (addrInfo?.coin_balance) {
+      try {
+        ethBalance = formatUnits(BigInt(addrInfo.coin_balance), 18);
+      } catch {
+        // Ignore
       }
+    }
+
+    const tokens = rawTokens.map((t: any) => {
+      const decimals = t.token?.decimals ? parseInt(t.token.decimals, 10) : 18;
+      let formattedBalance = '0';
+      try {
+        if (t.value) {
+          formattedBalance = formatUnits(BigInt(t.value), decimals);
+        }
+      } catch {
+        formattedBalance = t.value || '0';
+      }
+
+      return {
+        address: t.token?.address || t.token?.address_hash || '',
+        name: t.token?.name || 'Unknown',
+        symbol: t.token?.symbol || '???',
+        balance: formattedBalance,
+        rawBalance: t.value,
+        type: t.token?.type || 'ERC-20',
+      };
+    });
+
+    return NextResponse.json({
+      address,
+      ethBalance: parseFloat(ethBalance).toFixed(4),
+      rawEthBalance: ethBalance,
+      isContract: addrInfo?.is_contract || false,
+      isVerified: addrInfo?.is_verified || false,
+      contractName: addrInfo?.name || null,
+      tokens,
+      tokenCount: tokens.length,
+      txCount: null,
     });
   } catch (error) {
     console.error('Error fetching address info:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to retrieve address intelligence' }, { status: 500 });
   }
 }

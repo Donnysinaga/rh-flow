@@ -1,7 +1,4 @@
-import { createPublicClient, http, parseAbi } from 'viem';
-// Assuming client, contracts and network config files will exist or we define fallback here
-// Since user hasn't created them, we will use viem directly with hardcoded default chain for now or assume imports exist.
-// Based on user prompt: Import public client from web3/client.ts, Import ABIs from config/contracts.ts, Import addresses from config/network.ts
+import { parseAbi } from 'viem';
 import { publicClient } from '../web3/client';
 import { DEX_FACTORY_ABI, DEX_PAIR_ABI, ERC20_ABI } from '../../config/contracts';
 import { DEX_FACTORY_ADDRESS } from '../../config/network';
@@ -26,7 +23,7 @@ export async function getPairAddress(tokenA: string, tokenB: string): Promise<st
       address: DEX_FACTORY_ADDRESS as `0x${string}`,
       abi: DEX_FACTORY_ABI,
       functionName: 'getPair',
-      args: [tokenA, tokenB],
+      args: [tokenA as `0x${string}`, tokenB as `0x${string}`],
     });
     return data as string;
   } catch (error) {
@@ -98,7 +95,7 @@ export async function getTokenInfo(address: string): Promise<TokenInfo | null> {
     return {
       name: results[0].result as string,
       symbol: results[1].result as string,
-      decimals: results[2].result as number,
+      decimals: Number(results[2].result),
       totalSupply: results[3].result as bigint,
     };
   } catch (error) {

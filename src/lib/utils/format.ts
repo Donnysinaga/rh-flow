@@ -1,5 +1,7 @@
 import { formatUnits } from 'viem';
 
+export { formatUnits };
+
 export const formatAddress = (address: string): string => {
   if (!address || !isValidAddress(address)) return address || '—';
   return `${address.slice(0, 6)}...${address.slice(-4)}`;

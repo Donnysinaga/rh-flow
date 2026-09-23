@@ -83,13 +83,24 @@ export interface PaginatedResponse<T> {
 const BASE_URL = 'https://robinhoodchain.blockscout.com/api/v2';
 const TIMEOUT_MS = 10000;
 
-async function fetchWithTimeout(url: string, options: RequestInit = {}): Promise<any> {
+export const BLOCKSCOUT_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Accept': 'application/json, text/plain, */*',
+  'Accept-Language': 'en-US,en;q=0.9',
+  'Referer': 'https://robinhoodchain.blockscout.com/',
+};
+
+export async function fetchWithTimeout(url: string, options: RequestInit = {}): Promise<any> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
     const response = await fetch(url, {
       ...options,
+      headers: {
+        ...BLOCKSCOUT_HEADERS,
+        ...(options.headers || {}),
+      },
       signal: controller.signal,
     });
     if (!response.ok) {
@@ -104,8 +115,9 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}): Promise
   }
 }
 
-export async function fetchTokens(): Promise<PaginatedResponse<Token> | null> {
-  return fetchWithTimeout(`${BASE_URL}/tokens`);
+export async function fetchTokens(type?: string): Promise<PaginatedResponse<Token> | null> {
+  const url = type ? `${BASE_URL}/tokens?type=${encodeURIComponent(type)}` : `${BASE_URL}/tokens`;
+  return fetchWithTimeout(url);
 }
 
 export async function fetchToken(address: string): Promise<Token | null> {
@@ -132,7 +144,7 @@ export async function fetchAddressTokenBalances(address: string): Promise<TokenB
   return fetchWithTimeout(`${BASE_URL}/addresses/${address}/token-balances`);
 }
 
-export async function fetchRecentTransactions(): Promise<PaginatedResponse<Transaction> | null> {
+export async function fetchRecentTransactions(): Promise<any[] | null> {
   return fetchWithTimeout(`${BASE_URL}/main-page/transactions`);
 }
 
