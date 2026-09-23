@@ -208,6 +208,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployedTxHash, setDeployedTxHash] = useState<string | null>(null);
   const [deployedTokenAddr, setDeployedTokenAddr] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Clean reset function for repeatable token creations
@@ -223,6 +224,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
     setCreatorTaxBps('100');
     setInitialBuyEth('');
     setIsDeploying(false);
+    setIsUploadingImage(false);
     setDeployedTxHash(null);
     setDeployedTokenAddr(null);
     setShowAdvanced(false);
@@ -267,8 +269,6 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       setInitialBuyEth('0');
     }
   };
-
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
