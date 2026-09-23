@@ -35,9 +35,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 1. Attempt upload to Pinata IPFS if JWT or API Key + Secret is configured
-    const pinataJwt = process.env.PINATA_JWT;
+    const pinataJwt =
+      process.env.PINATA_JWT ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhMzgxZDlkNS1kZTgwLTRiNTQtOTkwNy01YzI2MGRhMTcyZTAiLCJlbWFpbCI6Imdsb3J5YWM4MkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiZmVmMTM3MzQwMGE3OGU0OWQ1MWEiLCJzY29wZWRLZXlTZWNyZXQiOiI5NWY0MWIxNmE0ZWU0MzUzNWVkMTRkNmQ0Zjg1YjgyNDU4ZTg4NDc1NjE5YTYxYWQyZmI2MjcyNmU1ZjFhYTQ3IiwiZXhwIjoxODIxNzE2NTIwfQ.P3Q1aJJ1nK14sXE29kcM_76mxQJ8D2DhPFwdlYCtZiQ';
     const pinataApiKey = process.env.PINATA_API_KEY || 'fef1373400a78e49d51a';
-    const pinataSecret = process.env.PINATA_API_SECRET;
+    const pinataSecret = process.env.PINATA_API_SECRET || '95f41b16a4ee43535ed14d6d4f85b82458e88475619a61ad2fb62726e5f1aa47';
 
     if (pinataJwt || (pinataApiKey && pinataSecret)) {
       try {
