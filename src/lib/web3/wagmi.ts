@@ -1,0 +1,14 @@
+import { http, createConfig } from 'wagmi';
+import { injected } from 'wagmi/connectors';
+import { robinhoodChain } from './chains';
+import { ROBINHOOD_CHAIN } from '../../config/network';
+
+export const wagmiConfig = createConfig({
+  chains: [robinhoodChain],
+  connectors: [
+    injected(),
+  ],
+  transports: {
+    [robinhoodChain.id]: http(ROBINHOOD_CHAIN.rpcUrls.primary),
+  },
+});
