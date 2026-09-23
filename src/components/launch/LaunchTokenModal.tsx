@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { useAccount, useSendTransaction, useSwitchChain, useChainId } from 'wagmi';
+import { useAccount, useSendTransaction, useSwitchChain, useChainId, useBalance } from 'wagmi';
 import { parseEther, encodeFunctionData } from 'viem';
 import { PONS_FACTORY_ADDRESS, ROBINHOOD_CHAIN } from '@/config/network';
 import { PONS_V2_FACTORY_ABI } from '@/config/contracts';
@@ -16,6 +16,7 @@ interface LaunchTokenModalProps {
 export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
+  const { data: balanceData } = useBalance({ address, chainId: ROBINHOOD_CHAIN.id });
   const { switchChainAsync } = useSwitchChain();
   const { sendTransactionAsync } = useSendTransaction();
   const { toastSuccess, toastError, toastInfo } = useToast();
@@ -82,6 +83,18 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         await switchChainAsync({ chainId: ROBINHOOD_CHAIN.id });
       }
 
+      const launchFeeWei = 500000000000000n; // 0.0005 ETH official Pons v2 launch fee
+      const initialBuyWei = initialBuyEth && parseFloat(initialBuyEth) > 0 ? parseEther(initialBuyEth) : 0n;
+      const totalValue = launchFeeWei + initialBuyWei;
+
+      // Check balance pre-flight
+      if (balanceData && balanceData.value < totalValue) {
+        const requiredEth = (Number(totalValue) / 1e18).toFixed(4);
+        toastError('Insufficient Balance', `You need at least ${requiredEth} ETH + gas on Robinhood Chain.`);
+        setIsDeploying(false);
+        return;
+      }
+
       toastInfo('Submitting Transaction', 'Please confirm the token launch in your wallet...');
 
       // Generate cryptographically unique salt for token address generation
@@ -92,10 +105,6 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         for (let i = 0; i < 32; i++) saltBytes[i] = Math.floor(Math.random() * 256);
       }
       const randomSalt = (`0x` + Array.from(saltBytes, (b) => b.toString(16).padStart(2, '0')).join('')) as `0x${string}`;
-
-      const launchFeeWei = 500000000000000n; // 0.0005 ETH official Pons v2 launch fee
-      const initialBuyWei = initialBuyEth && parseFloat(initialBuyEth) > 0 ? parseEther(initialBuyEth) : 0n;
-      const totalValue = launchFeeWei + initialBuyWei;
 
       // Safe clean logo URL (avoid huge base64 strings in on-chain calldata)
       const cleanLogo = iconUrl.trim().startsWith('http://') || iconUrl.trim().startsWith('https://') || iconUrl.trim().startsWith('ipfs://')
@@ -130,13 +139,42 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         ],
       });
 
-      // Dispatch transaction directly via connected wallet with explicit gas limit buffer
-      const hash = await sendTransactionAsync({
-        to: PONS_FACTORY_ADDRESS,
-        value: totalValue,
-        data: callData,
-        gas: 4200000n,
-      });
+      let hash: string;
+      const win = typeof window !== 'undefined' ? (window as any) : null;
+      const ethProvider = win?.ethereum;
+
+      // Dispatch transaction directly via connected provider or wagmi fallback
+      if (ethProvider && typeof ethProvider.request === 'function') {
+        try {
+          hash = await ethProvider.request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: address,
+                to: PONS_FACTORY_ADDRESS,
+                value: '0x' + totalValue.toString(16),
+                data: callData,
+              },
+            ],
+          });
+        } catch (ethErr: any) {
+          if (ethErr?.code === 4001 || ethErr?.message?.toLowerCase().includes('user rejected') || ethErr?.message?.toLowerCase().includes('cancelled')) {
+            throw ethErr;
+          }
+          // Fallback to wagmi sendTransactionAsync
+          hash = await sendTransactionAsync({
+            to: PONS_FACTORY_ADDRESS,
+            value: totalValue,
+            data: callData,
+          });
+        }
+      } else {
+        hash = await sendTransactionAsync({
+          to: PONS_FACTORY_ADDRESS,
+          value: totalValue,
+          data: callData,
+        });
+      }
 
       toastSuccess(
         'Token Deployed Successfully! 🚀',
@@ -148,7 +186,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       console.error('Deployment error:', err);
       toastError(
         'Launch Failed',
-        err?.shortMessage || err?.message || 'Transaction rejected by user or network.'
+        err?.shortMessage || err?.message || 'Transaction was rejected or failed.'
       );
     } finally {
       setIsDeploying(false);
