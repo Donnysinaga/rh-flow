@@ -517,6 +517,10 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               )}
             </button>
           </div>
+        </form>
+      </div>
+    </div>
   );
 }
+
 
