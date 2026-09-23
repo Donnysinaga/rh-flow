@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAccount, useSendTransaction, useSwitchChain, useChainId, useBalance } from 'wagmi';
-import { parseEther, encodeFunctionData } from 'viem';
+import { encodeFunctionData, parseAbiItem } from 'viem';
 import { PONS_FACTORY_ADDRESS, ROBINHOOD_CHAIN } from '@/config/network';
 import { PONS_V2_FACTORY_ABI } from '@/config/contracts';
+import { publicClient } from '@/lib/web3/client';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PonsLogo } from '@/components/ui/PonsLogo';
 
@@ -14,6 +16,7 @@ interface LaunchTokenModalProps {
 }
 
 export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
+  const router = useRouter();
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const { data: balanceData } = useBalance({ address, chainId: ROBINHOOD_CHAIN.id });
@@ -31,8 +34,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [telegram, setTelegram] = useState('');
   const [website, setWebsite] = useState('');
   const [creatorTaxBps, setCreatorTaxBps] = useState('100'); // 1% default
-  const [initialBuyEth, setInitialBuyEth] = useState('');
   const [isDeploying, setIsDeploying] = useState(false);
+  const [deployedTxHash, setDeployedTxHash] = useState<string | null>(null);
+  const [deployedTokenAddr, setDeployedTokenAddr] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -83,14 +87,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         await switchChainAsync({ chainId: ROBINHOOD_CHAIN.id });
       }
 
-      const launchFeeWei = 500000000000000n; // 0.0005 ETH official Pons v2 launch fee
-      const initialBuyWei = initialBuyEth && parseFloat(initialBuyEth) > 0 ? parseEther(initialBuyEth) : 0n;
-      const totalValue = launchFeeWei + initialBuyWei;
+      // Exact Pons v2 Factory deployment fee (0.0005 ETH)
+      const launchFeeWei = 500000000000000n;
 
       // Check balance pre-flight
-      if (balanceData && balanceData.value < totalValue) {
-        const requiredEth = (Number(totalValue) / 1e18).toFixed(4);
-        toastError('Insufficient Balance', `You need at least ${requiredEth} ETH + gas on Robinhood Chain.`);
+      if (balanceData && balanceData.value < launchFeeWei) {
+        toastError('Insufficient Balance', 'You need at least 0.0007 ETH on Robinhood Chain to cover deployment and gas.');
         setIsDeploying(false);
         return;
       }
@@ -152,7 +154,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               {
                 from: address,
                 to: PONS_FACTORY_ADDRESS,
-                value: '0x' + totalValue.toString(16),
+                value: '0x' + launchFeeWei.toString(16),
                 data: callData,
               },
             ],
@@ -164,24 +166,41 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           // Fallback to wagmi sendTransactionAsync
           hash = await sendTransactionAsync({
             to: PONS_FACTORY_ADDRESS,
-            value: totalValue,
+            value: launchFeeWei,
             data: callData,
           });
         }
       } else {
         hash = await sendTransactionAsync({
           to: PONS_FACTORY_ADDRESS,
-          value: totalValue,
+          value: launchFeeWei,
           data: callData,
         });
       }
 
+      setDeployedTxHash(hash);
       toastSuccess(
         'Token Deployed Successfully! 🚀',
-        `Transaction submitted: ${hash.slice(0, 10)}...${hash.slice(-8)}. Your curve is active on Robinhood Chain!`,
+        `Transaction submitted: ${hash.slice(0, 10)}...${hash.slice(-8)}. Your curve is live!`,
         hash
       );
-      onClose();
+
+      // Try to fetch receipt in background to extract token address
+      try {
+        const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as `0x${string}` });
+        if (receipt && receipt.logs) {
+          // TokenLaunched event log
+          for (const log of receipt.logs) {
+            if (log.address.toLowerCase() === PONS_FACTORY_ADDRESS.toLowerCase() && log.topics && log.topics[1]) {
+              const tokenAddr = `0x${log.topics[1].slice(26)}`;
+              setDeployedTokenAddr(tokenAddr);
+              break;
+            }
+          }
+        }
+      } catch {
+        // Receipt fetch can continue in background
+      }
     } catch (err: any) {
       console.error('Deployment error:', err);
       toastError(
@@ -192,6 +211,65 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       setIsDeploying(false);
     }
   };
+
+  const handleGoToTrade = () => {
+    const targetAddr = deployedTokenAddr;
+    setDeployedTxHash(null);
+    setDeployedTokenAddr(null);
+    onClose();
+    if (targetAddr) {
+      router.push(`/token/${targetAddr}`);
+    } else {
+      router.push('/');
+    }
+  };
+
+  if (deployedTxHash) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="relative w-full max-w-md bg-zinc-950 border border-emerald-500/40 rounded-xl shadow-2xl p-6 font-mono text-xs space-y-4 text-center">
+          <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400 text-2xl">
+            🚀
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-zinc-100 uppercase">Token Deployed!</h3>
+            <p className="text-zinc-400 text-[11px]">
+              <span className="text-emerald-400 font-bold">{name} ({symbol})</span> is now live on Robinhood Chain with 1B tokens in its fair bonding curve.
+            </p>
+          </div>
+
+          <div className="p-3 bg-zinc-900/80 border border-zinc-800 rounded-lg text-left text-[11px] space-y-1 text-zinc-400 truncate">
+            <div className="text-zinc-500 text-[10px] uppercase">Transaction Hash:</div>
+            <a
+              href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/tx/${deployedTxHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-400 hover:underline block truncate"
+            >
+              {deployedTxHash}
+            </a>
+          </div>
+
+          <div className="pt-2 space-y-2">
+            <button
+              type="button"
+              onClick={handleGoToTrade}
+              className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold rounded-lg transition-colors cursor-pointer shadow-lg shadow-emerald-500/20 text-xs"
+            >
+              Go to Token & Buy Tokens Now 🚀
+            </button>
+            <button
+              type="button"
+              onClick={() => { setDeployedTxHash(null); onClose(); }}
+              className="w-full py-2 bg-zinc-900 hover:bg-zinc-850 text-zinc-400 hover:text-zinc-200 rounded-lg transition-colors text-xs"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
@@ -373,39 +451,22 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             </div>
           </div>
 
-          {/* Creator Tax & Initial Buy */}
-          <div className="grid grid-cols-2 gap-3 pt-1 border-t border-zinc-850">
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-zinc-300">
-                Creator Tax Royalty
-              </label>
-              <select
-                value={creatorTaxBps}
-                onChange={(e) => setCreatorTaxBps(e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-100 focus:outline-none focus:border-emerald-500/50 text-xs"
-              >
-                <option value="0">0.00% Tax (Zero Tax)</option>
-                <option value="50">0.50% Tax</option>
-                <option value="100">1.00% Tax (Standard)</option>
-                <option value="200">2.00% Tax</option>
-                <option value="300">3.00% Tax (Max)</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-zinc-300">
-                Initial Buy (ETH) <span className="text-zinc-500 font-normal">(Optional)</span>
-              </label>
-              <input
-                type="number"
-                step="0.001"
-                min="0"
-                placeholder="0.0 ETH"
-                value={initialBuyEth}
-                onChange={(e) => setInitialBuyEth(e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 text-xs"
-              />
-            </div>
+          {/* Creator Tax */}
+          <div className="space-y-1 pt-1 border-t border-zinc-850">
+            <label className="text-[11px] font-semibold text-zinc-300">
+              Creator Tax Royalty
+            </label>
+            <select
+              value={creatorTaxBps}
+              onChange={(e) => setCreatorTaxBps(e.target.value)}
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-100 focus:outline-none focus:border-emerald-500/50 text-xs"
+            >
+              <option value="0">0.00% Tax (Zero Tax)</option>
+              <option value="50">0.50% Tax</option>
+              <option value="100">1.00% Tax (Standard)</option>
+              <option value="200">2.00% Tax</option>
+              <option value="300">3.00% Tax (Max)</option>
+            </select>
           </div>
 
           {/* Economics Highlights */}
@@ -420,7 +481,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             </div>
             <div className="flex items-center justify-between text-zinc-400">
               <span>Protocol Deployment Fee:</span>
-              <span className="text-zinc-200 font-semibold">0.0005 ETH</span>
+              <span className="text-emerald-400 font-semibold">0.0005 ETH</span>
             </div>
             <div className="flex items-center justify-between text-zinc-400">
               <span>Uniswap Liquidity Lock:</span>
@@ -448,18 +509,14 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             >
               {isDeploying ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-3.5 h-3.5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
                   <span>Deploying on Robinhood Chain...</span>
                 </>
-              ) : !isConnected ? (
-                <span>Connect Wallet to Deploy</span>
               ) : (
-                <span>Deploy Token to Robinhood Chain</span>
+                <span>Launch Token (0.0005 ETH) 🚀</span>
               )}
             </button>
           </div>
-        </form>
-      </div>
-    </div>
   );
 }
+
