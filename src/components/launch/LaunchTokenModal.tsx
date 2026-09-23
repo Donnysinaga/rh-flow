@@ -493,18 +493,35 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       );
 
       try {
+        toastInfo('Confirming on Blockchain', 'Waiting for Robinhood Chain confirmation...');
         const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as `0x${string}` });
+        let extractedTokenAddr: string | null = null;
+
         if (receipt && receipt.logs) {
           for (const log of receipt.logs) {
+            // Find TokenLaunched event topic or indexed token address
             if (log.topics && log.topics[1]) {
-              const tokenAddr = `0x${log.topics[1].slice(26)}`;
-              setDeployedTokenAddr(tokenAddr);
-              break;
+              const possibleAddr = `0x${log.topics[1].slice(26)}`;
+              if (possibleAddr.length === 42 && possibleAddr !== '0x0000000000000000000000000000000000000000') {
+                extractedTokenAddr = possibleAddr;
+                setDeployedTokenAddr(possibleAddr);
+                break;
+              }
             }
           }
         }
-      } catch {
-        // Background receipt fetch
+
+        // Automatic redirect directly to the newly deployed token trading terminal
+        if (extractedTokenAddr) {
+          toastSuccess('Token Live 🚀', `Redirecting to ${name} terminal...`);
+          setTimeout(() => {
+            resetForm();
+            onClose();
+            router.push(`/token/${extractedTokenAddr}`);
+          }, 1200);
+        }
+      } catch (receiptErr) {
+        console.warn('Background receipt error:', receiptErr);
       }
     } catch (err: any) {
       console.error('Deployment error:', err);
@@ -539,6 +556,9 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             <h3 className="text-base font-bold text-zinc-100 uppercase">Token Deployed!</h3>
             <p className="text-zinc-400 text-[11px]">
               <span className="text-[#00C805] font-bold">{name} ({symbol})</span> is now live on Robinhood Chain with 1B tokens in its fair bonding curve.
+            </p>
+            <p className="text-[#00C805] text-[10px] animate-pulse">
+              ⚡ Redirecting to token terminal...
             </p>
           </div>
 
