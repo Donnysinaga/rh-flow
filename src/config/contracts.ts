@@ -54,6 +54,12 @@ export const PONS_V2_FACTORY_ABI = parseAbi([
   'event CreatorFeeRecipientUpdated(address indexed token, address indexed oldRecipient, address indexed newRecipient)',
 ]);
 
+export const PONS_V2_LAUNCH_AND_BUY_ABI = parseAbi([
+  'struct Socials { string twitter; string telegram; string discord; string website; string farcaster; }',
+  'struct LaunchParams { string name; string symbol; string description; string logo; Socials socials; address creatorFeeRecipient; uint16 creatorTaxBps; bool buybackEnabled; bytes32 poolSalt; bytes32 tokenSalt; }',
+  'function launchAndBuy(LaunchParams params, uint256 launchConfigId, address pairToken, uint256 amountIn, uint256 minTokensOut, address recipient, address[] snipeTaxExemptions) payable returns (address token, address curve, uint256 tokensBought)',
+]);
+
 export const PONS_V2_CURVE_ABI = parseAbi([
   'function getReserves() view returns (uint256 quoteReserve, uint256 tokenReserve)',
   'function realQuoteReserve() view returns (uint256)',

@@ -3,9 +3,9 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAccount, useSendTransaction, useSwitchChain, useChainId, useBalance } from 'wagmi';
-import { encodeFunctionData, parseAbiItem } from 'viem';
-import { PONS_FACTORY_ADDRESS, ROBINHOOD_CHAIN } from '@/config/network';
-import { PONS_V2_FACTORY_ABI } from '@/config/contracts';
+import { parseEther, encodeFunctionData } from 'viem';
+import { PONS_FACTORY_ADDRESS, PONS_V2_ROUTER_ADDRESS, ROBINHOOD_CHAIN } from '@/config/network';
+import { PONS_V2_FACTORY_ABI, PONS_V2_LAUNCH_AND_BUY_ABI } from '@/config/contracts';
 import { publicClient } from '@/lib/web3/client';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PonsLogo } from '@/components/ui/PonsLogo';
@@ -34,6 +34,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [telegram, setTelegram] = useState('');
   const [website, setWebsite] = useState('');
   const [creatorTaxBps, setCreatorTaxBps] = useState('100'); // 1% default
+  const [initialBuyEth, setInitialBuyEth] = useState('');
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployedTxHash, setDeployedTxHash] = useState<string | null>(null);
   const [deployedTokenAddr, setDeployedTokenAddr] = useState<string | null>(null);
@@ -87,17 +88,24 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         await switchChainAsync({ chainId: ROBINHOOD_CHAIN.id });
       }
 
-      // Exact Pons v2 Factory deployment fee (0.0005 ETH)
-      const launchFeeWei = 500000000000000n;
+      const launchFeeWei = 500000000000000n; // 0.0005 ETH official Pons v2 launch fee
+      const initialBuyWei = initialBuyEth && parseFloat(initialBuyEth) > 0 ? parseEther(initialBuyEth) : 0n;
+      const totalValue = launchFeeWei + initialBuyWei;
 
       // Check balance pre-flight
-      if (balanceData && balanceData.value < launchFeeWei) {
-        toastError('Insufficient Balance', 'You need at least 0.0007 ETH on Robinhood Chain to cover deployment and gas.');
+      if (balanceData && balanceData.value < totalValue) {
+        const requiredEth = (Number(totalValue) / 1e18).toFixed(4);
+        toastError('Insufficient Balance', `You need at least ${requiredEth} ETH + gas on Robinhood Chain.`);
         setIsDeploying(false);
         return;
       }
 
-      toastInfo('Submitting Transaction', 'Please confirm the token launch in your wallet...');
+      toastInfo(
+        'Submitting Transaction',
+        initialBuyWei > 0n
+          ? `Deploying token & executing atomic developer buy (${initialBuyEth} ETH)...`
+          : 'Please confirm the token launch in your wallet...'
+      );
 
       // Generate cryptographically unique salt for token address generation
       const saltBytes = new Uint8Array(32);
@@ -113,33 +121,57 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         ? iconUrl.trim()
         : '';
 
-      // Encode function data for launchToken
-      const callData = encodeFunctionData({
-        abi: PONS_V2_FACTORY_ABI,
-        functionName: 'launchToken',
-        args: [
-          {
-            name: name.trim(),
-            symbol: symbol.trim().toUpperCase(),
-            description: description.trim(),
-            logo: cleanLogo,
-            socials: {
-              twitter: twitter.trim(),
-              telegram: telegram.trim(),
-              discord: '',
-              website: website.trim(),
-              farcaster: '',
-            },
-            creatorFeeRecipient: address as `0x${string}`,
-            creatorTaxBps: parseInt(creatorTaxBps, 10) || 100,
-            buybackEnabled: true,
-            poolSalt: '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`,
-            tokenSalt: randomSalt,
-          },
-          0n, // launchConfigId 0 (Standard 1B supply, 4.2 ETH target)
-          '0x0000000000000000000000000000000000000000' as `0x${string}`, // native ETH pair
-        ],
-      });
+      const launchParams = {
+        name: name.trim(),
+        symbol: symbol.trim().toUpperCase(),
+        description: description.trim(),
+        logo: cleanLogo,
+        socials: {
+          twitter: twitter.trim(),
+          telegram: telegram.trim(),
+          discord: '',
+          website: website.trim(),
+          farcaster: '',
+        },
+        creatorFeeRecipient: address as `0x${string}`,
+        creatorTaxBps: parseInt(creatorTaxBps, 10) || 100,
+        buybackEnabled: true,
+        poolSalt: '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`,
+        tokenSalt: randomSalt,
+      };
+
+      let callData: `0x${string}`;
+      let targetAddress: `0x${string}`;
+
+      if (initialBuyWei > 0n) {
+        // Atomic Deploy + Buy in the exact same transaction block (Zero frontrunning snipe risk!)
+        targetAddress = PONS_V2_ROUTER_ADDRESS;
+        callData = encodeFunctionData({
+          abi: PONS_V2_LAUNCH_AND_BUY_ABI,
+          functionName: 'launchAndBuy',
+          args: [
+            launchParams,
+            0n, // launchConfigId 0 (Standard 1B supply, 4.2 ETH target)
+            '0x0000000000000000000000000000000000000000' as `0x${string}`, // native ETH pair
+            initialBuyWei,
+            0n, // minTokensOut (slippage handled)
+            address as `0x${string}`, // recipient of bought tokens
+            [], // snipeTaxExemptions
+          ],
+        });
+      } else {
+        // Standard Fair Launch without initial buy
+        targetAddress = PONS_FACTORY_ADDRESS;
+        callData = encodeFunctionData({
+          abi: PONS_V2_FACTORY_ABI,
+          functionName: 'launchToken',
+          args: [
+            launchParams,
+            0n, // launchConfigId 0
+            '0x0000000000000000000000000000000000000000' as `0x${string}`, // native ETH pair
+          ],
+        });
+      }
 
       let hash: string;
       const win = typeof window !== 'undefined' ? (window as any) : null;
@@ -153,8 +185,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             params: [
               {
                 from: address,
-                to: PONS_FACTORY_ADDRESS,
-                value: '0x' + launchFeeWei.toString(16),
+                to: targetAddress,
+                value: '0x' + totalValue.toString(16),
                 data: callData,
               },
             ],
@@ -165,22 +197,24 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           }
           // Fallback to wagmi sendTransactionAsync
           hash = await sendTransactionAsync({
-            to: PONS_FACTORY_ADDRESS,
-            value: launchFeeWei,
+            to: targetAddress,
+            value: totalValue,
             data: callData,
           });
         }
       } else {
         hash = await sendTransactionAsync({
-          to: PONS_FACTORY_ADDRESS,
-          value: launchFeeWei,
+          to: targetAddress,
+          value: totalValue,
           data: callData,
         });
       }
 
       setDeployedTxHash(hash);
       toastSuccess(
-        'Token Deployed Successfully! 🚀',
+        initialBuyWei > 0n
+          ? 'Token Deployed & Bought Atomically! 🚀'
+          : 'Token Deployed Successfully! 🚀',
         `Transaction submitted: ${hash.slice(0, 10)}...${hash.slice(-8)}. Your curve is live!`,
         hash
       );
@@ -189,9 +223,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
       try {
         const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as `0x${string}` });
         if (receipt && receipt.logs) {
-          // TokenLaunched event log
           for (const log of receipt.logs) {
-            if (log.address.toLowerCase() === PONS_FACTORY_ADDRESS.toLowerCase() && log.topics && log.topics[1]) {
+            if (log.topics && log.topics[1]) {
               const tokenAddr = `0x${log.topics[1].slice(26)}`;
               setDeployedTokenAddr(tokenAddr);
               break;
@@ -199,7 +232,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           }
         }
       } catch {
-        // Receipt fetch can continue in background
+        // Background receipt fetch
       }
     } catch (err: any) {
       console.error('Deployment error:', err);
@@ -451,6 +484,67 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             </div>
           </div>
 
+          {/* Initial Buy / Snipe Protection (Atomic Create + Buy) */}
+          <div className="space-y-2 pt-2 border-t border-zinc-850">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-semibold text-zinc-300 flex items-center gap-1.5">
+                <span>Developer Initial Buy</span>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+                  Anti-Snipe 0-Block
+                </span>
+              </label>
+              <span className="text-[10px] text-zinc-500 font-normal">Optional</span>
+            </div>
+            
+            <p className="text-[10px] text-zinc-400 leading-relaxed">
+              Buy your tokens atomically in the <span className="text-emerald-400 font-medium">exact same transaction block</span> as creation to prevent MEV bots from frontrunning your launch.
+            </p>
+
+            <div className="relative">
+              <input
+                type="number"
+                step="any"
+                min="0"
+                placeholder="0.0 (e.g. 0.05 ETH)"
+                value={initialBuyEth}
+                onChange={(e) => setInitialBuyEth(e.target.value)}
+                className="w-full px-3 py-2 pr-16 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500/50 text-xs font-mono"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-bold pointer-events-none">
+                ETH
+              </div>
+            </div>
+
+            {/* Quick preset chips */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] text-zinc-500">Presets:</span>
+              {[
+                { label: 'None', val: '' },
+                { label: '0.01 ETH', val: '0.01' },
+                { label: '0.05 ETH', val: '0.05' },
+                { label: '0.10 ETH', val: '0.1' },
+                { label: '0.25 ETH', val: '0.25' },
+                { label: '0.50 ETH', val: '0.5' },
+              ].map((chip) => {
+                const isActive = initialBuyEth === chip.val;
+                return (
+                  <button
+                    key={chip.label}
+                    type="button"
+                    onClick={() => setInitialBuyEth(chip.val)}
+                    className={`px-2 py-0.5 text-[10px] rounded border transition-colors cursor-pointer ${
+                      isActive
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 font-bold'
+                        : 'bg-zinc-900 hover:bg-zinc-850 text-zinc-400 border-zinc-800 hover:text-zinc-200'
+                    }`}
+                  >
+                    {chip.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Creator Tax */}
           <div className="space-y-1 pt-1 border-t border-zinc-850">
             <label className="text-[11px] font-semibold text-zinc-300">
@@ -483,6 +577,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               <span>Protocol Deployment Fee:</span>
               <span className="text-emerald-400 font-semibold">0.0005 ETH</span>
             </div>
+            {initialBuyEth && parseFloat(initialBuyEth) > 0 && (
+              <div className="flex items-center justify-between text-emerald-400 font-semibold border-t border-emerald-500/20 pt-1.5 mt-1.5">
+                <span>Total Transaction Cost:</span>
+                <span>{(0.0005 + parseFloat(initialBuyEth)).toFixed(4)} ETH</span>
+              </div>
+            )}
             <div className="flex items-center justify-between text-zinc-400">
               <span>Uniswap Liquidity Lock:</span>
               <span className="text-emerald-400 font-semibold">100% Locked Permanently</span>
@@ -510,10 +610,18 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               {isDeploying ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
-                  <span>Deploying on Robinhood Chain...</span>
+                  <span>
+                    {initialBuyEth && parseFloat(initialBuyEth) > 0
+                      ? 'Deploying & Buying Atomically...'
+                      : 'Deploying on Robinhood Chain...'}
+                  </span>
                 </>
               ) : (
-                <span>Launch Token (0.0005 ETH) 🚀</span>
+                <span>
+                  {initialBuyEth && parseFloat(initialBuyEth) > 0
+                    ? `Create & Buy (${(0.0005 + parseFloat(initialBuyEth)).toFixed(4)} ETH) 🚀`
+                    : 'Launch Token (0.0005 ETH) 🚀'}
+                </span>
               )}
             </button>
           </div>
