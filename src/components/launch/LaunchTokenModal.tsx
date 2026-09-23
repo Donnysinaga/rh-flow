@@ -210,9 +210,44 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [deployedTokenAddr, setDeployedTokenAddr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  // Clean reset function for repeatable token creations
+  const resetForm = () => {
+    setName('');
+    setSymbol('');
+    setDescription('');
+    setIconUrl('');
+    setImagePreview(null);
+    setTwitter('');
+    setTelegram('');
+    setWebsite('');
+    setCreatorTaxBps('100');
+    setInitialBuyEth('');
+    setIsDeploying(false);
+    setDeployedTxHash(null);
+    setDeployedTokenAddr(null);
+    setShowAdvanced(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleModalClose = () => {
+    resetForm();
+    onClose();
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Whenever modal opens afresh, reset previous deployment results so user can create next token
+  useEffect(() => {
+    if (isOpen) {
+      setDeployedTxHash(null);
+      setDeployedTokenAddr(null);
+      setIsDeploying(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen || !mounted) return null;
 
@@ -352,7 +387,12 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
 
       // If no custom logo was provided or upload failed, use standard official Robinhood Chain IPFS token logo
       const DEFAULT_TOKEN_IPFS = 'ipfs://bafkreickpwaumbwsrgxl4aolt4xf6fp3iy3lv6bh372x3xen4zsmf62ne4';
-      if (!cleanLogo || (!cleanLogo.startsWith('ipfs://') && !cleanLogo.startsWith('http://') && !cleanLogo.startsWith('https://'))) {
+      if (
+        !cleanLogo ||
+        cleanLogo.startsWith('data:') ||
+        cleanLogo.length > 250 ||
+        (!cleanLogo.startsWith('ipfs://') && !cleanLogo.startsWith('http://') && !cleanLogo.startsWith('https://'))
+      ) {
         cleanLogo = DEFAULT_TOKEN_IPFS;
       }
 
@@ -479,8 +519,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
 
   const handleGoToTrade = () => {
     const targetAddr = deployedTokenAddr;
-    setDeployedTxHash(null);
-    setDeployedTokenAddr(null);
+    resetForm();
     onClose();
     if (targetAddr) {
       router.push(`/token/${targetAddr}`);
@@ -525,8 +564,8 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
             </button>
             <button
               type="button"
-              onClick={() => { setDeployedTxHash(null); onClose(); }}
-              className="w-full py-2 bg-[#14161b] hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded-xl transition-colors text-xs"
+              onClick={handleModalClose}
+              className="w-full py-2 bg-[#14161b] hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded-xl transition-colors text-xs cursor-pointer"
             >
               Close
             </button>
@@ -556,7 +595,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleModalClose}
             className="cursor-pointer p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
           >
             ✕
