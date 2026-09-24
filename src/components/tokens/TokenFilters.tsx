@@ -1,6 +1,6 @@
 'use client';
 
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 
 interface TokenFiltersProps {
   activeFilter: string;
@@ -12,7 +12,7 @@ export function TokenFilters({ activeFilter, onFilterChange, watchlistCount = 0 
   const filters = [
     { id: 'all', label: 'All Tokens', icon: null },
     { id: 'new-pairs', label: 'New Pairs', icon: <span className="text-[#00C805] font-bold">✨</span> },
-    { id: 'pons', label: 'Fair Flow Curves', icon: <PonsLogo className="w-3.5 h-3.5" size={14} /> },
+    { id: 'pons', label: 'Fair Flow Curves', icon: <OrbitraLogo className="w-3.5 h-3.5" size={14} /> },
     { id: 'watchlist', label: `Watchlist (${watchlistCount})`, icon: <span className="text-amber-400">★</span> },
     { id: 'top-volume', label: 'Top Volume', icon: null },
     { id: 'market-cap', label: 'Market Cap', icon: null },

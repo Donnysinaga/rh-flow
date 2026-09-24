@@ -9,7 +9,7 @@ import { siteConfig } from '@/config/site';
 import { PriceChart } from '@/components/charts/PriceChart';
 import { SwapWidget } from '@/components/trade/SwapWidget';
 import { TokenSecurityAudit } from '@/components/tokens/TokenSecurityAudit';
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 import { HolderAuditCard } from '@/components/tokens/HolderAuditCard';
 import { PnLShareModal } from '@/components/share/PnLShareModal';
 
@@ -240,7 +240,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
         <div className="bg-[#0a0d12] border border-[#00C805]/30 rounded-2xl p-4 sm:p-5 space-y-4 font-mono shadow-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1a222d] pb-3">
             <div className="flex items-center gap-2.5">
-              <PonsLogo className="w-5 h-5 shrink-0" size={20} />
+              <OrbitraLogo className="w-5 h-5 shrink-0" size={20} />
               <span className="text-xs sm:text-sm font-bold text-[#00C805]">Fair Flow Bonding Curve</span>
               <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 border border-[#00C805]/30 text-[#00C805] font-semibold">
                 {token.pons.phaseLabel}

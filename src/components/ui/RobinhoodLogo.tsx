@@ -1,5 +1,7 @@
 'use client';
 
+import { OrbitraLogo } from './OrbitraLogo';
+
 interface RobinhoodLogoProps {
   className?: string;
   size?: number;
@@ -33,9 +35,9 @@ export function RobinhoodFeatherLogo({ className = 'w-5 h-5', size = 20 }: Robin
 export function RobinhoodWordmark({ className = 'h-5' }: { className?: string }) {
   return (
     <div className={`flex items-center gap-1.5 font-sans font-black ${className}`}>
-      <RobinhoodFeatherLogo className="w-5 h-5" size={20} />
+      <OrbitraLogo className="w-5 h-5" size={20} />
       <span className="text-zinc-100 tracking-tight text-base font-bold">
-        <span className="text-[#00C805]">RH</span> FLOW
+        <span className="text-[#00C805]">ORBITRA</span>
       </span>
     </div>
   );

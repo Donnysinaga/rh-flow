@@ -9,7 +9,7 @@ import { PONS_FACTORY_ADDRESS, PONS_V2_ROUTER_ADDRESS, ROBINHOOD_CHAIN } from '@
 import { PONS_V2_FACTORY_ABI, PONS_V2_LAUNCH_AND_BUY_ABI } from '@/config/contracts';
 import { publicClient } from '@/lib/web3/client';
 import { useToast } from '@/components/ui/ToastProvider';
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 
 interface LaunchTokenModalProps {
   isOpen: boolean;
@@ -603,7 +603,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         {/* Modal Top Header (Fixed at top) */}
         <div className="shrink-0 flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-zinc-800 bg-[#14161b]">
           <div className="flex items-center gap-2.5">
-            <PonsLogo className="w-5 h-5" size={20} />
+            <OrbitraLogo className="w-5 h-5 shadow-sm" size={20} />
             <div>
               <h3 className="text-sm font-bold text-zinc-100 tracking-wide flex items-center gap-2">
                 <span>Launch Token on Robinhood Chain</span>

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { TokenFilters } from './TokenFilters';
 import { useToast } from '@/components/ui/ToastProvider';
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 
 export interface TokenItem {
   address: string;
@@ -247,7 +247,7 @@ export function TokenTable() {
                               {token.name || 'Unnamed Token'}
                             </span>
                             {token.progress !== undefined && (
-                              <PonsLogo className="w-3 h-3 shrink-0" size={12} />
+                              <OrbitraLogo className="w-3 h-3 shrink-0" size={12} />
                             )}
                             {(token.holders && token.holders <= 25) || activeFilter === 'new-pairs' ? (
                               <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 shrink-0 font-bold font-mono">

@@ -1,6 +1,6 @@
 'use client';
 
-import { RobinhoodFeatherLogo } from './RobinhoodLogo';
+import { OrbitraLogo } from './OrbitraLogo';
 
 interface PonsLogoProps {
   className?: string;
@@ -8,12 +8,10 @@ interface PonsLogoProps {
 }
 
 /**
- * Official Robinhood Brand Logo Component
+ * Official Orbitra Brand Logo Component ($ORB)
  */
 export function PonsLogo({ className = 'w-4 h-4', size = 16 }: PonsLogoProps) {
-  return <RobinhoodFeatherLogo className={className} size={size} />;
+  return <OrbitraLogo className={className} size={size} />;
 }
 
-export { PonsLogo as RhFlowLogo };
-
-
+export { OrbitraLogo as RhFlowLogo, OrbitraLogo };
