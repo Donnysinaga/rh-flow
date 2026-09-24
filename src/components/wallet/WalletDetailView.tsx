@@ -101,16 +101,16 @@ export function WalletDetailView({ address }: WalletDetailProps) {
           Terminal
         </Link>
         <span>/</span>
-        <span className="text-zinc-300 font-semibold">Wallet Intelligence</span>
+        <span className="text-[#00C805] font-semibold">Wallet Intelligence</span>
       </div>
 
       {/* Header Banner */}
-      <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase font-mono text-zinc-500">Address</span>
+            <span className="text-xs uppercase font-mono text-zinc-500 font-semibold">Address</span>
             {wallet.isContract && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20 font-semibold">
                 Smart Contract {wallet.contractName ? `(${wallet.contractName})` : ''}
               </span>
             )}
@@ -125,7 +125,7 @@ export function WalletDetailView({ address }: WalletDetailProps) {
             href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/address/${address}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded text-zinc-300 hover:text-zinc-100 transition-colors"
+            className="px-3 py-1.5 bg-[#12171e] hover:bg-[#1a222d] border border-[#1a222d] rounded-xl text-zinc-300 hover:text-zinc-100 transition-colors"
           >
             Open in Robinscan ↗
           </a>
@@ -134,16 +134,16 @@ export function WalletDetailView({ address }: WalletDetailProps) {
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">ETH Balance</div>
-          <div className="text-lg font-bold text-emerald-400">{wallet.ethBalance} ETH</div>
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-4 space-y-1 shadow-md">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">ETH Balance</div>
+          <div className="text-lg font-bold text-[#00C805]">{wallet.ethBalance} ETH</div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">Token Holdings</div>
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-4 space-y-1 shadow-md">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">Token Holdings</div>
           <div className="text-lg font-bold text-zinc-100">{wallet.tokenCount || 0} Assets</div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">Realized PnL</div>
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-4 space-y-1 shadow-md">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">Realized PnL</div>
           <div className="text-sm font-semibold text-zinc-400">PnL unavailable</div>
           <div className="text-[10px] text-zinc-600">Requires verified trade settlement history</div>
         </div>
@@ -152,21 +152,21 @@ export function WalletDetailView({ address }: WalletDetailProps) {
       {/* Two Column Layout: Holdings & Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 font-mono text-xs">
         {/* Token Holdings Table */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden flex flex-col">
-          <div className="px-4 py-3 bg-zinc-900/60 border-b border-zinc-800 flex items-center justify-between">
-            <h3 className="font-semibold text-zinc-200 uppercase text-[11px] tracking-wider">
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl overflow-hidden flex flex-col shadow-xl">
+          <div className="px-4 py-3 bg-[#0d1117] border-b border-[#1a222d] flex items-center justify-between">
+            <h3 className="font-bold text-zinc-100 uppercase text-[11px] tracking-wider">
               Token Holdings ({wallet.tokens?.length || 0})
             </h3>
           </div>
           <div className="overflow-x-auto flex-1 max-h-[480px]">
             <table className="w-full text-left">
-              <thead className="bg-zinc-900/40 text-zinc-400 uppercase text-[10px] border-b border-zinc-800">
+              <thead className="bg-[#0d1117] text-zinc-400 uppercase text-[10px] border-b border-[#1a222d]">
                 <tr>
                   <th className="px-4 py-2.5 font-medium">Asset</th>
                   <th className="px-4 py-2.5 font-medium text-right">Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800/40">
+              <tbody className="divide-y divide-[#1a222d]/60">
                 {!wallet.tokens || wallet.tokens.length === 0 ? (
                   <tr>
                     <td colSpan={2} className="px-4 py-8 text-center text-zinc-500">
@@ -175,19 +175,19 @@ export function WalletDetailView({ address }: WalletDetailProps) {
                   </tr>
                 ) : (
                   wallet.tokens.map((t: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-zinc-900/50 transition-colors">
+                    <tr key={idx} className="hover:bg-[#12171e] transition-colors">
                       <td className="px-4 py-2.5">
                         <Link
                           href={`/token/${t.address}`}
-                          className="font-semibold text-zinc-200 hover:text-emerald-400 transition-colors"
+                          className="font-semibold text-zinc-100 hover:text-[#00C805] transition-colors"
                         >
                           {t.symbol}
                         </Link>
-                        <span className="ml-2 text-zinc-500 text-[11px] truncate max-w-[140px] inline-block align-bottom">
+                        <span className="ml-2 text-zinc-400 text-[11px] truncate max-w-[140px] inline-block align-bottom">
                           {t.name}
                         </span>
                       </td>
-                      <td className="px-4 py-2.5 text-right text-zinc-300 font-mono">
+                      <td className="px-4 py-2.5 text-right text-zinc-100 font-mono">
                         {t.balance}
                       </td>
                     </tr>
@@ -199,15 +199,15 @@ export function WalletDetailView({ address }: WalletDetailProps) {
         </div>
 
         {/* Recent Transactions Table */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden flex flex-col">
-          <div className="px-4 py-3 bg-zinc-900/60 border-b border-zinc-800 flex items-center justify-between">
-            <h3 className="font-semibold text-zinc-200 uppercase text-[11px] tracking-wider">
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl overflow-hidden flex flex-col shadow-xl">
+          <div className="px-4 py-3 bg-[#0d1117] border-b border-[#1a222d] flex items-center justify-between">
+            <h3 className="font-bold text-zinc-100 uppercase text-[11px] tracking-wider">
               Recent Activity ({transactions.length})
             </h3>
           </div>
           <div className="overflow-x-auto flex-1 max-h-[480px]">
             <table className="w-full text-left">
-              <thead className="bg-zinc-900/40 text-zinc-400 uppercase text-[10px] border-b border-zinc-800">
+              <thead className="bg-[#0d1117] text-zinc-400 uppercase text-[10px] border-b border-[#1a222d]">
                 <tr>
                   <th className="px-4 py-2.5 font-medium">Tx</th>
                   <th className="px-4 py-2.5 font-medium">To / Interacted</th>
@@ -215,7 +215,7 @@ export function WalletDetailView({ address }: WalletDetailProps) {
                   <th className="px-4 py-2.5 font-medium text-right">Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800/40">
+              <tbody className="divide-y divide-[#1a222d]/60">
                 {transactions.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">
@@ -224,13 +224,13 @@ export function WalletDetailView({ address }: WalletDetailProps) {
                   </tr>
                 ) : (
                   transactions.map((tx, idx) => (
-                    <tr key={idx} className="hover:bg-zinc-900/50 transition-colors">
+                    <tr key={idx} className="hover:bg-[#12171e] transition-colors">
                       <td className="px-4 py-2.5">
                         <a
                           href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/tx/${tx.hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-zinc-300 hover:text-emerald-400 transition-colors"
+                          className="text-zinc-300 hover:text-[#00C805] transition-colors"
                         >
                           {tx.hash.slice(0, 8)}...
                         </a>
@@ -243,7 +243,7 @@ export function WalletDetailView({ address }: WalletDetailProps) {
                           {tx.to?.slice(0, 8)}...
                         </Link>
                       </td>
-                      <td className="px-4 py-2.5 text-right text-zinc-300">
+                      <td className="px-4 py-2.5 text-right text-zinc-200">
                         {tx.value !== '0' ? tx.value : '0'}
                       </td>
                       <td className="px-4 py-2.5 text-right text-zinc-500">

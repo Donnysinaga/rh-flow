@@ -395,16 +395,16 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   return createPortal(
-    <div className="fixed inset-0 z-[999999] overflow-y-auto p-4 sm:p-6 flex min-h-full items-center justify-center bg-black/85 backdrop-blur-md animate-in fade-in duration-200 font-mono text-xs">
+    <div className="fixed inset-0 z-[999999] overflow-y-auto p-4 sm:p-6 flex min-h-full items-center justify-center bg-black/90 backdrop-blur-md animate-in fade-in duration-200 font-mono text-xs">
       <div 
-        className="relative w-full max-w-md max-h-[85vh] flex flex-col bg-[#0e0e11] border border-zinc-800 rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.95)] overflow-hidden text-zinc-100 my-auto z-10"
+        className="relative w-full max-w-md max-h-[85vh] flex flex-col bg-[#0a0d12] border border-[#1a222d] rounded-2xl shadow-[0_0_70px_rgba(0,0,0,0.95)] overflow-hidden text-zinc-100 my-auto z-10"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="shrink-0 px-5 py-4 border-b border-zinc-800/80 flex items-center justify-between bg-zinc-900/40">
+        <div className="shrink-0 px-5 py-4 border-b border-[#1a222d] flex items-center justify-between bg-[#0d1117]">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-100">
+            <span className="w-2 h-2 rounded-full bg-[#00C805] animate-pulse"></span>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-100">
               {isConnecting ? 'Connecting Wallet' : 'Connect Web3 Wallet'}
             </h3>
           </div>
@@ -414,7 +414,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               handleReset();
               onClose();
             }}
-            className="text-zinc-500 hover:text-zinc-300 p-1.5 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer"
+            className="text-zinc-500 hover:text-zinc-200 p-1.5 rounded-lg hover:bg-[#12171e] transition-colors cursor-pointer"
           >
             ✕
           </button>
@@ -422,25 +422,25 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
         {/* Tab Toggle */}
         {!isConnecting && !errorMessage && (
-          <div className="shrink-0 flex border-b border-zinc-800/80 bg-zinc-950/60 p-1">
+          <div className="shrink-0 flex border-b border-[#1a222d] bg-[#0d1117] p-1.5 gap-1">
             <button
               type="button"
               onClick={() => setActiveTab('extension')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition-all cursor-pointer ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl font-medium transition-all cursor-pointer ${
                 activeTab === 'extension'
-                  ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700/60'
+                  ? 'bg-[#00C805]/15 text-[#00C805] font-bold shadow-sm border border-[#00C805]/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <MonitorIcon className="w-3.5 h-3.5" />
-              <span>Browser Extensions ({installed.length})</span>
+              <span>Extensions ({installed.length})</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('mobile')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-medium transition-all cursor-pointer ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl font-medium transition-all cursor-pointer ${
                 activeTab === 'mobile'
-                  ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700/60'
+                  ? 'bg-[#00C805]/15 text-[#00C805] font-bold shadow-sm border border-[#00C805]/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -456,7 +456,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           {isConnecting ? (
             <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
               <div className="relative">
-                <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-700/80 flex items-center justify-center p-3 shadow-lg">
+                <div className="w-16 h-16 rounded-2xl bg-[#0d1117] border border-[#1a222d] flex items-center justify-center p-3 shadow-lg">
                   {selectedWalletIcon ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img 
@@ -468,8 +468,8 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                     <span className="text-2xl">⚡</span>
                   )}
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-[#0e0e11] flex items-center justify-center">
-                  <span className="w-2.5 h-2.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#00C805] border-2 border-[#0a0d12] flex items-center justify-center">
+                  <span className="w-2.5 h-2.5 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
                 </div>
               </div>
 
@@ -486,7 +486,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-4 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-zinc-800 text-[11px] transition-colors cursor-pointer"
+                  className="px-4 py-1.5 rounded-xl bg-[#12171e] hover:bg-[#181f28] text-zinc-400 hover:text-zinc-200 border border-[#1a222d] text-[11px] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -495,15 +495,15 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           ) : errorMessage ? (
             /* Error State */
             <div className="py-6 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-lg">
+              <div className="w-12 h-12 rounded-full bg-[#FF5000]/10 border border-[#FF5000]/30 flex items-center justify-center text-[#FF5000] text-lg">
                 ⚠️
               </div>
 
               <div className="space-y-1.5">
-                <h4 className="text-sm font-semibold text-red-400">
+                <h4 className="text-sm font-bold text-[#FF5000]">
                   Connection Incomplete
                 </h4>
-                <p className="text-[11px] text-zinc-400 max-w-sm leading-relaxed px-2 bg-zinc-950 p-2.5 rounded-lg border border-zinc-850">
+                <p className="text-[11px] text-zinc-400 max-w-sm leading-relaxed px-2 bg-[#0d1117] p-2.5 rounded-xl border border-[#1a222d]">
                   {errorMessage}
                 </p>
               </div>
@@ -512,14 +512,14 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-[#00C805] hover:bg-[#00E806] text-black font-bold text-xs transition-colors cursor-pointer shadow-md"
                 >
                   Try Again
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-xs transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-[#12171e] hover:bg-[#181f28] text-zinc-300 text-xs transition-colors cursor-pointer border border-[#1a222d]"
                 >
                   Close
                 </button>
@@ -531,8 +531,8 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               {/* Installed / Discovered Section */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-[11px] text-zinc-400 px-1 font-medium">
-                  <span className="uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span className="uppercase tracking-wider text-[#00C805] flex items-center gap-1.5 font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00C805]"></span>
                     Detected Extensions ({installed.length})
                   </span>
                   <span className="text-zinc-500 text-[10px]">Ready to Connect</span>
@@ -545,10 +545,10 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                         key={wallet.id}
                         type="button"
                         onClick={() => handleConnectWallet(wallet)}
-                        className="w-full flex items-center justify-between p-3 bg-zinc-900/90 hover:bg-zinc-800/90 border border-zinc-800/90 hover:border-emerald-500/50 rounded-xl transition-all group cursor-pointer text-left shadow-sm active:scale-[0.99]"
+                        className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] hover:border-[#00C805]/50 rounded-xl transition-all group cursor-pointer text-left shadow-sm active:scale-[0.99]"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center p-1.5 overflow-hidden shrink-0 group-hover:border-emerald-500/30 transition-colors">
+                          <div className="w-9 h-9 rounded-xl bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 overflow-hidden shrink-0 group-hover:border-[#00C805]/40 transition-colors">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={wallet.icon}
@@ -557,9 +557,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                             />
                           </div>
                           <div>
-                            <div className="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors flex items-center gap-1.5 text-xs">
+                            <div className="font-semibold text-zinc-100 group-hover:text-[#00C805] transition-colors flex items-center gap-1.5 text-xs">
                               <span>{wallet.name}</span>
-                              <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[9px] font-normal border border-emerald-500/20">
+                              <span className="px-1.5 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] text-[9px] font-semibold border border-[#00C805]/20">
                                 Installed
                               </span>
                             </div>
@@ -568,13 +568,13 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                             </div>
                           </div>
                         </div>
-                        <span className="text-zinc-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all text-sm font-bold">
+                        <span className="text-zinc-500 group-hover:text-[#00C805] group-hover:translate-x-0.5 transition-all text-sm font-bold">
                           →
                         </span>
                       </button>
                     ))
                   ) : (
-                    <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-850 text-center space-y-2">
+                    <div className="p-4 rounded-xl bg-[#0d1117] border border-[#1a222d] text-center space-y-2">
                       <p className="text-zinc-400 text-[11px]">
                         No active browser wallet extension was automatically detected.
                       </p>
@@ -588,7 +588,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
               {/* Other Catalog Wallets */}
               {uninstalled.length > 0 && (
-                <div className="pt-2 border-t border-zinc-850/80 space-y-2">
+                <div className="pt-2 border-t border-[#1a222d] space-y-2">
                   <div className="flex items-center justify-between text-[11px] text-zinc-500 px-1 font-medium">
                     <span className="uppercase tracking-wider">Other Popular Wallets</span>
                     <span className="text-[10px]">Install Extension</span>
@@ -601,9 +601,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                         href={wallet.installUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2.5 p-2.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-850 hover:border-zinc-750 rounded-xl transition-all group"
+                        className="flex items-center gap-2.5 p-2.5 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] hover:border-zinc-700 rounded-xl transition-all group"
                       >
-                        <div className="w-6 h-6 rounded bg-zinc-900 flex items-center justify-center p-1 shrink-0">
+                        <div className="w-6 h-6 rounded-lg bg-[#0a0d12] flex items-center justify-center p-1 shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={wallet.icon}
@@ -615,7 +615,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                           <div className="font-medium text-zinc-400 group-hover:text-zinc-200 truncate text-[11px]">
                             {wallet.name}
                           </div>
-                          <div className="text-[9px] text-zinc-600 group-hover:text-emerald-400 flex items-center gap-0.5">
+                          <div className="text-[9px] text-zinc-500 group-hover:text-[#00C805] flex items-center gap-0.5">
                             <span>Get</span>
                             <span>↗</span>
                           </div>
@@ -629,10 +629,10 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           ) : (
             /* Mobile dApp View */
             <div className="space-y-3">
-              <div className="text-[11px] text-zinc-400 leading-relaxed bg-zinc-950 p-3 rounded-xl border border-zinc-850 flex items-start gap-2.5">
-                <SmartphoneIcon className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="text-[11px] text-zinc-400 leading-relaxed bg-[#0d1117] p-3 rounded-xl border border-[#1a222d] flex items-start gap-2.5">
+                <SmartphoneIcon className="w-4 h-4 text-[#00C805] shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-zinc-200 block mb-0.5">Open on Mobile Devices</span>
+                  <span className="font-bold text-zinc-200 block mb-0.5">Open on Mobile Devices</span>
                   Tap below to launch RH FLOW directly inside your wallet mobile dApp browser.
                 </div>
               </div>
@@ -642,117 +642,117 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                   href={getMetaMaskDeepLink(currentUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl transition-colors group"
+                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center p-1.5 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={METAMASK_OFFICIAL_ICON} alt="MetaMask" className="w-full h-full object-contain" />
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-emerald-400 text-xs">
+                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
                         MetaMask Mobile
                       </div>
                       <div className="text-[10px] text-zinc-500">Open in MetaMask mobile dApp browser</div>
                     </div>
                   </div>
-                  <span className="text-zinc-500 group-hover:text-emerald-400 text-xs">Open ↗</span>
+                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
                 </a>
 
                 <a
                   href={getOKXDeepLink(currentUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl transition-colors group"
+                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center p-1.5 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={OKX_OFFICIAL_ICON} alt="OKX" className="w-full h-full object-contain" />
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-emerald-400 text-xs">
+                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
                         OKX Mobile Wallet
                       </div>
                       <div className="text-[10px] text-zinc-500">Open in OKX mobile dApp browser</div>
                     </div>
                   </div>
-                  <span className="text-zinc-500 group-hover:text-emerald-400 text-xs">Open ↗</span>
+                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
                 </a>
 
                 <a
                   href={getCoinbaseDeepLink(currentUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl transition-colors group"
+                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center p-1.5 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={COINBASE_OFFICIAL_ICON} alt="Coinbase" className="w-full h-full object-contain" />
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-emerald-400 text-xs">
+                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
                         Coinbase Wallet
                       </div>
                       <div className="text-[10px] text-zinc-500">Open in Coinbase mobile dApp browser</div>
                     </div>
                   </div>
-                  <span className="text-zinc-500 group-hover:text-emerald-400 text-xs">Open ↗</span>
+                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
                 </a>
 
                 <a
                   href={getPhantomDeepLink(currentUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl transition-colors group"
+                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center p-1.5 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={PHANTOM_OFFICIAL_ICON} alt="Phantom" className="w-full h-full object-contain" />
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-emerald-400 text-xs">
+                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
                         Phantom Mobile
                       </div>
                       <div className="text-[10px] text-zinc-500">Open in Phantom mobile dApp browser</div>
                     </div>
                   </div>
-                  <span className="text-zinc-500 group-hover:text-emerald-400 text-xs">Open ↗</span>
+                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
                 </a>
 
                 <a
                   href={getTrustDeepLink(currentUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl transition-colors group"
+                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center p-1.5 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={TRUST_OFFICIAL_ICON} alt="Trust" className="w-full h-full object-contain" />
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-emerald-400 text-xs">
+                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
                         Trust Wallet Mobile
                       </div>
                       <div className="text-[10px] text-zinc-500">Open in Trust Wallet mobile dApp browser</div>
                     </div>
                   </div>
-                  <span className="text-zinc-500 group-hover:text-emerald-400 text-xs">Open ↗</span>
+                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
                 </a>
               </div>
             </div>
           )}
 
           {/* Footer Security Badge */}
-          <div className="pt-2 border-t border-zinc-850 flex items-center justify-between text-[10px] text-zinc-500">
+          <div className="pt-2 border-t border-[#1a222d] flex items-center justify-between text-[10px] text-zinc-500">
             <div className="flex items-center gap-1.5">
-              <ShieldLockIcon className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Robinhood Chain Network</span>
+              <ShieldLockIcon className="w-3.5 h-3.5 text-[#00C805]" />
+              <span className="text-zinc-400">Robinhood Chain Network</span>
             </div>
-            <span>EIP-6963 Verified</span>
+            <span className="text-[#00C805] font-semibold">EIP-6963 Verified</span>
           </div>
         </div>
       </div>

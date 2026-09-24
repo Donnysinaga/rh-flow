@@ -100,9 +100,9 @@ export function WalletButton() {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/50 rounded-lg text-xs font-mono font-medium transition-all shadow-sm group cursor-pointer"
+          className="flex items-center gap-2 px-3.5 py-1.5 bg-[#00C805]/10 hover:bg-[#00C805]/20 text-[#00C805] border border-[#00C805]/30 hover:border-[#00C805]/60 rounded-xl text-xs font-mono font-bold transition-all shadow-sm group cursor-pointer"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:scale-110 transition-transform"></span>
+          <span className="w-2 h-2 rounded-full bg-[#00C805] group-hover:scale-110 transition-transform"></span>
           <span>Connect Wallet</span>
         </button>
 
@@ -122,24 +122,24 @@ export function WalletButton() {
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex items-center gap-2.5 px-3 py-1.5 bg-zinc-900/90 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 rounded-lg text-xs transition-all shadow-sm cursor-pointer"
+          className="flex items-center gap-2.5 px-3 py-1.5 bg-[#0a0d12] hover:bg-[#12171e] border border-[#1a222d] hover:border-[#00C805]/40 rounded-xl text-xs transition-all shadow-sm cursor-pointer"
         >
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span className="text-zinc-200 font-medium">
+            <span className="w-2 h-2 rounded-full bg-[#00C805]"></span>
+            <span className="text-zinc-100 font-medium">
               {formatAddress(address)}
             </span>
           </div>
           {formattedBalance && (
             <>
               <span className="text-zinc-700">|</span>
-              <span className="text-emerald-400 font-semibold">
+              <span className="text-[#00C805] font-bold">
                 {formattedBalance}
               </span>
             </>
           )}
           <svg
-            className={`w-3.5 h-3.5 text-zinc-500 transition-transform duration-150 ${isDropdownOpen ? 'rotate-180' : ''}`}
+            className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-150 ${isDropdownOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -151,13 +151,13 @@ export function WalletButton() {
 
         {/* Dropdown Menu */}
         {isDropdownOpen && (
-          <div className="absolute right-0 mt-2 w-72 bg-[#0d0d10] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden z-50 text-xs animate-in fade-in-50 zoom-in-95 duration-100">
+          <div className="absolute right-0 mt-2 w-72 bg-[#0a0d12] border border-[#1a222d] rounded-2xl shadow-2xl overflow-hidden z-50 text-xs animate-in fade-in-50 zoom-in-95 duration-100">
             {/* Wallet Info Header */}
-            <div className="p-3.5 bg-zinc-950 border-b border-zinc-850 space-y-2">
+            <div className="p-3.5 bg-[#0d1117] border-b border-[#1a222d] space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">Connected Account</span>
-                <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span className="text-[10px] text-[#00C805] font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C805]"></span>
                   Robinhood Chain
                 </span>
               </div>
@@ -167,14 +167,14 @@ export function WalletButton() {
                 type="button"
                 onClick={handleCopy}
                 title="Click to copy address"
-                className="w-full flex items-center justify-between p-2 bg-zinc-900/80 hover:bg-zinc-850 border border-zinc-800 rounded-lg transition-colors group text-left cursor-pointer"
+                className="w-full flex items-center justify-between p-2 bg-[#12171e] hover:bg-[#181f28] border border-[#1a222d] rounded-xl transition-colors group text-left cursor-pointer"
               >
                 <span className="text-zinc-300 group-hover:text-zinc-100 truncate text-[11px] select-all">
                   {address}
                 </span>
                 <span className="text-zinc-500 group-hover:text-zinc-300 ml-2 shrink-0">
                   {copied ? (
-                    <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg className="w-3.5 h-3.5 text-[#00C805]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   ) : (
@@ -189,7 +189,7 @@ export function WalletButton() {
               {/* Balance */}
               <div className="flex items-center justify-between text-[11px] pt-1">
                 <span className="text-zinc-500">ETH Balance</span>
-                <span className="text-zinc-200 font-semibold">{formattedBalance || '0.0000 ETH'}</span>
+                <span className="text-[#00C805] font-bold">{formattedBalance || '0.0000 ETH'}</span>
               </div>
             </div>
 
@@ -199,7 +199,7 @@ export function WalletButton() {
                 href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/address/${address}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between px-3 py-2 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900 rounded-lg transition-colors"
+                className="flex items-center justify-between px-3 py-2 text-zinc-300 hover:text-zinc-100 hover:bg-[#12171e] rounded-xl transition-colors"
               >
                 <span>View on RobinScan</span>
                 <svg className="w-3 h-3 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -211,14 +211,14 @@ export function WalletButton() {
 
               <a
                 href={`/wallet/${address}`}
-                className="flex items-center justify-between px-3 py-2 text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900 rounded-lg transition-colors"
+                className="flex items-center justify-between px-3 py-2 text-zinc-300 hover:text-zinc-100 hover:bg-[#12171e] rounded-xl transition-colors"
                 onClick={() => setIsDropdownOpen(false)}
               >
                 <span>Wallet Intelligence & Portfolio</span>
                 <span className="text-zinc-500 text-[10px]">→</span>
               </a>
 
-              <div className="my-1 border-t border-zinc-850"></div>
+              <div className="my-1 border-t border-[#1a222d]"></div>
 
               <button
                 type="button"
@@ -226,7 +226,7 @@ export function WalletButton() {
                   disconnect();
                   setIsDropdownOpen(false);
                 }}
-                className="w-full flex items-center justify-between px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                className="w-full flex items-center justify-between px-3 py-2 text-[#FF5000] hover:text-[#FF6520] hover:bg-[#FF5000]/10 rounded-xl transition-colors cursor-pointer"
               >
                 <span>Disconnect</span>
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

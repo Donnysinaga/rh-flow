@@ -30,17 +30,17 @@ export function Header() {
   const [isLaunchModalOpen, setIsLaunchModalOpen] = useState(false);
 
   return (
-    <header className="h-14 border-b border-zinc-800 bg-[#000000]/90 backdrop-blur-md flex items-center justify-between px-4 sticky top-0 z-40">
+    <header className="h-14 border-b border-[#1a222d] bg-[#000000]/95 backdrop-blur-md flex items-center justify-between px-4 sticky top-0 z-40">
       {/* Brand Logo & Clean Network Pill */}
       <div className="flex items-center gap-4">
         <Link href="/" className="font-bold text-zinc-100 text-lg tracking-tight flex items-center gap-2.5 group cursor-pointer">
           <RobinhoodFeatherLogo className="w-6 h-6 transition-transform group-hover:scale-110" size={24} />
           <div className="flex items-baseline gap-1 font-sans">
             <span className="text-[#00C805] text-xl font-black tracking-tight">RH</span>
-            <span className="tracking-wider text-zinc-100 font-bold text-base">FLOW</span>
+            <span className="tracking-wider text-white font-bold text-base">FLOW</span>
           </div>
         </Link>
-        <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-[#12161a] border border-zinc-800 rounded-full text-xs font-mono text-zinc-300">
+        <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-[#0a0d12] border border-[#1a222d] rounded-full text-xs font-mono text-zinc-300">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00C805] animate-pulse"></span>
           <span>Robinhood Chain</span>
         </div>

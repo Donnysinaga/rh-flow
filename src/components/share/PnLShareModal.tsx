@@ -32,17 +32,17 @@ export function PnLShareModal({ isOpen, onClose, token }: PnLShareModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden font-mono text-xs">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md bg-[#0a0d12] border border-[#1a222d] rounded-2xl shadow-2xl overflow-hidden font-mono text-xs">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-900/60">
-          <span className="font-bold text-zinc-200 uppercase tracking-wide">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#1a222d] bg-[#0d1117]">
+          <span className="font-bold text-zinc-100 uppercase tracking-wide">
             Share PnL & Token Alpha
           </span>
           <button
             type="button"
             onClick={onClose}
-            className="cursor-pointer p-1.5 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+            className="cursor-pointer p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-[#12171e] transition-colors"
           >
             ✕
           </button>
@@ -58,10 +58,10 @@ export function PnLShareModal({ isOpen, onClose, token }: PnLShareModalProps) {
                 <button
                   key={m}
                   onClick={() => setPnlMultiplier(m)}
-                  className={`px-2 py-1 rounded text-[11px] font-bold transition-colors ${
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
                     pnlMultiplier === m
-                      ? 'bg-emerald-500 text-zinc-950 shadow-sm'
-                      : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border border-zinc-800'
+                      ? 'bg-[#00C805] text-black shadow-md'
+                      : 'bg-[#0d1117] text-zinc-400 hover:text-zinc-200 border border-[#1a222d]'
                   }`}
                 >
                   {m}x
@@ -70,18 +70,18 @@ export function PnLShareModal({ isOpen, onClose, token }: PnLShareModalProps) {
             </div>
           </div>
 
-          {/* Cyberpunk PnL Share Card Preview */}
-          <div className="relative p-5 rounded-xl bg-gradient-to-br from-zinc-900 via-zinc-950 to-emerald-950/40 border border-emerald-500/40 shadow-2xl overflow-hidden">
+          {/* Robinhood PnL Share Card Preview */}
+          <div className="relative p-5 rounded-2xl bg-gradient-to-br from-[#0d1117] via-[#000000] to-[#0a180c] border border-[#00C805]/40 shadow-2xl overflow-hidden">
             {/* Background Glow */}
-            <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none" />
+            <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-[#00C805]/10 blur-2xl pointer-events-none" />
 
             {/* Card Header: Brand */}
-            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+            <div className="flex items-center justify-between border-b border-[#1a222d] pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-mono text-base font-black">RH</span>
+                <span className="text-[#00C805] font-mono text-base font-black">RH</span>
                 <span className="text-zinc-100 font-bold tracking-wider">FLOW</span>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-700 text-emerald-400">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#0d1117] border border-[#1a222d] text-[#00C805] font-semibold">
                 Robinhood Chain
               </span>
             </div>
@@ -92,18 +92,18 @@ export function PnLShareModal({ isOpen, onClose, token }: PnLShareModalProps) {
               <div className="text-2xl font-black text-zinc-100 tracking-wider">
                 ${token?.symbol || 'TK'}
               </div>
-              <div className="text-4xl font-black text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <div className="text-4xl font-black text-[#00C805] drop-shadow-[0_0_15px_rgba(0,200,5,0.35)]">
                 +{pnlPercent.toFixed(0)}%
               </div>
               <div className="text-xs text-zinc-400 pt-1">
-                Price: <span className="text-zinc-200 font-bold">{formatCurrency(currentPrice)}</span>
+                Price: <span className="text-zinc-100 font-bold">{formatCurrency(currentPrice)}</span>
               </div>
             </div>
 
             {/* Card Footer: Verified On-Chain */}
-            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-[10px] text-zinc-500">
+            <div className="pt-3 border-t border-[#1a222d] flex items-center justify-between text-[10px] text-zinc-500">
               <span>Verified On-Chain DEX</span>
-              <span className="text-emerald-400 font-semibold">rh-flow.terminal</span>
+              <span className="text-[#00C805] font-semibold">rh-flow.terminal</span>
             </div>
           </div>
 
@@ -111,13 +111,13 @@ export function PnLShareModal({ isOpen, onClose, token }: PnLShareModalProps) {
           <div className="flex items-center gap-2 pt-2">
             <button
               onClick={handleCopyLink}
-              className="w-1/2 py-2.5 bg-zinc-900 hover:bg-zinc-850 text-zinc-300 border border-zinc-800 rounded-lg font-medium transition-colors flex items-center justify-center gap-1.5"
+              className="w-1/2 py-2.5 bg-[#0d1117] hover:bg-[#12171e] text-zinc-200 border border-[#1a222d] rounded-xl font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>🔗 Copy Link</span>
             </button>
             <button
               onClick={handleShareToTwitter}
-              className="w-1/2 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/40"
+              className="w-1/2 py-2.5 bg-[#00C805] hover:bg-[#00E806] text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-lg shadow-[#00C805]/20 cursor-pointer"
             >
               <span>𝕏 Share on X</span>
             </button>

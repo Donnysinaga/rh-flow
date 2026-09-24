@@ -58,43 +58,43 @@ export default function Home() {
         <div className="w-full md:w-[420px]">
           <SearchBar />
         </div>
-        <div className="flex items-center bg-zinc-950 p-1 rounded-lg border border-zinc-800 overflow-x-auto">
+        <div className="flex items-center bg-[#0a0d12] p-1 rounded-xl border border-[#1a222d] overflow-x-auto">
           <button
             onClick={() => setActiveTab('discovery')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-all cursor-pointer ${
               activeTab === 'discovery'
-                ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#00C805] text-black shadow-sm font-bold'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
             Token Discovery
           </button>
           <button
             onClick={() => setActiveTab('flow')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-all cursor-pointer ${
               activeTab === 'flow'
-                ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#00C805] text-black shadow-sm font-bold'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
             Flow Stream
           </button>
           <button
             onClick={() => setActiveTab('smart')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-all cursor-pointer ${
               activeTab === 'smart'
-                ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#00C805] text-black shadow-sm font-bold'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
             Smart Money
           </button>
           <button
             onClick={() => setActiveTab('portfolio')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-all cursor-pointer ${
               activeTab === 'portfolio'
-                ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#00C805] text-black shadow-sm font-bold'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
             My Portfolio
@@ -110,19 +110,19 @@ export default function Home() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-200 font-mono">
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-white font-mono">
                     Token Discovery
                   </h2>
-                  <p className="text-[11px] text-zinc-500 font-mono mt-0.5">
+                  <p className="text-[11px] text-zinc-400 font-mono mt-0.5">
                     Verified on-chain contracts & Blockscout indexed tokens
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsLaunchOpen(true)}
-                  className="cursor-pointer px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                  className="cursor-pointer px-3.5 py-1.5 bg-[#00C805] hover:bg-[#00E806] active:scale-95 text-black font-bold rounded-xl text-xs font-sans transition-all flex items-center gap-1.5 shadow-lg shadow-[#00C805]/20"
                 >
-                  <span className="text-emerald-400 font-bold">+</span>
+                  <span className="text-black font-extrabold text-sm">+</span>
                   <span>Launch Token</span>
                 </button>
               </div>

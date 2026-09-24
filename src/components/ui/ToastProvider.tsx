@@ -90,14 +90,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto p-3.5 rounded-xl border shadow-2xl backdrop-blur-md transition-all duration-300 animate-in slide-in-from-bottom-2 ${
+            className={`pointer-events-auto p-3.5 rounded-2xl border shadow-2xl backdrop-blur-md transition-all duration-300 animate-in slide-in-from-bottom-2 ${
               t.type === 'success'
-                ? 'bg-zinc-950/95 border-emerald-500/40 text-zinc-100 shadow-emerald-500/10'
+                ? 'bg-[#0a0d12]/95 border-[#00C805]/50 text-zinc-100 shadow-[#00C805]/15'
                 : t.type === 'error'
-                ? 'bg-zinc-950/95 border-red-500/40 text-zinc-100 shadow-red-500/10'
+                ? 'bg-[#0a0d12]/95 border-[#FF5000]/50 text-zinc-100 shadow-[#FF5000]/15'
                 : t.type === 'whale'
-                ? 'bg-zinc-950/95 border-amber-500/40 text-zinc-100 shadow-amber-500/10'
-                : 'bg-zinc-950/95 border-zinc-800 text-zinc-100'
+                ? 'bg-[#0a0d12]/95 border-amber-500/50 text-zinc-100 shadow-amber-500/15'
+                : 'bg-[#0a0d12]/95 border-[#1a222d] text-zinc-100'
             }`}
           >
             <div className="flex items-start justify-between gap-2">
@@ -105,19 +105,19 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 ${
                     t.type === 'success'
-                      ? 'bg-emerald-400'
+                      ? 'bg-[#00C805]'
                       : t.type === 'error'
-                      ? 'bg-red-400'
+                      ? 'bg-[#FF5000]'
                       : t.type === 'whale'
                       ? 'bg-amber-400 animate-pulse'
                       : 'bg-blue-400'
                   }`}
                 />
-                <span className="font-semibold text-zinc-100">{t.title}</span>
+                <span className="font-bold text-zinc-100">{t.title}</span>
               </div>
               <button
                 onClick={() => removeToast(t.id)}
-                className="text-zinc-500 hover:text-zinc-300 -mr-1 -mt-1 p-1 text-xs"
+                className="text-zinc-500 hover:text-zinc-300 -mr-1 -mt-1 p-1 text-xs cursor-pointer"
               >
                 ✕
               </button>
@@ -129,7 +129,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/tx/${t.txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] text-emerald-400 hover:underline inline-flex items-center gap-1"
+                  className="text-[10px] text-[#00C805] font-semibold hover:underline inline-flex items-center gap-1"
                 >
                   View on Robinscan ↗
                 </a>

@@ -49,12 +49,12 @@ export function HeroNarrative() {
   const current = stories[activeTab];
 
   return (
-    <div className="w-full bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900/40 border border-zinc-800/80 rounded-xl p-4 sm:p-5 font-mono text-xs transition-all shadow-xl">
+    <div className="w-full bg-[#0a0d12] border border-[#1a222d] rounded-2xl p-4 sm:p-5 font-mono text-xs transition-all shadow-sm">
       {/* Header Bar with Narrative Tabs */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-[#1a222d] pb-3">
         <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-bold">
+          <span className="flex h-2 w-2 rounded-full bg-[#00C805] animate-pulse" />
+          <span className="text-[11px] uppercase tracking-wider text-[#00C805] font-bold">
             Ecosystem Architecture & Guidelines
           </span>
         </div>
@@ -64,10 +64,10 @@ export function HeroNarrative() {
           <button
             type="button"
             onClick={() => setActiveTab('launches')}
-            className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'launches'
-                ? 'bg-zinc-800 text-zinc-100 border border-zinc-700 shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
             <PonsLogo className="w-3 h-3" size={12} />
@@ -76,25 +76,25 @@ export function HeroNarrative() {
           <button
             type="button"
             onClick={() => setActiveTab('trading')}
-            className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'trading'
-                ? 'bg-zinc-800 text-zinc-100 border border-zinc-700 shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
-            <span className="text-cyan-400">⚡</span>
+            <span className="text-[#00C805]">⚡</span>
             <span>Speed & Execution</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('rwa')}
-            className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'rwa'
-                ? 'bg-zinc-800 text-zinc-100 border border-zinc-700 shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
+                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
             }`}
           >
-            <span className="text-amber-400">🏛️</span>
+            <span className="text-[#00C805]">🏛️</span>
             <span>Ecosystem & Assets</span>
           </button>
         </div>
@@ -105,11 +105,11 @@ export function HeroNarrative() {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
           <div className="space-y-1.5 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${current.badgeColor}`}>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${current.badgeColor}`}>
                 {current.tag}
               </span>
             </div>
-            <h2 className="text-sm sm:text-base font-bold text-zinc-100 font-sans tracking-tight">
+            <h2 className="text-sm sm:text-base font-bold text-white font-sans tracking-tight">
               {current.title}
             </h2>
             <p className="text-zinc-400 text-xs leading-relaxed font-sans">
@@ -120,7 +120,7 @@ export function HeroNarrative() {
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="cursor-pointer text-emerald-400 hover:text-emerald-300 text-[11px] font-medium whitespace-nowrap self-start md:self-center transition-colors flex items-center gap-1"
+            className="cursor-pointer text-[#00C805] hover:text-[#00E806] text-[11px] font-bold whitespace-nowrap self-start md:self-center transition-colors flex items-center gap-1"
           >
             <span>{isExpanded ? 'Collapse ▲' : 'Details ▼'}</span>
           </button>
@@ -128,16 +128,16 @@ export function HeroNarrative() {
 
         {/* Narrative Key Points */}
         {isExpanded && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-2 border-t border-zinc-800/60 animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-2 border-t border-[#1a222d] animate-in fade-in duration-200">
             {current.details.map((detail, idx) => {
               const [title, desc] = detail.split(': ');
               return (
                 <div
                   key={idx}
-                  className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-800/80 space-y-1"
+                  className="p-3.5 rounded-xl bg-[#0e1217] border border-[#1a222d] hover:border-[#00C805]/30 space-y-1 transition-colors"
                 >
-                  <div className="text-zinc-200 font-bold text-[11px] flex items-center gap-1.5">
-                    <span className="text-emerald-400 text-[10px]">●</span>
+                  <div className="text-white font-bold text-[11px] flex items-center gap-1.5">
+                    <span className="text-[#00C805] text-[10px]">●</span>
                     <span>{title}</span>
                   </div>
                   {desc && (
@@ -153,7 +153,7 @@ export function HeroNarrative() {
       </div>
 
       {/* Clean Footer Metadata */}
-      <div className="mt-3 pt-2.5 border-t border-zinc-800/60 flex flex-wrap items-center justify-between gap-2 text-[10px] text-zinc-500 font-mono">
+      <div className="mt-3 pt-2.5 border-t border-[#1a222d] flex flex-wrap items-center justify-between gap-2 text-[10px] text-zinc-500 font-mono">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <span className="text-zinc-400">Pons v2 Fair Launchpad</span>
           <span>•</span>

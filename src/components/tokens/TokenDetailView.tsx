@@ -114,33 +114,33 @@ export function TokenDetailView({ address }: TokenDetailProps) {
           Discovery
         </Link>
         <span>/</span>
-        <span className="text-zinc-300 font-semibold">{token.symbol || 'Token'}</span>
+        <span className="text-[#00C805] font-semibold">{token.symbol || 'Token'}</span>
       </div>
 
       {/* Header Info Banner */}
-      <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-3.5">
           {token.iconUrl ? (
             <img
               src={token.iconUrl}
               alt={token.name}
-              className="w-12 h-12 rounded-full bg-zinc-900 shrink-0"
+              className="w-12 h-12 rounded-full bg-[#12171e] border border-[#1a222d] shrink-0"
               onError={(e) => {
                 (e.target as HTMLElement).style.display = 'none';
               }}
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-emerald-400 font-mono font-bold text-base shrink-0">
+            <div className="w-12 h-12 rounded-full bg-[#12171e] border border-[#1a222d] flex items-center justify-center text-[#00C805] font-mono font-bold text-base shrink-0">
               {token.symbol?.slice(0, 2) || 'TK'}
             </div>
           )}
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
               <h1 className="text-lg sm:text-xl font-bold text-zinc-100">{token.name}</h1>
-              <span className="px-2 py-0.5 rounded text-xs font-mono font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
+              <span className="px-2 py-0.5 rounded text-xs font-mono font-medium bg-[#12171e] border border-[#1a222d] text-zinc-300">
                 {token.symbol}
               </span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-500 border border-zinc-800">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#12171e] text-zinc-400 border border-[#1a222d]">
                 {token.type || 'ERC-20'}
               </span>
             </div>
@@ -157,7 +157,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
             href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/token/${address}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded text-zinc-300 hover:text-zinc-100 transition-colors"
+            className="px-3 py-1.5 bg-[#12171e] hover:bg-[#1a222d] border border-[#1a222d] rounded-lg text-zinc-300 hover:text-zinc-100 transition-colors"
           >
             Robinscan ↗
           </a>
@@ -165,13 +165,13 @@ export function TokenDetailView({ address }: TokenDetailProps) {
             href={`${ROBINHOOD_CHAIN.blockExplorers.blockscout}/token/${address}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded text-zinc-300 hover:text-zinc-100 transition-colors"
+            className="px-3 py-1.5 bg-[#12171e] hover:bg-[#1a222d] border border-[#1a222d] rounded-lg text-zinc-300 hover:text-zinc-100 transition-colors"
           >
             Blockscout ↗
           </a>
           <button
             onClick={() => setIsShareOpen(true)}
-            className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 bg-[#00C805]/10 hover:bg-[#00C805]/20 text-[#00C805] border border-[#00C805]/30 rounded-lg font-semibold transition-colors flex items-center gap-1.5"
           >
             <span>📸</span>
             <span>Share PnL</span>
@@ -180,7 +180,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
             href={siteConfig.PONS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded text-zinc-300 hover:text-zinc-100 transition-colors"
+            className="px-3 py-1.5 bg-[#12171e] hover:bg-[#1a222d] border border-[#1a222d] rounded-lg text-zinc-300 hover:text-zinc-100 transition-colors"
           >
             PONS Launchpad ↗
           </a>
@@ -189,35 +189,35 @@ export function TokenDetailView({ address }: TokenDetailProps) {
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono">
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">Price</div>
-          <div className="text-base font-semibold text-zinc-100">{formatPrice(token.price)}</div>
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">Price</div>
+          <div className="text-base font-bold text-zinc-100">{formatPrice(token.price)}</div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">Market Cap</div>
-          <div className="text-base font-semibold text-zinc-100">
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">Market Cap</div>
+          <div className="text-base font-bold text-zinc-100">
             {token.marketCap ? `$${formatNumber(token.marketCap)}` : '—'}
           </div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">24h Volume</div>
-          <div className="text-base font-semibold text-zinc-100">
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">24h Volume</div>
+          <div className="text-base font-bold text-zinc-100">
             {token.volume24h ? `$${formatNumber(token.volume24h)}` : '—'}
           </div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">Holders</div>
-          <div className="text-base font-semibold text-zinc-100">
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">Holders</div>
+          <div className="text-base font-bold text-zinc-100">
             {token.holderCount ? formatNumber(token.holderCount) : '—'}
           </div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">Decimals</div>
-          <div className="text-base font-semibold text-zinc-100">{token.decimals ?? 18}</div>
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">Decimals</div>
+          <div className="text-base font-bold text-zinc-100">{token.decimals ?? 18}</div>
         </div>
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-3.5 space-y-1">
-          <div className="text-[10px] uppercase text-zinc-500 tracking-wider">DEX Pair</div>
-          <div className="text-xs font-semibold text-emerald-400 truncate">
+        <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] uppercase text-zinc-500 tracking-wider font-semibold">DEX Pair</div>
+          <div className="text-xs font-semibold text-[#00C805] truncate">
             {token.pairAddress ? (
               <a
                 href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/address/${token.pairAddress}`}
@@ -237,12 +237,12 @@ export function TokenDetailView({ address }: TokenDetailProps) {
 
       {/* Fair Flow Curve Protocol Section */}
       {token.isPonsV2 && token.pons && (
-        <div className="bg-zinc-950 border border-emerald-500/30 rounded-lg p-4 sm:p-5 space-y-4 font-mono">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-3">
+        <div className="bg-[#0a0d12] border border-[#00C805]/30 rounded-2xl p-4 sm:p-5 space-y-4 font-mono shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1a222d] pb-3">
             <div className="flex items-center gap-2.5">
               <PonsLogo className="w-5 h-5 shrink-0" size={20} />
-              <span className="text-xs sm:text-sm font-bold text-emerald-400">Fair Flow Bonding Curve</span>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-300">
+              <span className="text-xs sm:text-sm font-bold text-[#00C805]">Fair Flow Bonding Curve</span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 border border-[#00C805]/30 text-[#00C805] font-semibold">
                 {token.pons.phaseLabel}
               </span>
             </div>
@@ -253,16 +253,16 @@ export function TokenDetailView({ address }: TokenDetailProps) {
 
           {/* Bonding Curve Progress Bar */}
           {token.pons.curve && (
-            <div className="space-y-2 bg-zinc-900/40 p-3.5 rounded-lg border border-zinc-800/60">
+            <div className="space-y-2 bg-[#0d1117] p-3.5 rounded-xl border border-[#1a222d]">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-zinc-400">Bonding Curve Progress</span>
-                <span className="text-emerald-400 font-bold">
+                <span className="text-[#00C805] font-bold">
                   {token.pons.curve.progressPercent.toFixed(2)}%
                 </span>
               </div>
-              <div className="w-full bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+              <div className="w-full bg-[#12171e] h-2.5 rounded-full overflow-hidden border border-[#1a222d]">
                 <div
-                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500"
+                  className="bg-[#00C805] h-full rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, token.pons.curve.progressPercent)}%` }}
                 />
               </div>
@@ -272,27 +272,27 @@ export function TokenDetailView({ address }: TokenDetailProps) {
               </div>
 
               {/* Visual Milestone Lifecycle Steps */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-zinc-800/60 font-mono text-[10px]">
-                <div className="p-2 rounded bg-zinc-950/80 border border-emerald-500/40 text-left">
-                  <div className="text-emerald-400 font-bold flex items-center gap-1">
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#1a222d] font-mono text-[10px]">
+                <div className="p-2 rounded-lg bg-[#0a0d12] border border-[#00C805]/40 text-left">
+                  <div className="text-[#00C805] font-bold flex items-center gap-1">
                     <span>✓</span> Step 1: Launch
                   </div>
                   <div className="text-zinc-500 mt-0.5">Fair launch curve created</div>
                 </div>
-                <div className={`p-2 rounded border text-left ${
+                <div className={`p-2 rounded-lg border text-left ${
                   (token.pons.curve.progressPercent || 0) >= 50
-                    ? 'bg-zinc-950/80 border-emerald-500/40 text-emerald-400'
-                    : 'bg-zinc-950/40 border-zinc-800 text-zinc-400'
+                    ? 'bg-[#0a0d12] border-[#00C805]/40 text-[#00C805]'
+                    : 'bg-[#0a0d12] border-[#1a222d] text-zinc-400'
                 }`}>
                   <div className="font-bold flex items-center gap-1">
                     <span>{(token.pons.curve.progressPercent || 0) >= 50 ? '✓' : '●'}</span> Step 2: 50% Milestone
                   </div>
                   <div className="text-zinc-500 mt-0.5">2.10 ETH depth reached</div>
                 </div>
-                <div className={`p-2 rounded border text-left ${
+                <div className={`p-2 rounded-lg border text-left ${
                   token.pons.phase === 2
-                    ? 'bg-zinc-950/80 border-emerald-500/40 text-emerald-400'
-                    : 'bg-zinc-950/40 border-zinc-800 text-zinc-400'
+                    ? 'bg-[#0a0d12] border-[#00C805]/40 text-[#00C805]'
+                    : 'bg-[#0a0d12] border-[#1a222d] text-zinc-400'
                 }`}>
                   <div className="font-bold flex items-center gap-1">
                     <span>{token.pons.phase === 2 ? '✓' : '●'}</span> Step 3: Uniswap v4
@@ -305,28 +305,28 @@ export function TokenDetailView({ address }: TokenDetailProps) {
 
           {/* Pons Protocol Details Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-            <div className="bg-zinc-900/50 p-2.5 rounded border border-zinc-800/40">
+            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-[#1a222d]">
               <div className="text-[10px] text-zinc-500 uppercase">Curve Fee</div>
               <div className="text-zinc-200 font-semibold">{token.pons.curve ? (token.pons.curve.feeBps / 100).toFixed(2) : '1.00'}%</div>
             </div>
-            <div className="bg-zinc-900/50 p-2.5 rounded border border-zinc-800/40">
+            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-[#1a222d]">
               <div className="text-[10px] text-zinc-500 uppercase">Creator Tax</div>
               <div className="text-zinc-200 font-semibold">{(token.pons.creatorTaxBps / 100).toFixed(2)}%</div>
             </div>
-            <div className="bg-zinc-900/50 p-2.5 rounded border border-zinc-800/40">
+            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-[#1a222d]">
               <div className="text-[10px] text-zinc-500 uppercase">Buyback & Vest</div>
               <div className="text-zinc-200 font-semibold">{token.pons.buybackEnabled ? '5-Yr Linear Vest' : 'Disabled'}</div>
             </div>
-            <div className="bg-zinc-900/50 p-2.5 rounded border border-zinc-800/40">
+            <div className="bg-[#0d1117] p-2.5 rounded-lg border border-[#1a222d]">
               <div className="text-[10px] text-zinc-500 uppercase">Curve Contract</div>
-              <div className="text-emerald-400 font-semibold truncate">
-                <CopyableAddress address={token.pons.curveAddress} className="text-emerald-400" />
+              <div className="text-[#00C805] font-semibold truncate">
+                <CopyableAddress address={token.pons.curveAddress} className="text-[#00C805]" />
               </div>
             </div>
           </div>
 
           {/* Token About, Description & Socials */}
-          <div className="bg-[#12141a] p-4 rounded-xl border border-zinc-800/80 text-xs space-y-2.5">
+          <div className="bg-[#0d1117] p-4 rounded-xl border border-[#1a222d] text-xs space-y-2.5">
             <div className="text-[13px] font-semibold text-zinc-200">About</div>
             
             <p className="text-zinc-300 leading-relaxed font-sans text-xs whitespace-pre-line">
@@ -348,7 +348,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                     href={token.socials.website.startsWith('http') ? token.socials.website : `https://${token.socials.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 bg-[#12171e] hover:bg-[#1a222d] text-zinc-200 rounded-lg border border-[#1a222d] transition-colors flex items-center gap-1"
                   >
                     <span>Website</span>
                     <span className="text-[10px] text-zinc-400">↗</span>
@@ -359,7 +359,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                     href={token.socials.twitter.startsWith('http') ? token.socials.twitter : `https://x.com/${token.socials.twitter.replace('@', '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 bg-[#12171e] hover:bg-[#1a222d] text-zinc-200 rounded-lg border border-[#1a222d] transition-colors flex items-center gap-1"
                   >
                     <span>Twitter / X</span>
                     <span className="text-[10px] text-zinc-400">↗</span>
@@ -370,7 +370,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                     href={token.socials.telegram.startsWith('http') ? token.socials.telegram : `https://t.me/${token.socials.telegram.replace('@', '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 bg-[#12171e] hover:bg-[#1a222d] text-zinc-200 rounded-lg border border-[#1a222d] transition-colors flex items-center gap-1"
                   >
                     <span>Telegram</span>
                     <span className="text-[10px] text-zinc-400">↗</span>
@@ -381,7 +381,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                     href={token.socials.discord.startsWith('http') ? token.socials.discord : `https://${token.socials.discord}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 bg-[#12171e] hover:bg-[#1a222d] text-zinc-200 rounded-lg border border-[#1a222d] transition-colors flex items-center gap-1"
                   >
                     <span>Discord</span>
                     <span className="text-[10px] text-zinc-400">↗</span>
@@ -392,7 +392,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                     href={token.socials.farcaster.startsWith('http') ? token.socials.farcaster : `https://warpcast.com/${token.socials.farcaster}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-2.5 py-1 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700/40 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 bg-[#12171e] hover:bg-[#1a222d] text-zinc-200 rounded-lg border border-[#1a222d] transition-colors flex items-center gap-1"
                   >
                     <span>Farcaster</span>
                     <span className="text-[10px] text-zinc-400">↗</span>
@@ -413,14 +413,14 @@ export function TokenDetailView({ address }: TokenDetailProps) {
           <HolderAuditCard token={token} holders={holders} />
 
           {/* Tabs for Holders, Transfers, and Security Audit */}
-          <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden font-mono text-xs">
+          <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl overflow-hidden font-mono text-xs shadow-xl">
 
-            <div className="flex border-b border-zinc-800 bg-zinc-900/60 px-2 pt-2">
+            <div className="flex border-b border-[#1a222d] bg-[#0d1117] px-2 pt-2">
               <button
                 onClick={() => setActiveTab('holders')}
                 className={`px-4 py-2 font-medium transition-colors border-b-2 ${
                   activeTab === 'holders'
-                    ? 'text-zinc-100 border-emerald-400'
+                    ? 'text-zinc-100 border-[#00C805] font-semibold'
                     : 'text-zinc-400 hover:text-zinc-200 border-transparent'
                 }`}
               >
@@ -430,7 +430,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                 onClick={() => setActiveTab('transfers')}
                 className={`px-4 py-2 font-medium transition-colors border-b-2 ${
                   activeTab === 'transfers'
-                    ? 'text-zinc-100 border-emerald-400'
+                    ? 'text-zinc-100 border-[#00C805] font-semibold'
                     : 'text-zinc-400 hover:text-zinc-200 border-transparent'
                 }`}
               >
@@ -440,7 +440,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                 onClick={() => setActiveTab('audit')}
                 className={`px-4 py-2 font-medium transition-colors border-b-2 ${
                   activeTab === 'audit'
-                    ? 'text-zinc-100 border-emerald-400'
+                    ? 'text-zinc-100 border-[#00C805] font-semibold'
                     : 'text-zinc-400 hover:text-zinc-200 border-transparent'
                 }`}
               >
@@ -452,7 +452,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
               {activeTab === 'holders' && (
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[640px] text-left">
-                    <thead className="bg-zinc-900/40 text-zinc-400 uppercase text-[11px] border-b border-zinc-800">
+                    <thead className="bg-[#0d1117] text-zinc-400 uppercase text-[11px] border-b border-[#1a222d]">
                       <tr>
                         <th className="px-4 py-2.5 font-medium w-12">#</th>
                         <th className="px-4 py-2.5 font-medium">Holder Address</th>
@@ -460,7 +460,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                         <th className="px-4 py-2.5 font-medium text-right">Type</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-800/40">
+                    <tbody className="divide-y divide-[#1a222d]/60">
                       {holders.length === 0 ? (
                         <tr>
                           <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">
@@ -469,12 +469,12 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                         </tr>
                       ) : (
                         holders.map((holder, idx) => (
-                          <tr key={idx} className="hover:bg-zinc-900/50 transition-colors">
+                          <tr key={idx} className="hover:bg-[#12171e] transition-colors">
                             <td className="px-4 py-2.5 text-zinc-500">{idx + 1}</td>
                             <td className="px-4 py-2.5">
                               <Link
                                 href={`/wallet/${holder.address}`}
-                                className="text-zinc-300 hover:text-emerald-400 transition-colors"
+                                className="text-zinc-300 hover:text-[#00C805] transition-colors"
                               >
                                 {holder.address}
                               </Link>
@@ -486,7 +486,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                               {holder.balance}
                             </td>
                             <td className="px-4 py-2.5 text-right">
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
+                              <span className="text-[10px] px-2 py-0.5 rounded bg-[#12171e] border border-[#1a222d] text-zinc-400">
                                 {holder.isContract ? 'Contract' : 'EOA'}
                               </span>
                             </td>
@@ -501,7 +501,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
               {activeTab === 'transfers' && (
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[700px] text-left">
-                    <thead className="bg-zinc-900/40 text-zinc-400 uppercase text-[11px] border-b border-zinc-800">
+                    <thead className="bg-[#0d1117] text-zinc-400 uppercase text-[11px] border-b border-[#1a222d]">
                       <tr>
                         <th className="px-4 py-2.5 font-medium">Tx Hash</th>
                         <th className="px-4 py-2.5 font-medium">Time</th>
@@ -510,7 +510,7 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                         <th className="px-4 py-2.5 font-medium text-right">Raw Amount</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-800/40">
+                    <tbody className="divide-y divide-[#1a222d]/60">
                       {transfers.length === 0 ? (
                         <tr>
                           <td colSpan={5} className="px-4 py-8 text-center text-zinc-500">
@@ -519,13 +519,13 @@ export function TokenDetailView({ address }: TokenDetailProps) {
                         </tr>
                       ) : (
                         transfers.map((tx, idx) => (
-                          <tr key={idx} className="hover:bg-zinc-900/50 transition-colors">
+                          <tr key={idx} className="hover:bg-[#12171e] transition-colors">
                             <td className="px-4 py-2.5">
                               <a
                                 href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/tx/${tx.hash}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-zinc-300 hover:text-emerald-400 transition-colors"
+                                className="text-zinc-300 hover:text-[#00C805] transition-colors"
                               >
                                 {tx.hash.slice(0, 10)}...
                               </a>

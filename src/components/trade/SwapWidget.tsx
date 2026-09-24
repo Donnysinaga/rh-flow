@@ -192,22 +192,22 @@ export function SwapWidget({
   };
 
   return (
-    <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-xs space-y-4 shadow-xl">
-      <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+    <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl p-4 font-mono text-xs space-y-4 shadow-2xl">
+      <div className="flex items-center justify-between border-b border-[#1a222d] pb-3">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-zinc-200 uppercase tracking-wide">
+          <span className="font-semibold text-zinc-100 uppercase tracking-wide">
             {isPonsV2 ? 'Pons Curve Trade' : 'Instant DEX Trade'}
           </span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-[#12171e] border border-[#1a222d] text-zinc-400">
             {isPonsV2 ? 'Bonding Curve' : 'Robinhood Router'}
           </span>
         </div>
-        <div className="flex items-center bg-zinc-900 p-0.5 rounded border border-zinc-800 text-[11px]">
+        <div className="flex items-center bg-[#0d1117] p-0.5 rounded-lg border border-[#1a222d] text-[11px]">
           <button
             onClick={() => { setMode('BUY'); setPayAmount('0.05'); }}
-            className={`px-3 py-1 rounded transition-colors ${
+            className={`px-3 py-1 rounded-md transition-colors ${
               mode === 'BUY'
-                ? 'bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/30'
+                ? 'bg-[#00C805]/20 text-[#00C805] font-semibold border border-[#00C805]/40'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -215,9 +215,9 @@ export function SwapWidget({
           </button>
           <button
             onClick={() => { setMode('SELL'); setPayAmount(userTokenBalance !== '0.00' ? (parseFloat(userTokenBalance) * 0.5).toFixed(2) : '100'); }}
-            className={`px-3 py-1 rounded transition-colors ${
+            className={`px-3 py-1 rounded-md transition-colors ${
               mode === 'SELL'
-                ? 'bg-red-500/20 text-red-400 font-semibold border border-red-500/30'
+                ? 'bg-[#FF5000]/20 text-[#FF5000] font-semibold border border-[#FF5000]/40'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -227,7 +227,7 @@ export function SwapWidget({
       </div>
 
       {/* Input Field */}
-      <div className="bg-zinc-900/70 border border-zinc-800 rounded-lg p-3 space-y-1.5">
+      <div className="bg-[#0d1117] border border-[#1a222d] rounded-xl p-3 space-y-1.5">
         <div className="flex items-center justify-between text-[11px] text-zinc-400">
           <span>You Pay</span>
           <span className="text-zinc-500">
@@ -244,7 +244,7 @@ export function SwapWidget({
             className="bg-transparent text-base font-bold text-zinc-100 focus:outline-none w-full"
             placeholder="0.0"
           />
-          <span className="text-zinc-300 font-semibold px-2 py-0.5 bg-zinc-800 rounded border border-zinc-700">
+          <span className="text-zinc-200 font-semibold px-2 py-0.5 bg-[#12171e] rounded-lg border border-[#1a222d]">
             {mode === 'BUY' ? 'ETH' : tokenSymbol}
           </span>
         </div>
@@ -257,10 +257,10 @@ export function SwapWidget({
             <button
               key={amt}
               onClick={() => setPayAmount(amt)}
-              className={`py-1 rounded border transition-colors ${
+              className={`py-1 rounded-lg border transition-colors ${
                 payAmount === amt
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/40 font-semibold'
-                  : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200'
+                  ? 'bg-[#00C805]/15 text-[#00C805] border-[#00C805]/40 font-semibold'
+                  : 'bg-[#0d1117] text-zinc-400 border-[#1a222d] hover:text-zinc-200'
               }`}
             >
               {amt}
@@ -276,7 +276,7 @@ export function SwapWidget({
                 const total = parseFloat(userTokenBalance) || 0;
                 setPayAmount(((total * pct) / 100).toFixed(2));
               }}
-              className="py-1 rounded bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-zinc-200 transition-colors"
+              className="py-1 rounded-lg bg-[#0d1117] text-zinc-400 border border-[#1a222d] hover:text-zinc-200 transition-colors"
             >
               {pct}%
             </button>
@@ -285,33 +285,33 @@ export function SwapWidget({
       )}
 
       {/* Output Estimation */}
-      <div className="bg-zinc-900/70 border border-zinc-800 rounded-lg p-3 space-y-1.5">
+      <div className="bg-[#0d1117] border border-[#1a222d] rounded-xl p-3 space-y-1.5">
         <div className="flex items-center justify-between text-[11px] text-zinc-400">
           <span>You Receive (Est.)</span>
           <span>Asset: {mode === 'BUY' ? tokenSymbol : 'ETH'}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-base font-bold text-emerald-400 truncate">
+          <span className="text-base font-bold text-[#00C805] truncate">
             {estimatedReceive}
           </span>
-          <span className="text-zinc-300 font-semibold px-2 py-0.5 bg-zinc-800 rounded border border-zinc-700">
+          <span className="text-zinc-200 font-semibold px-2 py-0.5 bg-[#12171e] rounded-lg border border-[#1a222d]">
             {mode === 'BUY' ? tokenSymbol : 'ETH'}
           </span>
         </div>
       </div>
 
       {/* Slippage & Gas Settings */}
-      <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1 border-t border-zinc-900">
+      <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1 border-t border-[#1a222d]">
         <span>Slippage Tolerance</span>
         <div className="flex items-center gap-1">
           {['0.5', '1.0', '2.5', '5.0'].map((slip) => (
             <button
               key={slip}
               onClick={() => { setSlippage(slip); setIsCustomSlip(false); }}
-              className={`px-1.5 py-0.5 rounded border transition-colors ${
+              className={`px-2 py-0.5 rounded-md border transition-colors ${
                 !isCustomSlip && slippage === slip
-                  ? 'bg-zinc-800 text-zinc-100 border-zinc-600 font-semibold'
-                  : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-zinc-300'
+                  ? 'bg-[#12171e] text-zinc-100 border-[#00C805]/50 font-semibold'
+                  : 'bg-[#0d1117] text-zinc-500 border-[#1a222d] hover:text-zinc-300'
               }`}
             >
               {slip}%
@@ -324,7 +324,7 @@ export function SwapWidget({
       {isWrongNetwork ? (
         <button
           onClick={() => switchChain({ chainId: ROBINHOOD_CHAIN.id })}
-          className="w-full py-2.5 bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 rounded-lg font-bold text-xs transition-colors"
+          className="w-full py-2.5 bg-[#FF5000]/20 text-[#FF5000] hover:bg-[#FF5000]/30 border border-[#FF5000]/30 rounded-xl font-bold text-xs transition-colors cursor-pointer"
         >
           Switch to Robinhood Chain
         </button>
@@ -332,12 +332,12 @@ export function SwapWidget({
         <button
           onClick={handleSwap}
           disabled={isPending}
-          className={`w-full py-2.5 rounded-lg font-bold text-xs transition-all duration-200 ${
+          className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all duration-200 cursor-pointer ${
             isPending
               ? 'bg-zinc-800 text-zinc-500 cursor-wait'
               : mode === 'BUY'
-              ? 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-lg shadow-emerald-500/20'
-              : 'bg-red-500 hover:bg-red-400 text-white shadow-lg shadow-red-500/20'
+              ? 'bg-[#00C805] hover:bg-[#00E806] text-black shadow-lg shadow-[#00C805]/20 font-bold'
+              : 'bg-[#FF5000] hover:bg-[#FF6520] text-white shadow-lg shadow-[#FF5000]/20 font-bold'
           }`}
         >
           {isPending
@@ -352,13 +352,13 @@ export function SwapWidget({
 
       {/* Transaction Success Feedback */}
       {txHash && (
-        <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-[11px] space-y-1">
+        <div className="p-2.5 bg-[#00C805]/10 border border-[#00C805]/30 rounded-xl text-[#00C805] text-[11px] space-y-1">
           <div className="font-bold">Transaction Broadcasted!</div>
           <a
             href={`${ROBINHOOD_CHAIN.blockExplorers.robinscan}/tx/${txHash}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline truncate block text-emerald-300"
+            className="underline truncate block text-[#00C805]"
           >
             View on Robinscan ↗
           </a>
@@ -366,7 +366,7 @@ export function SwapWidget({
       )}
 
       {txError && (
-        <div className="p-2.5 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-[11px]">
+        <div className="p-2.5 bg-[#FF5000]/10 border border-[#FF5000]/30 rounded-xl text-[#FF5000] text-[11px]">
           {txError}
         </div>
       )}

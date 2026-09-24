@@ -24,16 +24,16 @@ const GitHubIcon = () => (
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[#09090b] border-t border-zinc-800/80 py-8 px-4 mt-auto font-mono text-xs">
+    <footer className="w-full bg-[#000000] border-t border-[#1a222d] py-8 px-4 mt-auto font-mono text-xs">
       <div className="max-w-[1440px] mx-auto space-y-6">
         {/* Main Footer Narrative Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           {/* Brand & Mission Statement */}
           <div className="md:col-span-6 space-y-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-emerald-400 font-mono text-lg font-black">RH</span>
-              <span className="text-zinc-100 font-bold text-sm tracking-wider">FLOW TERMINAL</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <span className="text-[#00C805] font-mono text-lg font-black">RH</span>
+              <span className="text-white font-bold text-sm tracking-wider">FLOW TERMINAL</span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 font-semibold">
                 Robinhood Network
               </span>
             </div>

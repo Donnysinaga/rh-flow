@@ -95,7 +95,7 @@ export function SearchBar() {
         </div>
         <input
           type="text"
-          className="w-full pl-9 pr-8 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none focus:border-zinc-600 transition-colors"
+          className="w-full pl-9 pr-8 py-2 bg-[#0a0d12] border border-[#1a222d] rounded-xl text-xs text-white placeholder-zinc-500 font-mono focus:outline-none focus:border-[#00C805]/70 focus:ring-1 focus:ring-[#00C805]/30 transition-all shadow-sm"
           placeholder="Search by token address, symbol, or wallet (0x...)"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -105,28 +105,28 @@ export function SearchBar() {
         />
         {loading && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-            <div className="w-3.5 h-3.5 border-2 border-zinc-600 border-t-emerald-400 rounded-full animate-spin" />
+            <div className="w-3.5 h-3.5 border-2 border-zinc-700 border-t-[#00C805] rounded-full animate-spin" />
           </div>
         )}
       </form>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute mt-1 w-full bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden z-50">
-          <div className="max-h-64 overflow-y-auto divide-y divide-zinc-800/60 font-mono text-xs">
+        <div className="absolute mt-1.5 w-full bg-[#0a0d12] border border-[#1a222d] rounded-xl shadow-2xl overflow-hidden z-50">
+          <div className="max-h-64 overflow-y-auto divide-y divide-[#1a222d]/60 font-mono text-xs">
             {results.map((item, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleSelect(item)}
-                className="w-full text-left px-3.5 py-2.5 hover:bg-zinc-800/80 transition-colors flex items-center justify-between gap-2"
+                className="w-full text-left px-3.5 py-2.5 hover:bg-[#12171e] transition-colors flex items-center justify-between gap-2 cursor-pointer"
               >
                 <div className="min-w-0">
-                  <div className="font-semibold text-zinc-200 truncate">
+                  <div className="font-bold text-white truncate">
                     {item.name} {item.symbol ? `(${item.symbol})` : ''}
                   </div>
-                  <div className="text-[11px] text-zinc-500 truncate">{item.address}</div>
+                  <div className="text-[11px] text-zinc-400 truncate">{item.address}</div>
                 </div>
-                <span className="shrink-0 text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">
+                <span className="shrink-0 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#12171e] text-[#00C805] border border-[#00C805]/20 font-bold">
                   {item.type}
                 </span>
               </button>

@@ -51,7 +51,7 @@ export function PriceChart({ tokenAddress, tokenSymbol, basePrice }: PriceChartP
           const volumeData: HistogramData<Time>[] = json.list.map((b: any) => ({
             time: b.time as Time,
             value: b.volume || Math.abs(b.close - b.open) * 1000,
-            color: b.close >= b.open ? '#10b98133' : '#ef444433',
+            color: b.close >= b.open ? '#00C80533' : '#FF500033',
           }));
 
           seriesRef.current?.setData(chartData);
@@ -72,37 +72,37 @@ export function PriceChart({ tokenAddress, tokenSymbol, basePrice }: PriceChartP
     // Initialize Lightweight Chart
     const chart = createChart(chartContainerRef.current, {
       layout: {
-        background: { color: '#09090b' },
-        textColor: '#71717a',
+        background: { color: '#000000' },
+        textColor: '#94a3b8',
       },
       grid: {
-        vertLines: { color: '#18181b' },
-        horzLines: { color: '#18181b' },
+        vertLines: { color: '#1a222d' },
+        horzLines: { color: '#1a222d' },
       },
       crosshair: {
-        vertLine: { color: '#3f3f46', width: 1 },
-        horzLine: { color: '#3f3f46', width: 1 },
+        vertLine: { color: '#00C805', width: 1 },
+        horzLine: { color: '#00C805', width: 1 },
       },
       rightPriceScale: {
-        borderColor: '#27272a',
+        borderColor: '#1a222d',
       },
       timeScale: {
-        borderColor: '#27272a',
+        borderColor: '#1a222d',
         timeVisible: true,
         secondsVisible: false,
       },
     });
 
     const candlestickSeries = chart.addSeries(CandlestickSeries, {
-      upColor: '#10b981',
-      downColor: '#ef4444',
+      upColor: '#00C805',
+      downColor: '#FF5000',
       borderVisible: false,
-      wickUpColor: '#10b981',
-      wickDownColor: '#ef4444',
+      wickUpColor: '#00C805',
+      wickDownColor: '#FF5000',
     });
 
     const volumeSeries = chart.addSeries(HistogramSeries, {
-      color: '#10b981',
+      color: '#00C805',
       priceFormat: {
         type: 'volume',
       },
@@ -146,14 +146,14 @@ export function PriceChart({ tokenAddress, tokenSymbol, basePrice }: PriceChartP
 
 
   return (
-    <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden flex flex-col font-mono">
+    <div className="bg-[#0a0d12] border border-[#1a222d] rounded-2xl overflow-hidden flex flex-col font-mono shadow-xl">
       {/* Chart Header Bar */}
-      <div className="px-4 py-2.5 bg-zinc-900/60 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div className="px-4 py-2.5 bg-[#0d1117] border-b border-[#1a222d] flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-3">
-          <span className="font-semibold text-zinc-200 uppercase tracking-wide">
+          <span className="font-bold text-zinc-100 uppercase tracking-wide">
             {tokenSymbol} / USD
           </span>
-          <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-400 border border-zinc-700">
+          <span className="px-2 py-0.5 rounded text-[10px] bg-[#12171e] text-zinc-400 border border-[#1a222d]">
             {dataSource === 'GMGN_OPENAPI' ? 'GMGN Feed' : 'Robinhood DEX Feed'}
           </span>
           {isLoading && (
@@ -162,14 +162,14 @@ export function PriceChart({ tokenAddress, tokenSymbol, basePrice }: PriceChartP
         </div>
 
         {/* Timeframe selector */}
-        <div className="flex items-center gap-1 bg-zinc-900 p-0.5 rounded border border-zinc-800 text-[11px]">
+        <div className="flex items-center gap-1 bg-[#12171e] p-0.5 rounded-lg border border-[#1a222d] text-[11px]">
           {(['1m', '5m', '15m', '1h', '1D'] as const).map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeframe(tf)}
-              className={`px-2 py-0.5 rounded transition-colors ${
+              className={`px-2 py-0.5 rounded-md transition-colors ${
                 timeframe === tf
-                  ? 'bg-zinc-800 text-emerald-400 font-semibold border border-zinc-700'
+                  ? 'bg-[#00C805]/15 text-[#00C805] font-semibold border border-[#00C805]/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >

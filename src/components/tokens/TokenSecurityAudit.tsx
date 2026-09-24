@@ -43,7 +43,7 @@ export function TokenSecurityAudit({ address }: { address: string }) {
 
   if (loading) {
     return (
-      <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-xs animate-pulse text-zinc-500">
+      <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-4 font-mono text-xs animate-pulse text-zinc-500">
         Running on-chain security and holder concentration analysis...
       </div>
     );
@@ -52,17 +52,17 @@ export function TokenSecurityAudit({ address }: { address: string }) {
   if (!data) return null;
 
   return (
-    <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-xs space-y-3">
-      <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2.5">
+    <div className="bg-[#0a0d12] border border-[#1a222d] rounded-xl p-4 font-mono text-xs space-y-3 shadow-md">
+      <div className="flex items-center justify-between border-b border-[#1a222d] pb-2.5">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-zinc-200 uppercase tracking-wide">
+          <span className="font-bold text-zinc-100 uppercase tracking-wide">
             On-Chain Security Audit
           </span>
           <span className="text-[10px] text-zinc-500">Bytecode & Supply Check</span>
         </div>
         <div className="flex items-center gap-1.5 text-[11px]">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span className="text-emerald-400 font-semibold">Verified Bytecode</span>
+          <span className="w-2 h-2 rounded-full bg-[#00C805]"></span>
+          <span className="text-[#00C805] font-bold">Verified Bytecode</span>
         </div>
       </div>
 
@@ -70,23 +70,23 @@ export function TokenSecurityAudit({ address }: { address: string }) {
         {data.checks.map((check, idx) => (
           <div
             key={idx}
-            className="p-2.5 rounded bg-zinc-900/60 border border-zinc-800 space-y-1"
+            className="p-2.5 rounded-xl bg-[#0d1117] border border-[#1a222d] space-y-1"
           >
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-zinc-300">{check.name}</span>
+              <span className="font-semibold text-zinc-200">{check.name}</span>
               <span
-                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                   check.status === 'PASSED'
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30'
                     : check.status === 'WARNING'
                     ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                    : 'bg-zinc-800 text-zinc-400'
+                    : 'bg-[#12171e] text-zinc-400'
                 }`}
               >
                 {check.status}
               </span>
             </div>
-            <p className="text-[11px] text-zinc-500">{check.detail}</p>
+            <p className="text-[11px] text-zinc-400">{check.detail}</p>
           </div>
         ))}
       </div>

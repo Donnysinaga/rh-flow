@@ -153,7 +153,7 @@ export function TokenTable() {
 
   return (
     <div className="space-y-3 font-mono text-xs">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-950/70 p-3 rounded-lg border border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0a0d12] p-3 rounded-xl border border-[#1a222d]">
         <TokenFilters
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
@@ -165,34 +165,34 @@ export function TokenTable() {
             placeholder="Filter tokens..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-600 font-mono"
+            className="w-full px-3 py-1.5 bg-[#0d1117] border border-[#1a222d] rounded-lg text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-[#00C805] font-mono transition-colors"
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="w-full overflow-x-auto rounded-lg border border-zinc-800 bg-zinc-950 p-4">
+        <div className="w-full overflow-x-auto rounded-xl border border-[#1a222d] bg-[#0a0d12] p-4">
           <div className="animate-pulse space-y-2">
-            <div className="h-8 bg-zinc-900 rounded" />
+            <div className="h-8 bg-[#0d1117] rounded-lg" />
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-12 bg-zinc-900/50 rounded" />
+              <div key={i} className="h-12 bg-[#0d1117]/60 rounded-lg" />
             ))}
           </div>
         </div>
       ) : error ? (
-        <div className="p-8 text-center text-xs text-zinc-500 font-mono bg-zinc-950 rounded-lg border border-zinc-800">
+        <div className="p-8 text-center text-xs text-zinc-500 font-mono bg-[#0a0d12] rounded-xl border border-[#1a222d]">
           {error}
         </div>
       ) : filteredTokens.length === 0 ? (
-        <div className="p-8 text-center text-xs text-zinc-500 font-mono bg-zinc-950 rounded-lg border border-zinc-800">
+        <div className="p-8 text-center text-xs text-zinc-500 font-mono bg-[#0a0d12] rounded-xl border border-[#1a222d]">
           {activeFilter === 'watchlist'
             ? 'No tokens in your watchlist yet. Click the ⭐ icon on any token to add.'
             : 'No matching tokens found on Robinhood Chain.'}
         </div>
       ) : (
-        <div className="w-full overflow-x-auto rounded-lg border border-zinc-800 bg-zinc-950">
+        <div className="w-full overflow-x-auto rounded-xl border border-[#1a222d] bg-[#0a0d12] shadow-xl">
           <table className="w-full min-w-[760px] text-left text-xs">
-            <thead className="bg-zinc-900/80 text-zinc-400 font-mono uppercase tracking-wider text-[11px] border-b border-zinc-800">
+            <thead className="bg-[#0d1117] text-zinc-400 font-mono uppercase tracking-wider text-[11px] border-b border-[#1a222d]">
               <tr>
                 <th className="px-3 py-3 font-medium w-8">⭐</th>
                 <th className="px-3 py-3 font-medium w-8">#</th>
@@ -204,14 +204,14 @@ export function TokenTable() {
                 <th className="px-3 py-3 font-medium text-right">Standard</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800/40">
+            <tbody className="divide-y divide-[#1a222d]/60">
               {filteredTokens.map((token, idx) => {
                 const isStarred = watchlist.includes(token.address);
                 return (
                   <tr
                     key={token.address}
                     onClick={() => router.push(`/token/${token.address}`)}
-                    className="group cursor-pointer hover:bg-zinc-900/70 transition-colors"
+                    className="group cursor-pointer hover:bg-[#12171e] transition-colors"
                   >
                     <td className="px-3 py-3 text-center">
                       <button
@@ -231,52 +231,52 @@ export function TokenTable() {
                           <img
                             src={token.icon_url}
                             alt={token.name}
-                            className="w-7 h-7 rounded-full bg-zinc-800 shrink-0"
+                            className="w-7 h-7 rounded-full bg-[#12171e] shrink-0 border border-[#1a222d]"
                             onError={(e) => {
                               (e.target as HTMLElement).style.display = 'none';
                             }}
                           />
                         ) : (
-                          <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700/50 flex items-center justify-center text-zinc-300 font-mono font-bold text-[11px] shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-[#12171e] border border-[#1a222d] flex items-center justify-center text-zinc-300 font-mono font-bold text-[11px] shrink-0">
                             {token.symbol?.slice(0, 2) || 'TK'}
                           </div>
                         )}
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-semibold text-zinc-200 truncate group-hover:text-emerald-400 transition-colors">
+                            <span className="font-semibold text-zinc-100 truncate group-hover:text-[#00C805] transition-colors">
                               {token.name || 'Unnamed Token'}
                             </span>
                             {token.progress !== undefined && (
                               <PonsLogo className="w-3 h-3 shrink-0" size={12} />
                             )}
                             {(token.holders && token.holders <= 25) || activeFilter === 'new-pairs' ? (
-                              <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shrink-0 font-bold">
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 shrink-0 font-bold font-mono">
                                 NEW
                               </span>
                             ) : null}
                           </div>
-                          <div className="text-[11px] text-zinc-500 font-mono truncate">{token.symbol || '—'}</div>
+                          <div className="text-[11px] text-zinc-400 font-mono truncate">{token.symbol || '—'}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-right font-mono text-zinc-200">
+                    <td className="px-3 py-3 text-right font-mono text-zinc-100 font-medium">
                       {formatPrice(token.price)}
                     </td>
-                    <td className="px-3 py-3 text-right font-mono text-zinc-400">
+                    <td className="px-3 py-3 text-right font-mono text-zinc-300">
                       {token.market_cap ? `$${formatCompact(token.market_cap)}` : '—'}
                     </td>
-                    <td className="px-3 py-3 text-right font-mono text-zinc-400">
+                    <td className="px-3 py-3 text-right font-mono text-zinc-300">
                       {token.volume_24h ? `$${formatCompact(token.volume_24h)}` : '—'}
                     </td>
-                    <td className="px-3 py-3 text-right font-mono text-zinc-400">
+                    <td className="px-3 py-3 text-right font-mono text-zinc-300">
                       {token.progress !== undefined ? (
                         <div className="flex flex-col items-end gap-1">
-                          <span className="text-emerald-400 font-bold text-[11px]">
+                          <span className="text-[#00C805] font-bold text-[11px]">
                             {token.progress.toFixed(1)}% curve
                           </span>
-                          <div className="w-16 bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                          <div className="w-16 bg-[#12171e] h-1.5 rounded-full overflow-hidden border border-[#1a222d]">
                             <div
-                              className="bg-emerald-400 h-full rounded-full"
+                              className="bg-[#00C805] h-full rounded-full transition-all duration-300"
                               style={{ width: `${Math.min(100, token.progress)}%` }}
                             />
                           </div>
@@ -287,10 +287,10 @@ export function TokenTable() {
                     </td>
                     <td className="px-3 py-3 text-right font-mono">
                       <span
-                        className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] ${
                           token.type === 'Pons v2'
-                            ? 'bg-emerald-950/60 border border-emerald-800/60 text-emerald-400 font-semibold'
-                            : 'bg-zinc-900 border border-zinc-800 text-zinc-400'
+                            ? 'bg-[#00C805]/10 border border-[#00C805]/30 text-[#00C805] font-semibold'
+                            : 'bg-[#12171e] border border-[#1a222d] text-zinc-400'
                         }`}
                       >
                         {token.type || 'ERC-20'}

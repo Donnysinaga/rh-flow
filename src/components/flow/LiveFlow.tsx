@@ -64,20 +64,20 @@ export function LiveFlow() {
   const getBadgeStyle = (type: string) => {
     switch (type) {
       case 'SWAP':
-        return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+        return 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30';
       case 'APPROVE':
         return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
       case 'CALL':
         return 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
       default:
-        return 'bg-zinc-800 text-zinc-400 border border-zinc-700/50';
+        return 'bg-[#12171e] text-zinc-400 border border-[#1a222d]';
     }
   };
 
   const getStatusDot = () => {
     switch (status) {
       case 'LIVE':
-        return 'bg-emerald-400 animate-pulse';
+        return 'bg-[#00C805] animate-pulse';
       case 'SYNCING':
         return 'bg-yellow-400';
       case 'DEGRADED':
@@ -88,27 +88,27 @@ export function LiveFlow() {
   };
 
   return (
-    <div className="flex flex-col bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden h-full font-mono text-xs">
-      <div className="px-3.5 py-2.5 bg-zinc-900/70 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2">
+    <div className="flex flex-col bg-[#0a0d12] border border-[#1a222d] rounded-2xl overflow-hidden h-full font-mono text-xs shadow-xl">
+      <div className="px-4 py-3 bg-[#0d1117] border-b border-[#1a222d] flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-300">Transaction Flow</h3>
-          <span className="text-[10px] text-zinc-500">Sequencer Stream</span>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-100">Transaction Flow</h3>
+          <span className="text-[10px] text-zinc-500 font-semibold">Sequencer Stream</span>
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Active</span>
+          <span className="h-2 w-2 rounded-full bg-[#00C805] animate-pulse" />
+          <span className="text-[#00C805] font-semibold">Live</span>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="px-3 py-1.5 bg-zinc-900/40 border-b border-zinc-800/80 flex items-center gap-1 text-[10px]">
+      <div className="px-3 py-1.5 bg-[#0a0d12] border-b border-[#1a222d] flex items-center gap-1 text-[10px]">
         {(['ALL', 'SWAP', 'WHALE', 'APPROVE'] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-2 py-0.5 rounded transition-colors ${
+            className={`px-2 py-0.5 rounded-md transition-colors ${
               filter === f
-                ? 'bg-zinc-800 text-zinc-200 font-bold border border-zinc-700'
+                ? 'bg-[#00C805]/15 text-[#00C805] font-bold border border-[#00C805]/40'
                 : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -126,7 +126,7 @@ export function LiveFlow() {
           filteredEntries.map((entry) => (
             <div
               key={entry.hash}
-              className="flex items-center gap-2 px-3 py-2 text-xs hover:bg-zinc-900/60 rounded border border-transparent hover:border-zinc-800 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-xs hover:bg-[#12171e] rounded-xl border border-transparent hover:border-[#1a222d] transition-colors"
             >
               <span className="text-zinc-500 text-[10px] w-12 shrink-0">
                 {formatTimeAgo(entry.timestamp)}
@@ -139,7 +139,7 @@ export function LiveFlow() {
               <div className="flex items-center gap-1.5 flex-1 text-[11px] text-zinc-400 truncate">
                 <a
                   href={`/wallet/${entry.from}`}
-                  className="text-zinc-300 hover:text-emerald-400 transition-colors"
+                  className="text-zinc-300 hover:text-[#00C805] transition-colors"
                   title={entry.from}
                 >
                   {formatAddress(entry.from)}

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#09090b] text-zinc-100 antialiased min-h-screen`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#000000] text-zinc-100 antialiased min-h-screen selection:bg-[#00C805] selection:text-black`}>
         <Web3Providers>
           <ToastProvider>
             <Header />

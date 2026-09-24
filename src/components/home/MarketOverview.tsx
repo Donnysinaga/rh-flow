@@ -18,53 +18,53 @@ export function MarketOverview({
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 w-full font-mono text-xs">
       {/* Metric 1: ETH & Gas */}
-      <div className="bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-lg p-3 transition-colors flex flex-col justify-between">
-        <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-          <span>ETH Price</span>
-          <span className="text-zinc-400 text-[10px]">USD</span>
+      <div className="bg-[#0a0d12] border border-[#1a222d] hover:border-[#00C805]/40 rounded-xl p-3.5 transition-all shadow-sm flex flex-col justify-between group">
+        <div className="flex items-center justify-between text-zinc-400 text-[11px]">
+          <span className="font-semibold tracking-wide">ETH Price</span>
+          <span className="text-zinc-500 text-[10px]">USD</span>
         </div>
         <div className="mt-1.5 flex items-baseline justify-between">
-          <span className="text-sm sm:text-base font-bold text-zinc-100">{ethPrice}</span>
-          <span className="text-[10px] text-zinc-400">Gas: ~0.06 Gwei</span>
+          <span className="text-sm sm:text-base font-bold text-white">{ethPrice}</span>
+          <span className="text-[10px] text-[#00C805] font-semibold">Gas: ~0.06 Gwei</span>
         </div>
       </div>
 
       {/* Metric 2: Total On-Chain Pairs */}
-      <div className="bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-lg p-3 transition-colors flex flex-col justify-between">
-        <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-          <span>Tracked Pairs</span>
-          <span className="text-zinc-400 text-[10px]">Indexed</span>
+      <div className="bg-[#0a0d12] border border-[#1a222d] hover:border-[#00C805]/40 rounded-xl p-3.5 transition-all shadow-sm flex flex-col justify-between group">
+        <div className="flex items-center justify-between text-zinc-400 text-[11px]">
+          <span className="font-semibold tracking-wide">Tracked Pairs</span>
+          <span className="text-zinc-500 text-[10px]">Indexed</span>
         </div>
         <div className="mt-1.5 flex items-baseline justify-between">
-          <span className="text-sm sm:text-base font-bold text-zinc-100">{totalPairs}</span>
-          <span className="text-[10px] text-emerald-400">AMM & Curves</span>
+          <span className="text-sm sm:text-base font-bold text-white">{totalPairs}</span>
+          <span className="text-[10px] text-[#00C805] font-semibold">AMM & Curves</span>
         </div>
       </div>
 
       {/* Metric 3: RH Flow Engine */}
-      <div className="bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-lg p-3 transition-colors flex flex-col justify-between">
-        <div className="flex items-center justify-between text-zinc-500 text-[11px]">
+      <div className="bg-[#0a0d12] border border-[#1a222d] hover:border-[#00C805]/40 rounded-xl p-3.5 transition-all shadow-sm flex flex-col justify-between group">
+        <div className="flex items-center justify-between text-zinc-400 text-[11px]">
           <span className="flex items-center gap-1.5">
             <PonsLogo className="w-3.5 h-3.5" size={14} />
-            <span className="text-zinc-300 font-medium">RH Flow Engine</span>
+            <span className="text-zinc-200 font-semibold">RH Flow Engine</span>
           </span>
-          <span className="text-[10px] text-emerald-400">Live</span>
+          <span className="text-[10px] px-1.5 py-0.2 bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 rounded font-bold">Live</span>
         </div>
         <div className="mt-1.5 flex items-baseline justify-between">
-          <span className="text-sm sm:text-base font-bold text-zinc-100">4.2 ETH</span>
+          <span className="text-sm sm:text-base font-bold text-white">4.2 ETH</span>
           <span className="text-[10px] text-zinc-400">Graduation Target</span>
         </div>
       </div>
 
       {/* Metric 4: Sequencer & Node Height */}
-      <div className="bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700/80 rounded-lg p-3 transition-colors flex flex-col justify-between">
-        <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-          <span>Sequencer Height</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+      <div className="bg-[#0a0d12] border border-[#1a222d] hover:border-[#00C805]/40 rounded-xl p-3.5 transition-all shadow-sm flex flex-col justify-between group">
+        <div className="flex items-center justify-between text-zinc-400 text-[11px]">
+          <span className="font-semibold tracking-wide">Sequencer Height</span>
+          <span className="w-2 h-2 rounded-full bg-[#00C805] animate-pulse" />
         </div>
         <div className="mt-1.5 flex items-baseline justify-between">
-          <span className="text-xs sm:text-sm font-bold text-zinc-200 truncate">{blockHeight}</span>
-          <span className="text-[10px] text-zinc-500">Block Height</span>
+          <span className="text-xs sm:text-sm font-bold text-white truncate">{blockHeight}</span>
+          <span className="text-[10px] text-zinc-400">Robinhood Block</span>
         </div>
       </div>
     </div>

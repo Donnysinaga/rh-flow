@@ -11,7 +11,7 @@ interface TokenFiltersProps {
 export function TokenFilters({ activeFilter, onFilterChange, watchlistCount = 0 }: TokenFiltersProps) {
   const filters = [
     { id: 'all', label: 'All Tokens', icon: null },
-    { id: 'new-pairs', label: 'New Pairs', icon: <span className="text-emerald-400 font-bold">✨</span> },
+    { id: 'new-pairs', label: 'New Pairs', icon: <span className="text-[#00C805] font-bold">✨</span> },
     { id: 'pons', label: 'Fair Flow Curves', icon: <PonsLogo className="w-3.5 h-3.5" size={14} /> },
     { id: 'watchlist', label: `Watchlist (${watchlistCount})`, icon: <span className="text-amber-400">★</span> },
     { id: 'top-volume', label: 'Top Volume', icon: null },
@@ -26,10 +26,10 @@ export function TokenFilters({ activeFilter, onFilterChange, watchlistCount = 0 
         <button
           key={filter.id}
           onClick={() => onFilterChange(filter.id)}
-          className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+          className={`px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
             activeFilter === filter.id
-              ? 'bg-zinc-800 text-zinc-100 border border-zinc-700 shadow-sm'
-              : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 border border-transparent'
+              ? 'bg-[#00C805]/15 text-[#00C805] border border-[#00C805]/40 shadow-sm font-semibold'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#12171e] border border-transparent'
           }`}
         >
           {filter.icon}
