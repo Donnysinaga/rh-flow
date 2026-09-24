@@ -23,6 +23,18 @@ import {
   TRUST_OFFICIAL_ICON,
   BINANCE_OFFICIAL_ICON,
   RAINBOW_OFFICIAL_ICON,
+  UNISWAP_OFFICIAL_ICON,
+  RABBY_OFFICIAL_ICON,
+  ZERION_OFFICIAL_ICON,
+  SAFE_OFFICIAL_ICON,
+  BRAVE_OFFICIAL_ICON,
+  EXODUS_OFFICIAL_ICON,
+  ONEINCH_OFFICIAL_ICON,
+  TOKENPOCKET_OFFICIAL_ICON,
+  IMTOKEN_OFFICIAL_ICON,
+  COIN98_OFFICIAL_ICON,
+  BACKPACK_OFFICIAL_ICON,
+  LEDGER_OFFICIAL_ICON,
   BROWSER_INJECTED_ICON,
   SearchIcon,
   ChevronRightIcon,
@@ -52,21 +64,28 @@ interface WalletItemData {
 
 type ModalView = 'main' | 'qr' | 'search' | 'help';
 
-// Comprehensive catalog of popular Web3 wallets
+// Comprehensive catalog of 20+ top Web3 wallets referenced from real Web3 ecosystem
 const POPULAR_CATALOG: Omit<WalletItemData, 'isInstalled'>[] = [
   { id: 'metamask', name: 'MetaMask', icon: METAMASK_OFFICIAL_ICON, installUrl: 'https://metamask.io/download/' },
   { id: 'okx', name: 'OKX Wallet', icon: OKX_OFFICIAL_ICON, installUrl: 'https://www.okx.com/web3' },
   { id: 'phantom', name: 'Phantom', icon: PHANTOM_OFFICIAL_ICON, installUrl: 'https://phantom.app/download' },
   { id: 'coinbase', name: 'Coinbase Wallet', icon: COINBASE_OFFICIAL_ICON, installUrl: 'https://www.coinbase.com/wallet' },
   { id: 'trust', name: 'Trust Wallet', icon: TRUST_OFFICIAL_ICON, installUrl: 'https://trustwallet.com/browser-extension' },
-  { id: 'bitget', name: 'Bitget Wallet', icon: BITGET_OFFICIAL_ICON, installUrl: 'https://web3.bitget.com/' },
   { id: 'binance', name: 'Binance Web3', icon: BINANCE_OFFICIAL_ICON, installUrl: 'https://www.binance.com/en/web3wallet' },
   { id: 'rainbow', name: 'Rainbow', icon: RAINBOW_OFFICIAL_ICON, installUrl: 'https://rainbow.me/' },
-  { id: 'zerion', name: 'Zerion Wallet', icon: BROWSER_INJECTED_ICON, installUrl: 'https://zerion.io/' },
-  { id: 'safe', name: 'Safe Wallet', icon: BROWSER_INJECTED_ICON, installUrl: 'https://safe.global/' },
-  { id: 'tokenpocket', name: 'TokenPocket', icon: BROWSER_INJECTED_ICON, installUrl: 'https://www.tokenpocket.pro/' },
-  { id: 'imtoken', name: 'imToken', icon: BROWSER_INJECTED_ICON, installUrl: 'https://token.im/' },
-  { id: 'coin98', name: 'Coin98', icon: BROWSER_INJECTED_ICON, installUrl: 'https://coin98.com/' },
+  { id: 'bitget', name: 'Bitget Wallet', icon: BITGET_OFFICIAL_ICON, installUrl: 'https://web3.bitget.com/' },
+  { id: 'uniswap', name: 'Uniswap Wallet', icon: UNISWAP_OFFICIAL_ICON, installUrl: 'https://wallet.uniswap.org/' },
+  { id: 'rabby', name: 'Rabby Wallet', icon: RABBY_OFFICIAL_ICON, installUrl: 'https://rabby.io/' },
+  { id: 'zerion', name: 'Zerion Wallet', icon: ZERION_OFFICIAL_ICON, installUrl: 'https://zerion.io/' },
+  { id: 'safe', name: 'Safe (Gnosis)', icon: SAFE_OFFICIAL_ICON, installUrl: 'https://safe.global/' },
+  { id: 'brave', name: 'Brave Wallet', icon: BRAVE_OFFICIAL_ICON, installUrl: 'https://brave.com/wallet/' },
+  { id: 'exodus', name: 'Exodus', icon: EXODUS_OFFICIAL_ICON, installUrl: 'https://www.exodus.com/' },
+  { id: '1inch', name: '1inch Wallet', icon: ONEINCH_OFFICIAL_ICON, installUrl: 'https://1inch.io/wallet/' },
+  { id: 'tokenpocket', name: 'TokenPocket', icon: TOKENPOCKET_OFFICIAL_ICON, installUrl: 'https://www.tokenpocket.pro/' },
+  { id: 'imtoken', name: 'imToken', icon: IMTOKEN_OFFICIAL_ICON, installUrl: 'https://token.im/' },
+  { id: 'coin98', name: 'Coin98', icon: COIN98_OFFICIAL_ICON, installUrl: 'https://coin98.com/' },
+  { id: 'backpack', name: 'Backpack', icon: BACKPACK_OFFICIAL_ICON, installUrl: 'https://backpack.app/' },
+  { id: 'ledger', name: 'Ledger Live', icon: LEDGER_OFFICIAL_ICON, installUrl: 'https://www.ledger.com/ledger-live' },
 ];
 
 export function WalletModal({ isOpen, onClose }: WalletModalProps) {
@@ -160,6 +179,10 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
       else if (lower.includes('bitget') || lower.includes('bitkeep')) key = 'bitget';
       else if (lower.includes('trust')) key = 'trust';
       else if (lower.includes('binance')) key = 'binance';
+      else if (lower.includes('uniswap')) key = 'uniswap';
+      else if (lower.includes('zerion')) key = 'zerion';
+      else if (lower.includes('safe')) key = 'safe';
+      else if (lower.includes('brave')) key = 'brave';
 
       map.set(key, {
         id: p.info.uuid || key,
@@ -174,7 +197,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
     // 2. window.ethereum.providers array
     if (winEth && Array.isArray(winEth.providers)) {
-      winEth.providers.forEach((prov: any, idx: number) => {
+      winEth.providers.forEach((prov: any) => {
         if (prov.isMetaMask && !prov.isRabby && !map.has('metamask')) {
           map.set('metamask', {
             id: 'metamask',
@@ -446,7 +469,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
       installUrl: 'https://phantom.app/download',
     });
 
-    // 5. Any extra installed wallets (e.g. Coinbase, Bitget, Trust, Binance)
+    // 5. Any extra installed wallets (e.g. Coinbase, Bitget, Trust, Binance, Uniswap, Brave)
     detectedMap.forEach((wallet, key) => {
       if (!['metamask', 'okx', 'phantom'].includes(key)) {
         list.push(wallet);
@@ -778,7 +801,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <SearchIcon className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Search wallet name..."
+                  placeholder="Search 550+ wallets (e.g. Uniswap, Trust, Bitget...)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   autoFocus

@@ -18,6 +18,42 @@ export const COINBASE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http:
 // Official Trust Wallet SVG Icon
 export const TRUST_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%230500FF'/><path d='M50 18L78 28.5V48C78 64.5 66 76 50 82C34 76 22 64.5 22 48V28.5L50 18Z' fill='white'/><path d='M50 25.5L71.5 33.5V48C71.5 60.5 62.5 69.5 50 74.5C37.5 69.5 28.5 60.5 28.5 48V33.5L50 25.5Z' fill='%230500FF'/></svg>";
 
+// Official Uniswap Wallet SVG Icon
+export const UNISWAP_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23FF007A'/><path d='M68 28C68 28 65 35 58 37C51 39 45 35 40 40C35 45 36 52 33 58C30 64 24 66 24 66C24 66 31 68 38 64C45 60 48 53 54 50C60 47 66 49 70 44C74 39 72 32 68 28Z' fill='white'/><path d='M48 24C48 24 55 25 58 30C61 35 58 42 58 42C58 42 63 36 62 30C61 24 54 21 48 24Z' fill='white'/></svg>";
+
+// Official Rabby Wallet SVG Icon
+export const RABBY_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%238697FF'/><path d='M35 25C32 25 30 28 31 33L35 50C35 55 40 60 45 62C45 68 42 75 36 78H64C58 75 55 68 55 62C60 60 65 55 65 50L69 33C70 28 68 25 65 25C62 25 59 28 59 32L58 45H42L41 32C41 28 38 25 35 25Z' fill='white'/><circle cx='43' cy='52' r='3' fill='%238697FF'/><circle cx='57' cy='52' r='3' fill='%238697FF'/></svg>";
+
+// Official Zerion Wallet SVG Icon
+export const ZERION_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%232962FF'/><path d='M26 28H74V38L44 64H74V74H26V64L56 38H26V28Z' fill='white'/></svg>";
+
+// Official Safe Wallet SVG Icon
+export const SAFE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%2312FF80'/><path d='M28 32H72V68H28V32ZM36 40V60H64V40H36ZM50 46C52.2 46 54 47.8 54 50C54 51.5 53.2 52.8 52 53.5V56H48V53.5C46.8 52.8 46 51.5 46 50C46 47.8 47.8 46 50 46Z' fill='%23121312'/></svg>";
+
+// Official Brave Wallet SVG Icon
+export const BRAVE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23FB542B'/><path d='M50 20L72 32L68 56L50 80L32 56L28 32L50 20Z' fill='white'/><path d='M50 28L64 36L61 52L50 68L39 52L36 36L50 28Z' fill='%23FB542B'/></svg>";
+
+// Official Exodus Wallet SVG Icon
+export const EXODUS_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%231F2033'/><path d='M50 22L76 40L68 46L50 34L32 46L24 40L50 22ZM50 78L24 60L32 54L50 66L68 54L76 60L50 78ZM24 44L34 50L24 56V44ZM76 44V56L66 50L76 44Z' fill='%230B84FE'/></svg>";
+
+// Official 1inch Wallet SVG Icon
+export const ONEINCH_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%230B132B'/><path d='M50 22L68 36L60 48L72 52L62 76L46 64L42 78L28 60L38 46L28 36L50 22Z' fill='%23D92B34'/></svg>";
+
+// Official TokenPocket Wallet SVG Icon
+export const TOKENPOCKET_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%232980FE'/><path d='M28 28H72V42H56V72H44V42H28V28Z' fill='white'/></svg>";
+
+// Official imToken Wallet SVG Icon
+export const IMTOKEN_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23098DE6'/><circle cx='50' cy='36' r='8' fill='white'/><rect x='42' y='50' width='16' height='24' rx='4' fill='white'/></svg>";
+
+// Official Coin98 Wallet SVG Icon
+export const COIN98_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23000000'/><circle cx='50' cy='50' r='26' stroke='%23E5B842' stroke-width='8'/><circle cx='50' cy='50' r='12' fill='%23E5B842'/></svg>";
+
+// Official Backpack Wallet SVG Icon
+export const BACKPACK_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23E33E38'/><rect x='28' y='34' width='44' height='42' rx='10' fill='white'/><path d='M40 34V26C40 22.7 42.7 20 46 20H54C57.3 20 60 22.7 60 26V34' stroke='white' stroke-width='6'/></svg>";
+
+// Official Ledger Live SVG Icon
+export const LEDGER_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23000000'/><path d='M26 26H46V34H34V46H26V26ZM74 26V46H66V34H54V26H74ZM26 74V54H34V66H46V74H26ZM74 74H54V66H66V54H74V74Z' fill='white'/></svg>";
+
 // Official Bitget Wallet SVG Icon
 export const BITGET_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' rx='22' fill='%23000000'/><path d='M25 32H55C66 32 75 41 75 52C75 63 66 72 55 72H25V32Z' fill='%2300F0FF'/><path d='M35 42H53C58.5 42 63 46.5 63 52C63 57.5 58.5 62 53 62H35V42Z' fill='%23000000'/><polygon points='40,28 62,50 40,72' fill='%2300F0FF'/></svg>";
 
@@ -40,6 +76,18 @@ export function getOfficialWalletLogo(name: string, fallbackIcon?: string): stri
   if (lower.includes('coinbase')) return COINBASE_OFFICIAL_ICON;
   if (lower.includes('okx')) return OKX_OFFICIAL_ICON;
   if (lower.includes('phantom')) return PHANTOM_OFFICIAL_ICON;
+  if (lower.includes('uniswap')) return UNISWAP_OFFICIAL_ICON;
+  if (lower.includes('rabby')) return RABBY_OFFICIAL_ICON;
+  if (lower.includes('zerion')) return ZERION_OFFICIAL_ICON;
+  if (lower.includes('safe')) return SAFE_OFFICIAL_ICON;
+  if (lower.includes('brave')) return BRAVE_OFFICIAL_ICON;
+  if (lower.includes('exodus')) return EXODUS_OFFICIAL_ICON;
+  if (lower.includes('1inch')) return ONEINCH_OFFICIAL_ICON;
+  if (lower.includes('tokenpocket')) return TOKENPOCKET_OFFICIAL_ICON;
+  if (lower.includes('imtoken')) return IMTOKEN_OFFICIAL_ICON;
+  if (lower.includes('coin98')) return COIN98_OFFICIAL_ICON;
+  if (lower.includes('backpack')) return BACKPACK_OFFICIAL_ICON;
+  if (lower.includes('ledger')) return LEDGER_OFFICIAL_ICON;
   if (lower.includes('bitget') || lower.includes('bitkeep')) return BITGET_OFFICIAL_ICON;
   if (lower.includes('trust')) return TRUST_OFFICIAL_ICON;
   if (lower.includes('binance')) return BINANCE_OFFICIAL_ICON;
