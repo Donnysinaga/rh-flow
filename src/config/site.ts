@@ -7,8 +7,8 @@ export const siteConfig = {
   LOGO_PNG: '/logo.png',
   FAVICON_PNG: '/favicon.ico',
   CONTRACT_ADDRESS: '', // Configurable token CA if any
-  X_URL: '', // Configurable
-  TELEGRAM_URL: '', // Configurable
+  X_URL: 'https://x.com/Orbitrawtf',
+  TELEGRAM_URL: 'https://t.me/OrbitraHood',
   GITHUB_URL: '', // Configurable
   NETWORK: 'Robinhood Chain',
   CHAIN_ID: 4663,
