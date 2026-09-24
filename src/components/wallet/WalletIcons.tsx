@@ -1,16 +1,16 @@
 import React from 'react';
 
-// Official MetaMask Icon (Exact Authentic Fox Image)
-export const METAMASK_OFFICIAL_ICON = "/wallets/metamask.webp";
+// Official MetaMask Icon (Uploaded Exact Image)
+export const METAMASK_OFFICIAL_ICON = "/wallets/metamask.png";
 
-// Official WalletConnect SVG Icon (Original Reown / WalletConnect Blue Icon)
-export const WALLETCONNECT_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%233396FF'/><path d='M21 34.5C37 18.5 63 18.5 79 34.5L81.2 36.7C82 37.5 82 38.8 81.2 39.6L75.3 45.5C74.9 45.9 74.3 45.9 73.9 45.5L70.3 41.9C59 30.6 41 30.6 29.7 41.9L26.1 45.5C25.7 45.9 25.1 45.9 24.7 45.5L18.8 39.6C18 38.8 18 37.5 18.8 36.7L21 34.5ZM88.6 44.1L94.1 49.6C94.9 50.4 94.9 51.7 94.1 52.5L69.7 76.9C68.9 77.7 67.6 77.7 66.8 76.9L50 60.1L33.2 76.9C32.4 77.7 31.1 77.7 30.3 76.9L5.9 52.5C5.1 51.7 5.1 50.4 5.9 49.6L11.4 44.1C12.2 43.3 13.5 43.3 14.3 44.1L31.1 60.9C31.5 61.3 32.1 61.3 32.5 60.9L49.3 44.1C50.1 43.3 51.4 43.3 52.2 44.1L67.5 59.4C67.9 59.8 68.5 59.8 68.9 59.4L85.7 42.6C86.5 41.8 87.8 43.3 88.6 44.1Z' fill='white'/></svg>";
+// Official WalletConnect Icon (Uploaded Exact Image)
+export const WALLETCONNECT_OFFICIAL_ICON = "/wallets/walletconnect.png";
 
-// Official OKX Wallet SVG Icon (Authentic OKX Checkerboard Matrix)
-export const OKX_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23000000'/><rect x='18' y='18' width='26' height='26' rx='4' fill='white'/><rect x='56' y='18' width='26' height='26' rx='4' fill='white'/><rect x='18' y='56' width='26' height='26' rx='4' fill='white'/><rect x='56' y='56' width='26' height='26' rx='4' fill='white'/><rect x='37' y='37' width='26' height='26' rx='4' fill='white'/></svg>";
+// Official OKX Wallet Icon (Uploaded Exact Image)
+export const OKX_OFFICIAL_ICON = "/wallets/okx.png";
 
-// Official Phantom Wallet SVG Icon (Authentic Purple Ghost Logo)
-export const PHANTOM_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%235540D9'/><path d='M76 49C76 64.5 63.5 77 48 77C33.9 77 22.3 66.6 20.3 53.1C19.7 49.6 22.6 46.5 26.2 46.5C29.8 46.5 32.5 49.6 32.1 53.1C31.2 59.3 36.6 64.9 43 64.9C49.4 64.9 54.8 59.3 53.9 53.1C53.3 49.6 56.2 46.5 59.8 46.5C63.4 46.5 66.1 49.6 65.7 53.1C64.8 59.3 70.2 64.9 76 64.9V49ZM76 49C76 33.5 63.5 21 48 21C32.5 21 20 33.5 20 49' fill='white'/><ellipse cx='58' cy='38' rx='4' ry='4.5' fill='%235540D9'/><ellipse cx='70' cy='38' rx='4' ry='4.5' fill='%235540D9'/></svg>";
+// Official Phantom Wallet Icon (Uploaded Exact Image)
+export const PHANTOM_OFFICIAL_ICON = "/wallets/phantom.png";
 
 // Official Coinbase Wallet SVG Icon
 export const COINBASE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%230052FF'/><rect x='28' y='28' width='44' height='44' rx='9' fill='white'/><rect x='41' y='41' width='18' height='18' rx='3.5' fill='%230052FF'/></svg>";
@@ -57,8 +57,8 @@ export const LEDGER_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://
 // Official Bitget Wallet SVG Icon
 export const BITGET_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' rx='22' fill='%23000000'/><path d='M25 32H55C66 32 75 41 75 52C75 63 66 72 55 72H25V32Z' fill='%2300F0FF'/><path d='M35 42H53C58.5 42 63 46.5 63 52C63 57.5 58.5 62 53 62H35V42Z' fill='%23000000'/><polygon points='40,28 62,50 40,72' fill='%2300F0FF'/></svg>";
 
-// Official Binance Web3 Wallet SVG Icon
-export const BINANCE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' rx='22' fill='%23181A20'/><path d='M50 20L63 33L50 46L37 33L50 20Z' fill='%23F0B90B'/><path d='M70 40L83 53L70 66L57 53L70 40Z' fill='%23F0B90B'/><path d='M30 40L43 53L30 66L17 53L30 40Z' fill='%23F0B90B'/><path d='M50 60L63 73L50 86L37 73L50 60Z' fill='%23F0B90B'/><path d='M50 43L60 53L50 63L40 53L50 43Z' fill='%23F0B90B'/></svg>";
+// Official Binance Web3 Wallet Icon (Uploaded Exact Image)
+export const BINANCE_OFFICIAL_ICON = "/wallets/binance.png";
 
 // Official Rainbow Wallet SVG Icon
 export const RAINBOW_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' rx='22' fill='%2300191A'/><path d='M18 78C18 44.86 44.86 18 78 18V28C50.39 28 28 50.39 28 78H18Z' fill='%23FF1965'/><path d='M28 78C28 50.39 50.39 28 78 28V38C55.91 38 38 55.91 38 78H28Z' fill='%23FFB800'/><path d='M38 78C38 55.91 55.91 38 78 38V48C61.43 48 48 61.43 48 78H38Z' fill='%2300E5FF'/></svg>";
