@@ -14,9 +14,12 @@ export const metadata: Metadata = {
   title: 'Orbitra ($ORB) — Robinhood Chain Trading Intelligence',
   description: 'The premier decentralized liquidity terminal & fair-launch protocol on Robinhood Chain ($ORB).',
   icons: { 
-    icon: '/favicon.png',
-    shortcut: '/favicon.ico',
-    apple: '/logo.png',
+    icon: [
+      { url: '/favicon.png?v=3', type: 'image/png' },
+      { url: '/favicon.ico?v=3' },
+    ],
+    shortcut: '/favicon.ico?v=3',
+    apple: '/apple-icon.png?v=3',
   },
   openGraph: {
     title: 'Orbitra ($ORB) — Robinhood Chain Trading Intelligence',
@@ -28,6 +31,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="icon" type="image/png" href="/favicon.png?v=3" />
+        <link rel="shortcut icon" href="/favicon.ico?v=3" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=3" />
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#000000] text-zinc-100 antialiased min-h-screen selection:bg-[#00C805] selection:text-black`}>
         <Web3Providers>
           <ToastProvider>
