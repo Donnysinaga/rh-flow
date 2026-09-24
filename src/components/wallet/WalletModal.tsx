@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useConnect, Connector } from 'wagmi';
 import { 
@@ -14,17 +14,22 @@ import {
 } from '@/lib/web3/connectWallet';
 import { ROBINHOOD_CHAIN } from '@/config/network';
 import { 
-  MonitorIcon, 
-  SmartphoneIcon, 
-  ShieldLockIcon,
   METAMASK_OFFICIAL_ICON,
+  WALLETCONNECT_OFFICIAL_ICON,
   COINBASE_OFFICIAL_ICON,
   OKX_OFFICIAL_ICON,
   PHANTOM_OFFICIAL_ICON,
   BITGET_OFFICIAL_ICON,
   TRUST_OFFICIAL_ICON,
   BINANCE_OFFICIAL_ICON,
+  RAINBOW_OFFICIAL_ICON,
   BROWSER_INJECTED_ICON,
+  SearchIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  HelpCircleIcon,
+  QrCodeIcon,
+  SmartphoneIcon,
   getOfficialWalletLogo
 } from './WalletIcons';
 
@@ -33,33 +38,65 @@ interface WalletModalProps {
   onClose: () => void;
 }
 
-interface DetectedWalletItem {
+interface WalletItemData {
   id: string;
   name: string;
   icon: string;
+  badge?: string;
+  isInstalled: boolean;
   provider?: any;
   connector?: Connector;
-  isInstalled: boolean;
   installUrl?: string;
   deepLink?: string;
 }
+
+type ModalView = 'main' | 'qr' | 'search' | 'help';
+
+// Comprehensive catalog of popular Web3 wallets
+const POPULAR_CATALOG: Omit<WalletItemData, 'isInstalled'>[] = [
+  { id: 'metamask', name: 'MetaMask', icon: METAMASK_OFFICIAL_ICON, installUrl: 'https://metamask.io/download/' },
+  { id: 'okx', name: 'OKX Wallet', icon: OKX_OFFICIAL_ICON, installUrl: 'https://www.okx.com/web3' },
+  { id: 'phantom', name: 'Phantom', icon: PHANTOM_OFFICIAL_ICON, installUrl: 'https://phantom.app/download' },
+  { id: 'coinbase', name: 'Coinbase Wallet', icon: COINBASE_OFFICIAL_ICON, installUrl: 'https://www.coinbase.com/wallet' },
+  { id: 'trust', name: 'Trust Wallet', icon: TRUST_OFFICIAL_ICON, installUrl: 'https://trustwallet.com/browser-extension' },
+  { id: 'bitget', name: 'Bitget Wallet', icon: BITGET_OFFICIAL_ICON, installUrl: 'https://web3.bitget.com/' },
+  { id: 'binance', name: 'Binance Web3', icon: BINANCE_OFFICIAL_ICON, installUrl: 'https://www.binance.com/en/web3wallet' },
+  { id: 'rainbow', name: 'Rainbow', icon: RAINBOW_OFFICIAL_ICON, installUrl: 'https://rainbow.me/' },
+  { id: 'zerion', name: 'Zerion Wallet', icon: BROWSER_INJECTED_ICON, installUrl: 'https://zerion.io/' },
+  { id: 'safe', name: 'Safe Wallet', icon: BROWSER_INJECTED_ICON, installUrl: 'https://safe.global/' },
+  { id: 'tokenpocket', name: 'TokenPocket', icon: BROWSER_INJECTED_ICON, installUrl: 'https://www.tokenpocket.pro/' },
+  { id: 'imtoken', name: 'imToken', icon: BROWSER_INJECTED_ICON, installUrl: 'https://token.im/' },
+  { id: 'coin98', name: 'Coin98', icon: BROWSER_INJECTED_ICON, installUrl: 'https://coin98.com/' },
+];
 
 export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   const { connectors, connectAsync, reset } = useConnect();
 
   const [eip6963Providers, setEip6963Providers] = useState<EIP6963ProviderDetail[]>([]);
+  const [activeView, setActiveView] = useState<ModalView>('main');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedWalletName, setSelectedWalletName] = useState<string>('');
   const [selectedWalletIcon, setSelectedWalletIcon] = useState<string>('');
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'extension' | 'mobile'>('extension');
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Multi-injected EIP-6963 Discovery listener
+  // Reset state on open/close
+  useEffect(() => {
+    if (isOpen) {
+      setActiveView('main');
+      setSearchQuery('');
+      setErrorMessage('');
+      setIsConnecting(false);
+    }
+  }, [isOpen]);
+
+  // EIP-6963 Discovery listener
   useEffect(() => {
     const handleAnnouncement = (event: Event) => {
       const customEvent = event as CustomEvent<EIP6963ProviderDetail>;
@@ -94,17 +131,14 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
     }
   }, []);
 
-  // Scan all injected window providers across all installed extensions
-  const getInstalledAndAvailableWallets = useCallback((): { installed: DetectedWalletItem[]; uninstalled: DetectedWalletItem[] } => {
-    if (typeof window === 'undefined') return { installed: [], uninstalled: [] };
-
-    const installed: DetectedWalletItem[] = [];
-    const seenIds = new Set<string>();
+  // Discover all installed window providers
+  const getDetectedWallets = useCallback((): Map<string, WalletItemData> => {
+    const map = new Map<string, WalletItemData>();
+    if (typeof window === 'undefined') return map;
 
     const win = window as any;
     const winEth = win.ethereum;
 
-    // Helper to find best connector
     const findConnector = (idOrName: string) => {
       const lower = idOrName.toLowerCase();
       return connectors.find(
@@ -112,223 +146,187 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
       );
     };
 
-    // 1. EIP-6963 Discovered Providers (Standard modern extensions)
+    // 1. EIP-6963
     eip6963Providers.forEach((p) => {
       const name = p.info.name;
       const lower = name.toLowerCase();
-      const id = p.info.uuid || p.info.rdns || lower;
-      
-      if (!seenIds.has(id) && !seenIds.has(lower)) {
-        seenIds.add(id);
-        seenIds.add(lower);
+      if (lower.includes('rabby')) return;
 
-        installed.push({
-          id,
-          name,
-          icon: p.info.icon || getOfficialWalletLogo(name),
-          provider: p.provider,
-          connector: findConnector(name) || findConnector(p.info.rdns) || connectors.find((c) => c.id === 'injected'),
-          isInstalled: true,
-        });
-      }
+      let key = lower;
+      if (lower.includes('metamask')) key = 'metamask';
+      else if (lower.includes('okx')) key = 'okx';
+      else if (lower.includes('phantom')) key = 'phantom';
+      else if (lower.includes('coinbase')) key = 'coinbase';
+      else if (lower.includes('bitget') || lower.includes('bitkeep')) key = 'bitget';
+      else if (lower.includes('trust')) key = 'trust';
+      else if (lower.includes('binance')) key = 'binance';
+
+      map.set(key, {
+        id: p.info.uuid || key,
+        name,
+        icon: p.info.icon || getOfficialWalletLogo(name),
+        badge: 'INSTALLED',
+        isInstalled: true,
+        provider: p.provider,
+        connector: findConnector(name) || findConnector(p.info.rdns) || connectors.find((c) => c.id === 'injected'),
+      });
     });
 
-    // 2. Check window.ethereum.providers array (Multi-wallet injection standard)
+    // 2. window.ethereum.providers array
     if (winEth && Array.isArray(winEth.providers)) {
       winEth.providers.forEach((prov: any, idx: number) => {
-        let name = 'Web3 Provider';
-        let icon = BROWSER_INJECTED_ICON;
-        let id = `provider-${idx}`;
-
-        if (prov.isMetaMask && !prov.isRabby) {
-          name = 'MetaMask';
-          icon = METAMASK_OFFICIAL_ICON;
-          id = 'metamask';
-        } else if (prov.isOkxWallet) {
-          name = 'OKX Wallet';
-          icon = OKX_OFFICIAL_ICON;
-          id = 'okx';
-        } else if (prov.isPhantom) {
-          name = 'Phantom';
-          icon = PHANTOM_OFFICIAL_ICON;
-          id = 'phantom';
-        } else if (prov.isCoinbaseWallet) {
-          name = 'Coinbase Wallet';
-          icon = COINBASE_OFFICIAL_ICON;
-          id = 'coinbase';
-        } else if (prov.isBitKeep || prov.isBitget) {
-          name = 'Bitget Wallet';
-          icon = BITGET_OFFICIAL_ICON;
-          id = 'bitget';
-        } else if (prov.isTrust || prov.isTrustWallet) {
-          name = 'Trust Wallet';
-          icon = TRUST_OFFICIAL_ICON;
-          id = 'trust';
-        }
-
-        if (name.toLowerCase().includes('rabby')) return;
-
-        if (!seenIds.has(id) && !seenIds.has(name.toLowerCase())) {
-          seenIds.add(id);
-          seenIds.add(name.toLowerCase());
-          installed.push({
-            id,
-            name,
-            icon,
-            provider: prov,
-            connector: findConnector(id) || findConnector(name) || connectors.find((c) => c.id === 'injected'),
+        if (prov.isMetaMask && !prov.isRabby && !map.has('metamask')) {
+          map.set('metamask', {
+            id: 'metamask',
+            name: 'MetaMask',
+            icon: METAMASK_OFFICIAL_ICON,
+            badge: 'INSTALLED',
             isInstalled: true,
+            provider: prov,
+            connector: findConnector('metamask') || connectors.find((c) => c.id === 'injected'),
+          });
+        } else if (prov.isOkxWallet && !map.has('okx')) {
+          map.set('okx', {
+            id: 'okx',
+            name: 'OKX Wallet',
+            icon: OKX_OFFICIAL_ICON,
+            badge: 'INSTALLED',
+            isInstalled: true,
+            provider: prov,
+            connector: findConnector('okx') || connectors.find((c) => c.id === 'injected'),
+          });
+        } else if (prov.isPhantom && !map.has('phantom')) {
+          map.set('phantom', {
+            id: 'phantom',
+            name: 'Phantom',
+            icon: PHANTOM_OFFICIAL_ICON,
+            badge: 'INSTALLED',
+            isInstalled: true,
+            provider: prov,
+            connector: findConnector('phantom') || connectors.find((c) => c.id === 'injected'),
+          });
+        } else if (prov.isCoinbaseWallet && !map.has('coinbase')) {
+          map.set('coinbase', {
+            id: 'coinbase',
+            name: 'Coinbase Wallet',
+            icon: COINBASE_OFFICIAL_ICON,
+            badge: 'INSTALLED',
+            isInstalled: true,
+            provider: prov,
+            connector: findConnector('coinbase') || connectors.find((c) => c.id === 'injected'),
           });
         }
       });
     }
 
-    // 3. Direct dedicated provider objects
-    // MetaMask direct
-    if (winEth?.isMetaMask && !winEth?.isRabby && !seenIds.has('metamask')) {
-      seenIds.add('metamask');
-      installed.push({
+    // 3. Direct objects
+    if (winEth?.isMetaMask && !winEth?.isRabby && !map.has('metamask')) {
+      map.set('metamask', {
         id: 'metamask',
         name: 'MetaMask',
         icon: METAMASK_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: winEth,
         connector: findConnector('metamask') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // OKX
-    if (win.okxwallet && !seenIds.has('okx') && !seenIds.has('okx wallet')) {
-      seenIds.add('okx');
-      seenIds.add('okx wallet');
-      installed.push({
+    if (win.okxwallet && !map.has('okx')) {
+      map.set('okx', {
         id: 'okx',
         name: 'OKX Wallet',
         icon: OKX_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: win.okxwallet,
         connector: findConnector('okx') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // Phantom
-    if (win.phantom?.ethereum && !seenIds.has('phantom')) {
-      seenIds.add('phantom');
-      installed.push({
+    if (win.phantom?.ethereum && !map.has('phantom')) {
+      map.set('phantom', {
         id: 'phantom',
         name: 'Phantom',
         icon: PHANTOM_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: win.phantom.ethereum,
         connector: findConnector('phantom') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // Coinbase
-    if (win.coinbaseWalletExtension && !seenIds.has('coinbase') && !seenIds.has('coinbase wallet')) {
-      seenIds.add('coinbase');
-      seenIds.add('coinbase wallet');
-      installed.push({
+    if (win.coinbaseWalletExtension && !map.has('coinbase')) {
+      map.set('coinbase', {
         id: 'coinbase',
         name: 'Coinbase Wallet',
         icon: COINBASE_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: win.coinbaseWalletExtension,
         connector: findConnector('coinbase') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // Bitget
-    if ((win.bitkeep?.ethereum || win.bitgetWallet) && !seenIds.has('bitget') && !seenIds.has('bitget wallet')) {
-      seenIds.add('bitget');
-      seenIds.add('bitget wallet');
-      installed.push({
+    if ((win.bitkeep?.ethereum || win.bitgetWallet) && !map.has('bitget')) {
+      map.set('bitget', {
         id: 'bitget',
         name: 'Bitget Wallet',
         icon: BITGET_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: win.bitkeep?.ethereum || win.bitgetWallet,
         connector: findConnector('bitget') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // Trust
-    if (win.trustwallet && !seenIds.has('trust') && !seenIds.has('trust wallet')) {
-      seenIds.add('trust');
-      seenIds.add('trust wallet');
-      installed.push({
+    if (win.trustwallet && !map.has('trust')) {
+      map.set('trust', {
         id: 'trust',
         name: 'Trust Wallet',
         icon: TRUST_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: win.trustwallet,
         connector: findConnector('trust') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // Binance Web3
-    if (win.binancew3w?.ethereum && !seenIds.has('binance')) {
-      seenIds.add('binance');
-      installed.push({
+    if (win.binancew3w?.ethereum && !map.has('binance')) {
+      map.set('binance', {
         id: 'binance',
         name: 'Binance Web3',
         icon: BINANCE_OFFICIAL_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: win.binancew3w.ethereum,
         connector: findConnector('binance') || connectors.find((c) => c.id === 'injected'),
-        isInstalled: true,
       });
     }
 
-    // Default window.ethereum (Generic Injected)
-    if (winEth && !seenIds.has('injected-default') && !seenIds.has('metamask') && installed.length === 0) {
-      seenIds.add('injected-default');
-      installed.push({
+    // Default window.ethereum if nothing else detected
+    if (winEth && map.size === 0) {
+      map.set('injected-default', {
         id: 'injected-default',
         name: 'Browser Injected Wallet',
         icon: BROWSER_INJECTED_ICON,
+        badge: 'INSTALLED',
+        isInstalled: true,
         provider: winEth,
         connector: connectors[0],
-        isInstalled: true,
       });
     }
 
-    // Connectors fallback
-    connectors.forEach((c) => {
-      const lower = c.name.toLowerCase();
-      if (lower.includes('rabby')) return;
-      if (!seenIds.has(lower) && !seenIds.has(c.id.toLowerCase())) {
-        seenIds.add(lower);
-        seenIds.add(c.id.toLowerCase());
-        installed.push({
-          id: c.id,
-          name: c.name === 'Injected' ? 'Detected Browser Extension' : c.name,
-          icon: getOfficialWalletLogo(c.name),
-          connector: c,
-          isInstalled: true,
-        });
-      }
-    });
-
-    // Uninstalled popular wallets (offering direct install link)
-    const catalog: DetectedWalletItem[] = [
-      { id: 'metamask', name: 'MetaMask', icon: METAMASK_OFFICIAL_ICON, installUrl: 'https://metamask.io/download/', isInstalled: false },
-      { id: 'okx', name: 'OKX Wallet', icon: OKX_OFFICIAL_ICON, installUrl: 'https://www.okx.com/web3', isInstalled: false },
-      { id: 'coinbase', name: 'Coinbase Wallet', icon: COINBASE_OFFICIAL_ICON, installUrl: 'https://www.coinbase.com/wallet', isInstalled: false },
-      { id: 'phantom', name: 'Phantom', icon: PHANTOM_OFFICIAL_ICON, installUrl: 'https://phantom.app/download', isInstalled: false },
-      { id: 'trust', name: 'Trust Wallet', icon: TRUST_OFFICIAL_ICON, installUrl: 'https://trustwallet.com/browser-extension', isInstalled: false },
-      { id: 'bitget', name: 'Bitget Wallet', icon: BITGET_OFFICIAL_ICON, installUrl: 'https://web3.bitget.com/', isInstalled: false },
-    ];
-
-    const uninstalled = catalog.filter((item) => !seenIds.has(item.id) && !seenIds.has(item.name.toLowerCase()));
-
-    return { installed, uninstalled };
+    return map;
   }, [eip6963Providers, connectors]);
 
-  if (!isOpen) return null;
+  // Connect Handler preserving 100% web3 functionality
+  const handleConnectWallet = async (wallet: WalletItemData) => {
+    if (!wallet.isInstalled && wallet.installUrl) {
+      window.open(wallet.installUrl, '_blank');
+      return;
+    }
 
-  const { installed, uninstalled } = getInstalledAndAvailableWallets();
-
-  const handleConnectWallet = async (wallet: DetectedWalletItem) => {
     setIsConnecting(true);
     setSelectedWalletName(wallet.name);
     setSelectedWalletIcon(wallet.icon);
@@ -337,11 +335,8 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
     try {
       const targetConnector = wallet.connector || connectors.find((c) => c.id === 'injected') || connectors[0];
 
-      // 1. Connect account first through connector
       if (targetConnector) {
-        await connectAsync({
-          connector: targetConnector,
-        });
+        await connectAsync({ connector: targetConnector });
       } else if (wallet.provider && wallet.provider.request) {
         const accounts = await wallet.provider.request({
           method: 'eth_requestAccounts',
@@ -351,8 +346,8 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         }
       }
 
-      // 2. Safely prompt network switch / addition to Robinhood Chain
-      const activeProvider = wallet.provider || (window as any).ethereum;
+      // Prompt network switch / add Robinhood Chain
+      const activeProvider = wallet.provider || (typeof window !== 'undefined' ? (window as any).ethereum : null);
       if (activeProvider) {
         await switchOrAddRobinhoodChain(activeProvider);
       }
@@ -376,13 +371,11 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         setErrorMessage(`Request already pending in ${wallet.name}. Please open your browser extension popup to approve.`);
       } else {
         setErrorMessage(
-          err?.shortMessage || err?.message || `Failed to connect ${wallet.name}. Please ensure your wallet is active and unlocked.`
+          err?.shortMessage || err?.message || `Failed to connect ${wallet.name}. Please ensure your extension is active and unlocked.`
         );
       }
     }
   };
-
-  if (!isOpen || !mounted) return null;
 
   const handleReset = () => {
     reset();
@@ -394,91 +387,190 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
+  const detectedMap = useMemo(() => getDetectedWallets(), [getDetectedWallets]);
+
+  // Primary Wallets list to show on Main Pons view:
+  // 1. WalletConnect (QR Code)
+  // 2. MetaMask
+  // 3. OKX Wallet
+  // 4. Phantom
+  // Plus any additional installed wallets detected
+  const mainWalletRows = useMemo(() => {
+    const list: WalletItemData[] = [];
+
+    // 1. WalletConnect row
+    list.push({
+      id: 'walletconnect',
+      name: 'WalletConnect',
+      icon: WALLETCONNECT_OFFICIAL_ICON,
+      badge: 'QR CODE',
+      isInstalled: true,
+    });
+
+    // 2. MetaMask
+    const mm = detectedMap.get('metamask');
+    list.push({
+      id: 'metamask',
+      name: 'MetaMask',
+      icon: METAMASK_OFFICIAL_ICON,
+      badge: mm ? 'INSTALLED' : undefined,
+      isInstalled: !!mm,
+      provider: mm?.provider,
+      connector: mm?.connector,
+      installUrl: 'https://metamask.io/download/',
+    });
+
+    // 3. OKX Wallet
+    const okx = detectedMap.get('okx');
+    list.push({
+      id: 'okx',
+      name: 'OKX Wallet',
+      icon: OKX_OFFICIAL_ICON,
+      badge: okx ? 'INSTALLED' : undefined,
+      isInstalled: !!okx,
+      provider: okx?.provider,
+      connector: okx?.connector,
+      installUrl: 'https://www.okx.com/web3',
+    });
+
+    // 4. Phantom
+    const phantom = detectedMap.get('phantom');
+    list.push({
+      id: 'phantom',
+      name: 'Phantom',
+      icon: PHANTOM_OFFICIAL_ICON,
+      badge: phantom ? 'INSTALLED' : undefined,
+      isInstalled: !!phantom,
+      provider: phantom?.provider,
+      connector: phantom?.connector,
+      installUrl: 'https://phantom.app/download',
+    });
+
+    // 5. Any extra installed wallets (e.g. Coinbase, Bitget, Trust, Binance)
+    detectedMap.forEach((wallet, key) => {
+      if (!['metamask', 'okx', 'phantom'].includes(key)) {
+        list.push(wallet);
+      }
+    });
+
+    return list;
+  }, [detectedMap]);
+
+  // Search filter list
+  const filteredCatalog = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const allWallets: WalletItemData[] = POPULAR_CATALOG.map((item) => {
+      const detected = detectedMap.get(item.id);
+      return {
+        ...item,
+        isInstalled: !!detected,
+        badge: detected ? 'INSTALLED' : undefined,
+        provider: detected?.provider,
+        connector: detected?.connector,
+      };
+    });
+
+    if (!q) return allWallets;
+    return allWallets.filter((w) => w.name.toLowerCase().includes(q));
+  }, [searchQuery, detectedMap]);
+
+  const handleCopyLink = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(currentUrl);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
+  };
+
+  if (!isOpen || !mounted) return null;
+
   return createPortal(
-    <div className="fixed inset-0 z-[999999] overflow-y-auto p-4 sm:p-6 flex min-h-full items-center justify-center bg-black/90 backdrop-blur-md animate-in fade-in duration-200 font-mono text-xs">
+    <div className="fixed inset-0 z-[999999] overflow-y-auto p-4 flex min-h-full items-center justify-center bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-md max-h-[85vh] flex flex-col bg-[#0a0d12] border border-[#1a222d] rounded-2xl shadow-[0_0_70px_rgba(0,0,0,0.95)] overflow-hidden text-zinc-100 my-auto z-10"
+        className="relative w-full max-w-[380px] bg-[#141416] border border-[#27272a] rounded-[28px] shadow-[0_0_80px_rgba(0,0,0,0.9)] overflow-hidden text-zinc-100 flex flex-col my-auto transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="shrink-0 px-5 py-4 border-b border-[#1a222d] flex items-center justify-between bg-[#0d1117]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00C805] animate-pulse"></span>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-100">
-              {isConnecting ? 'Connecting Wallet' : 'Connect Web3 Wallet'}
-            </h3>
-          </div>
+        {/* Top Header */}
+        <div className="shrink-0 px-5 pt-5 pb-3 flex items-center justify-between">
+          {/* Left action button (Back if in subview, or Help icon) */}
+          {activeView !== 'main' && !isConnecting && !errorMessage ? (
+            <button
+              type="button"
+              onClick={() => setActiveView('main')}
+              className="w-8 h-8 rounded-full bg-[#1c1d22] hover:bg-[#282932] border border-[#2e2f38] flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              title="Back"
+            >
+              <ChevronLeftIcon className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setActiveView('help')}
+              className="w-8 h-8 rounded-full bg-[#1c1d22] hover:bg-[#282932] border border-[#2e2f38] flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              title="Help / What is a Wallet?"
+            >
+              <HelpCircleIcon className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* Title */}
+          <h3 className="text-[15px] font-semibold tracking-tight text-white">
+            {isConnecting
+              ? 'Connecting'
+              : errorMessage
+              ? 'Connection'
+              : activeView === 'qr'
+              ? 'WalletConnect'
+              : activeView === 'search'
+              ? 'Search Wallet'
+              : activeView === 'help'
+              ? 'What is a Wallet?'
+              : 'Connect Wallet'}
+          </h3>
+
+          {/* Close button */}
           <button
             type="button"
             onClick={() => {
               handleReset();
               onClose();
             }}
-            className="text-zinc-500 hover:text-zinc-200 p-1.5 rounded-lg hover:bg-[#12171e] transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-[#1c1d22] hover:bg-[#282932] border border-[#2e2f38] flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer text-sm"
+            title="Close"
           >
             ✕
           </button>
         </div>
 
-        {/* Tab Toggle */}
-        {!isConnecting && !errorMessage && (
-          <div className="shrink-0 flex border-b border-[#1a222d] bg-[#0d1117] p-1.5 gap-1">
-            <button
-              type="button"
-              onClick={() => setActiveTab('extension')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl font-medium transition-all cursor-pointer ${
-                activeTab === 'extension'
-                  ? 'bg-[#00C805]/15 text-[#00C805] font-bold shadow-sm border border-[#00C805]/40'
-                  : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              <MonitorIcon className="w-3.5 h-3.5" />
-              <span>Extensions ({installed.length})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('mobile')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl font-medium transition-all cursor-pointer ${
-                activeTab === 'mobile'
-                  ? 'bg-[#00C805]/15 text-[#00C805] font-bold shadow-sm border border-[#00C805]/40'
-                  : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              <SmartphoneIcon className="w-3.5 h-3.5" />
-              <span>Mobile dApp</span>
-            </button>
-          </div>
-        )}
-
-        {/* Body Content */}
-        <div className="flex-1 p-5 overflow-y-auto space-y-4">
-          {/* Connecting State */}
+        {/* Modal Body */}
+        <div className="p-4 pt-1 space-y-2 max-h-[75vh] overflow-y-auto">
+          {/* 1. Connecting State */}
           {isConnecting ? (
-            <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="py-10 flex flex-col items-center justify-center text-center space-y-4">
               <div className="relative">
-                <div className="w-16 h-16 rounded-2xl bg-[#0d1117] border border-[#1a222d] flex items-center justify-center p-3 shadow-lg">
+                <div className="w-18 h-18 rounded-2xl bg-[#1c1d22] border border-[#2e2f38] flex items-center justify-center p-3.5 shadow-2xl">
                   {selectedWalletIcon ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img 
                       src={selectedWalletIcon} 
                       alt={selectedWalletName} 
-                      className="w-10 h-10 object-contain rounded-lg" 
+                      className="w-11 h-11 object-contain rounded-xl" 
                     />
                   ) : (
                     <span className="text-2xl">⚡</span>
                   )}
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#00C805] border-2 border-[#0a0d12] flex items-center justify-center">
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#00C805] border-2 border-[#141416] flex items-center justify-center">
                   <span className="w-2.5 h-2.5 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <h4 className="text-sm font-semibold text-zinc-100">
-                  Connecting {selectedWalletName || 'Wallet'}...
+              <div className="space-y-1.5">
+                <h4 className="text-base font-semibold text-white">
+                  Continue in {selectedWalletName || 'Wallet'}
                 </h4>
-                <p className="text-[11px] text-zinc-400 max-w-xs leading-relaxed">
-                  Please confirm the request in your {selectedWalletName} extension popup and approve switching to Robinhood Chain.
+                <p className="text-xs text-zinc-400 max-w-[260px] leading-relaxed">
+                  Accept connection request in the wallet extension and switch network to Robinhood Chain.
                 </p>
               </div>
 
@@ -486,273 +578,307 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-4 py-1.5 rounded-xl bg-[#12171e] hover:bg-[#181f28] text-zinc-400 hover:text-zinc-200 border border-[#1a222d] text-[11px] transition-colors cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-[#1c1d22] hover:bg-[#282932] text-zinc-300 hover:text-white border border-[#2e2f38] text-xs font-medium transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
               </div>
             </div>
           ) : errorMessage ? (
-            /* Error State */
-            <div className="py-6 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-12 h-12 rounded-full bg-[#FF5000]/10 border border-[#FF5000]/30 flex items-center justify-center text-[#FF5000] text-lg">
+            /* 2. Error State */
+            <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
+              <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-xl">
                 ⚠️
               </div>
 
-              <div className="space-y-1.5">
-                <h4 className="text-sm font-bold text-[#FF5000]">
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-red-400">
                   Connection Incomplete
                 </h4>
-                <p className="text-[11px] text-zinc-400 max-w-sm leading-relaxed px-2 bg-[#0d1117] p-2.5 rounded-xl border border-[#1a222d]">
+                <p className="text-xs text-zinc-400 max-w-[280px] leading-relaxed p-3 bg-[#1c1d22] rounded-xl border border-[#2e2f38]">
                   {errorMessage}
                 </p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 pt-1">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-4 py-2 rounded-xl bg-[#00C805] hover:bg-[#00E806] text-black font-bold text-xs transition-colors cursor-pointer shadow-md"
+                  className="px-5 py-2 rounded-xl bg-[#00C805] hover:bg-[#00E806] text-black font-semibold text-xs transition-colors cursor-pointer"
                 >
                   Try Again
                 </button>
                 <button
                   type="button"
-                  onClick={onClose}
-                  className="px-4 py-2 rounded-xl bg-[#12171e] hover:bg-[#181f28] text-zinc-300 text-xs transition-colors cursor-pointer border border-[#1a222d]"
+                  onClick={() => {
+                    handleReset();
+                    setActiveView('main');
+                  }}
+                  className="px-4 py-2 rounded-xl bg-[#1c1d22] hover:bg-[#282932] text-zinc-300 text-xs transition-colors cursor-pointer border border-[#2e2f38]"
                 >
-                  Close
+                  Back
                 </button>
               </div>
             </div>
-          ) : activeTab === 'extension' ? (
-            /* Extensions View */
-            <div className="space-y-4">
-              {/* Installed / Discovered Section */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] text-zinc-400 px-1 font-medium">
-                  <span className="uppercase tracking-wider text-[#00C805] flex items-center gap-1.5 font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00C805]"></span>
-                    Detected Extensions ({installed.length})
+          ) : activeView === 'main' ? (
+            /* 3. Main Pons / Reown AppKit List View */
+            <div className="space-y-2">
+              {/* Primary list items */}
+              {mainWalletRows.map((wallet) => {
+                const isWC = wallet.id === 'walletconnect';
+
+                return (
+                  <button
+                    key={wallet.id}
+                    type="button"
+                    onClick={() => {
+                      if (isWC) {
+                        setActiveView('qr');
+                      } else {
+                        handleConnectWallet(wallet);
+                      }
+                    }}
+                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#1c1d22] hover:bg-[#25262c] border border-transparent hover:border-[#343540] transition-all duration-150 group cursor-pointer text-left active:scale-[0.99]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-[#141416] border border-[#2e2f38] flex items-center justify-center p-2 shrink-0 group-hover:border-[#3e404d] transition-colors">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={wallet.icon}
+                          alt={wallet.name}
+                          className="w-full h-full object-contain rounded-lg"
+                        />
+                      </div>
+                      <span className="font-semibold text-sm text-zinc-100 group-hover:text-white transition-colors">
+                        {wallet.name}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {wallet.badge && (
+                        <span 
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                            wallet.badge === 'QR CODE'
+                              ? 'bg-[#0f2e1b] text-[#00C805] border border-[#00C805]/30'
+                              : 'bg-[#0f2e1b] text-[#00C805] border border-[#00C805]/30'
+                          }`}
+                        >
+                          {wallet.badge}
+                        </span>
+                      )}
+                      <ChevronRightIcon className="w-4 h-4 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+                    </div>
+                  </button>
+                );
+              })}
+
+              {/* Search Wallet Row */}
+              <button
+                type="button"
+                onClick={() => setActiveView('search')}
+                className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#1c1d22] hover:bg-[#25262c] border border-transparent hover:border-[#343540] transition-all duration-150 group cursor-pointer text-left active:scale-[0.99]"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#141416] border border-[#2e2f38] flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 transition-colors shrink-0">
+                    <SearchIcon className="w-4 h-4" />
+                  </div>
+                  <span className="font-medium text-sm text-zinc-300 group-hover:text-white transition-colors">
+                    Search Wallet
                   </span>
-                  <span className="text-zinc-500 text-[10px]">Ready to Connect</span>
                 </div>
 
-                <div className="space-y-1.5">
-                  {installed.length > 0 ? (
-                    installed.map((wallet) => (
-                      <button
-                        key={wallet.id}
-                        type="button"
-                        onClick={() => handleConnectWallet(wallet)}
-                        className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] hover:border-[#00C805]/50 rounded-xl transition-all group cursor-pointer text-left shadow-sm active:scale-[0.99]"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 overflow-hidden shrink-0 group-hover:border-[#00C805]/40 transition-colors">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={wallet.icon}
-                              alt={wallet.name}
-                              className="w-full h-full object-contain rounded"
-                            />
-                          </div>
-                          <div>
-                            <div className="font-semibold text-zinc-100 group-hover:text-[#00C805] transition-colors flex items-center gap-1.5 text-xs">
-                              <span>{wallet.name}</span>
-                              <span className="px-1.5 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] text-[9px] font-semibold border border-[#00C805]/20">
-                                Installed
-                              </span>
-                            </div>
-                            <div className="text-[10px] text-zinc-500">
-                              Click to connect & switch to Robinhood Chain
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-zinc-500 group-hover:text-[#00C805] group-hover:translate-x-0.5 transition-all text-sm font-bold">
-                          →
-                        </span>
-                      </button>
-                    ))
-                  ) : (
-                    <div className="p-4 rounded-xl bg-[#0d1117] border border-[#1a222d] text-center space-y-2">
-                      <p className="text-zinc-400 text-[11px]">
-                        No active browser wallet extension was automatically detected.
-                      </p>
-                      <p className="text-zinc-500 text-[10px]">
-                        Install MetaMask, OKX, or Phantom below to connect.
-                      </p>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-medium text-zinc-400 bg-[#282932] px-2 py-0.5 rounded-full">
+                    550+
+                  </span>
+                  <ChevronRightIcon className="w-4 h-4 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
                 </div>
+              </button>
+            </div>
+          ) : activeView === 'qr' ? (
+            /* 4. WalletConnect / Mobile QR Code View */
+            <div className="space-y-4 py-2">
+              <div className="bg-[#1c1d22] p-4 rounded-2xl border border-[#2e2f38] text-center space-y-3">
+                <div className="w-48 h-48 mx-auto bg-white rounded-2xl p-3 flex flex-col items-center justify-center shadow-inner relative group">
+                  {/* Stylized QR Code placeholder with WalletConnect Brand */}
+                  <div className="w-full h-full border-2 border-dashed border-zinc-300 rounded-xl flex flex-col items-center justify-center text-zinc-800 p-2 text-center bg-zinc-50">
+                    <QrCodeIcon className="w-16 h-16 text-zinc-800 mb-1" />
+                    <span className="text-[11px] font-bold text-zinc-700">Scan with your mobile wallet</span>
+                    <span className="text-[9px] text-zinc-500">Robinhood Chain (4663)</span>
+                  </div>
+                </div>
+
+                <div className="space-y-1 text-center">
+                  <p className="text-xs text-zinc-300 font-medium">
+                    Scan with MetaMask, OKX, Phantom or Trust Wallet
+                  </p>
+                  <p className="text-[11px] text-zinc-500">
+                    Or copy the connection link below
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#282932] hover:bg-[#343540] text-zinc-200 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <span>{copiedLink ? '✓ Link Copied to Clipboard' : '📋 Copy Connection Link'}</span>
+                </button>
               </div>
 
-              {/* Other Catalog Wallets */}
-              {uninstalled.length > 0 && (
-                <div className="pt-2 border-t border-[#1a222d] space-y-2">
-                  <div className="flex items-center justify-between text-[11px] text-zinc-500 px-1 font-medium">
-                    <span className="uppercase tracking-wider">Other Popular Wallets</span>
-                    <span className="text-[10px]">Install Extension</span>
-                  </div>
+              {/* Direct Mobile Launch Shortcuts */}
+              <div className="space-y-2">
+                <div className="text-[11px] font-medium text-zinc-400 px-1 uppercase tracking-wider">
+                  Open Direct in Mobile App
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={getMetaMaskDeepLink(currentUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={METAMASK_OFFICIAL_ICON} alt="MetaMask" className="w-5 h-5 object-contain" />
+                    <span className="text-xs text-zinc-300 group-hover:text-white font-medium">MetaMask</span>
+                  </a>
+                  <a
+                    href={getOKXDeepLink(currentUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={OKX_OFFICIAL_ICON} alt="OKX" className="w-5 h-5 object-contain" />
+                    <span className="text-xs text-zinc-300 group-hover:text-white font-medium">OKX Wallet</span>
+                  </a>
+                  <a
+                    href={getPhantomDeepLink(currentUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={PHANTOM_OFFICIAL_ICON} alt="Phantom" className="w-5 h-5 object-contain" />
+                    <span className="text-xs text-zinc-300 group-hover:text-white font-medium">Phantom</span>
+                  </a>
+                  <a
+                    href={getTrustDeepLink(currentUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={TRUST_OFFICIAL_ICON} alt="Trust" className="w-5 h-5 object-contain" />
+                    <span className="text-xs text-zinc-300 group-hover:text-white font-medium">Trust Wallet</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          ) : activeView === 'search' ? (
+            /* 5. Search Wallets View */
+            <div className="space-y-3">
+              <div className="relative">
+                <SearchIcon className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search wallet name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  autoFocus
+                  className="w-full bg-[#1c1d22] border border-[#2e2f38] focus:border-[#00C805] text-white text-xs rounded-xl pl-9 pr-4 py-2.5 outline-none transition-colors"
+                />
+              </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    {uninstalled.map((wallet) => (
-                      <a
-                        key={wallet.id}
-                        href={wallet.installUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2.5 p-2.5 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] hover:border-zinc-700 rounded-xl transition-all group"
-                      >
-                        <div className="w-6 h-6 rounded-lg bg-[#0a0d12] flex items-center justify-center p-1 shrink-0">
+              <div className="space-y-1.5 max-h-[260px] overflow-y-auto pr-1">
+                {filteredCatalog.length > 0 ? (
+                  filteredCatalog.map((wallet) => (
+                    <button
+                      key={wallet.id}
+                      type="button"
+                      onClick={() => handleConnectWallet(wallet)}
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[#1c1d22] hover:bg-[#25262c] border border-transparent hover:border-[#343540] transition-colors group cursor-pointer text-left"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[#141416] border border-[#2e2f38] flex items-center justify-center p-1.5 shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={wallet.icon}
                             alt={wallet.name}
-                            className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                            className="w-full h-full object-contain rounded"
                           />
                         </div>
-                        <div className="overflow-hidden text-left">
-                          <div className="font-medium text-zinc-400 group-hover:text-zinc-200 truncate text-[11px]">
-                            {wallet.name}
-                          </div>
-                          <div className="text-[9px] text-zinc-500 group-hover:text-[#00C805] flex items-center gap-0.5">
+                        <span className="font-medium text-xs text-zinc-200 group-hover:text-white">
+                          {wallet.name}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {wallet.isInstalled ? (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#0f2e1b] text-[#00C805] border border-[#00C805]/30">
+                            INSTALLED
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-zinc-500 group-hover:text-zinc-300 flex items-center gap-0.5">
                             <span>Get</span>
                             <span>↗</span>
-                          </div>
-                        </div>
-                      </a>
-                    ))}
+                          </span>
+                        )}
+                        <ChevronRightIcon className="w-3.5 h-3.5 text-zinc-500" />
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="py-6 text-center text-xs text-zinc-500">
+                    No wallets found matching &quot;{searchQuery}&quot;
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           ) : (
-            /* Mobile dApp View */
-            <div className="space-y-3">
-              <div className="text-[11px] text-zinc-400 leading-relaxed bg-[#0d1117] p-3 rounded-xl border border-[#1a222d] flex items-start gap-2.5">
-                <SmartphoneIcon className="w-4 h-4 text-[#00C805] shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-zinc-200 block mb-0.5">Open on Mobile Devices</span>
-                  Tap below to launch RH FLOW directly inside your wallet mobile dApp browser.
-                </div>
+            /* 6. Help / "What is a Wallet?" View */
+            <div className="space-y-3 py-1 text-zinc-300 text-xs leading-relaxed">
+              <div className="bg-[#1c1d22] p-3.5 rounded-2xl border border-[#2e2f38] space-y-2">
+                <h4 className="font-semibold text-white flex items-center gap-1.5 text-xs">
+                  <span className="text-[#00C805]">●</span> A Digital Key to Web3
+                </h4>
+                <p className="text-[11px] text-zinc-400">
+                  Wallets let you store your crypto assets, interact with smart contracts on Robinhood Chain, and authenticate without a password.
+                </p>
               </div>
 
-              <div className="space-y-2">
-                <a
-                  href={getMetaMaskDeepLink(currentUrl)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={METAMASK_OFFICIAL_ICON} alt="MetaMask" className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
-                        MetaMask Mobile
-                      </div>
-                      <div className="text-[10px] text-zinc-500">Open in MetaMask mobile dApp browser</div>
-                    </div>
-                  </div>
-                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
-                </a>
+              <div className="bg-[#1c1d22] p-3.5 rounded-2xl border border-[#2e2f38] space-y-2">
+                <h4 className="font-semibold text-white flex items-center gap-1.5 text-xs">
+                  <span className="text-[#00C805]">●</span> Robinhood Chain Verified
+                </h4>
+                <p className="text-[11px] text-zinc-400">
+                  RH FLOW automatically adds and connects to Robinhood Chain (ID: 4663) using ultra-fast RPC nodes.
+                </p>
+              </div>
 
+              <div className="pt-1">
                 <a
-                  href={getOKXDeepLink(currentUrl)}
+                  href="https://metamask.io/download/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#00C805] hover:bg-[#00E806] text-black text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={OKX_OFFICIAL_ICON} alt="OKX" className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
-                        OKX Mobile Wallet
-                      </div>
-                      <div className="text-[10px] text-zinc-500">Open in OKX mobile dApp browser</div>
-                    </div>
-                  </div>
-                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
-                </a>
-
-                <a
-                  href={getCoinbaseDeepLink(currentUrl)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={COINBASE_OFFICIAL_ICON} alt="Coinbase" className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
-                        Coinbase Wallet
-                      </div>
-                      <div className="text-[10px] text-zinc-500">Open in Coinbase mobile dApp browser</div>
-                    </div>
-                  </div>
-                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
-                </a>
-
-                <a
-                  href={getPhantomDeepLink(currentUrl)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={PHANTOM_OFFICIAL_ICON} alt="Phantom" className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
-                        Phantom Mobile
-                      </div>
-                      <div className="text-[10px] text-zinc-500">Open in Phantom mobile dApp browser</div>
-                    </div>
-                  </div>
-                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
-                </a>
-
-                <a
-                  href={getTrustDeepLink(currentUrl)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-3 bg-[#0d1117] hover:bg-[#12171e] border border-[#1a222d] rounded-xl transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0a0d12] border border-[#1a222d] flex items-center justify-center p-1.5 shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={TRUST_OFFICIAL_ICON} alt="Trust" className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-zinc-200 group-hover:text-[#00C805] text-xs">
-                        Trust Wallet Mobile
-                      </div>
-                      <div className="text-[10px] text-zinc-500">Open in Trust Wallet mobile dApp browser</div>
-                    </div>
-                  </div>
-                  <span className="text-zinc-500 group-hover:text-[#00C805] text-xs font-semibold">Open ↗</span>
+                  <span>Get Started with MetaMask</span>
+                  <span>↗</span>
                 </a>
               </div>
             </div>
           )}
+        </div>
 
-          {/* Footer Security Badge */}
-          <div className="pt-2 border-t border-[#1a222d] flex items-center justify-between text-[10px] text-zinc-500">
-            <div className="flex items-center gap-1.5">
-              <ShieldLockIcon className="w-3.5 h-3.5 text-[#00C805]" />
-              <span className="text-zinc-400">Robinhood Chain Network</span>
-            </div>
-            <span className="text-[#00C805] font-semibold">EIP-6963 Verified</span>
+        {/* Footer */}
+        <div className="shrink-0 px-5 py-3 border-t border-[#27272a] bg-[#111113] flex items-center justify-between text-[11px] text-zinc-500">
+          <span className="text-zinc-500 font-medium">
+            UX by <span className="text-zinc-300 font-semibold">reown</span>
+          </span>
+          <div className="flex items-center gap-1.5 text-zinc-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00C805]"></span>
+            <span>Robinhood Chain</span>
           </div>
         </div>
       </div>
