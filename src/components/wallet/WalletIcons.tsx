@@ -18,8 +18,8 @@ export const COINBASE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http:
 // Official Trust Wallet SVG Icon
 export const TRUST_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%230500FF'/><path d='M50 18L78 28.5V48C78 64.5 66 76 50 82C34 76 22 64.5 22 48V28.5L50 18Z' fill='white'/><path d='M50 25.5L71.5 33.5V48C71.5 60.5 62.5 69.5 50 74.5C37.5 69.5 28.5 60.5 28.5 48V33.5L50 25.5Z' fill='%230500FF'/></svg>";
 
-// Official Uniswap Wallet SVG Icon
-export const UNISWAP_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%23FF007A'/><path d='M68 28C68 28 65 35 58 37C51 39 45 35 40 40C35 45 36 52 33 58C30 64 24 66 24 66C24 66 31 68 38 64C45 60 48 53 54 50C60 47 66 49 70 44C74 39 72 32 68 28Z' fill='white'/><path d='M48 24C48 24 55 25 58 30C61 35 58 42 58 42C58 42 63 36 62 30C61 24 54 21 48 24Z' fill='white'/></svg>";
+// Official Uniswap Wallet Icon (Uploaded Exact Image)
+export const UNISWAP_OFFICIAL_ICON = "/wallets/uniswap.png";
 
 // Official Rabby Wallet SVG Icon
 export const RABBY_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%238697FF'/><path d='M35 25C32 25 30 28 31 33L35 50C35 55 40 60 45 62C45 68 42 75 36 78H64C58 75 55 68 55 62C60 60 65 55 65 50L69 33C70 28 68 25 65 25C62 25 59 28 59 32L58 45H42L41 32C41 28 38 25 35 25Z' fill='white'/><circle cx='43' cy='52' r='3' fill='%238697FF'/><circle cx='57' cy='52' r='3' fill='%238697FF'/></svg>";
@@ -36,8 +36,8 @@ export const BRAVE_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://w
 // Official Exodus Wallet SVG Icon
 export const EXODUS_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%231F2033'/><path d='M50 22L76 40L68 46L50 34L32 46L24 40L50 22ZM50 78L24 60L32 54L50 66L68 54L76 60L50 78ZM24 44L34 50L24 56V44ZM76 44V56L66 50L76 44Z' fill='%230B84FE'/></svg>";
 
-// Official 1inch Wallet SVG Icon
-export const ONEINCH_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%230B132B'/><path d='M50 22L68 36L60 48L72 52L62 76L46 64L42 78L28 60L38 46L28 36L50 22Z' fill='%23D92B34'/></svg>";
+// Official 1inch Wallet Icon (Uploaded Exact Image)
+export const ONEINCH_OFFICIAL_ICON = "/wallets/1inch.png";
 
 // Official TokenPocket Wallet SVG Icon
 export const TOKENPOCKET_OFFICIAL_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><rect width='100' height='100' rx='22' fill='%232980FE'/><path d='M28 28H72V42H56V72H44V42H28V28Z' fill='white'/></svg>";
