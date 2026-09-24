@@ -21,7 +21,7 @@ export function PnLShareModal({ isOpen, onClose, token }: PnLShareModalProps) {
   const pnlPercent = (pnlMultiplier - 1) * 100;
 
   const handleShareToTwitter = () => {
-    const text = `🚀 Just traded $${token?.symbol || 'TOKEN'} on @RobinhoodChain via RH FLOW!\n\n📈 Current Gain: +${pnlPercent.toFixed(0)}% (${pnlMultiplier.toFixed(1)}x)\n💎 Fast on-chain execution with Pons v2 curves\n\nTrade now on RH FLOW terminal:`;
+    const text = `🚀 Just traded $${token?.symbol || 'TOKEN'} on @RobinhoodChain via Orbitra ($ORB)!\n\n📈 Current Gain: +${pnlPercent.toFixed(0)}% (${pnlMultiplier.toFixed(1)}x)\n💎 Fast on-chain execution on Robinhood Chain\n\nTrade now on Orbitra terminal:`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank');
   };

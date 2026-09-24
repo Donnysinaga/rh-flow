@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'RH FLOW — Robinhood Chain Trading Intelligence',
-  description: 'Track tokens, wallets and market flow across Robinhood Chain using real on-chain data.',
+  title: 'Orbitra ($ORB) — Robinhood Chain Trading Intelligence',
+  description: 'Track tokens, wallets and market flow across Robinhood Chain using Orbitra ($ORB).',
   icons: { icon: '/favicon.png' },
 };
 
@@ -32,4 +32,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-

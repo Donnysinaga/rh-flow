@@ -79,7 +79,7 @@ export function EcosystemSchema({ blockHeight = '70,226,624', rpcStatus = 'Conne
     },
     {
       id: 4,
-      title: 'RH FLOW Terminal',
+      title: 'Orbitra Terminal',
       tag: 'Intelligence Hub',
       color: 'amber',
       icon: (
@@ -119,7 +119,7 @@ export function EcosystemSchema({ blockHeight = '70,226,624', rpcStatus = 'Conne
               </span>
             </div>
             <p className="text-[11px] text-zinc-500 font-mono">
-              End-to-end execution pipeline from L2 Sequencer to RH FLOW Trading Engine
+              End-to-end execution pipeline from L2 Sequencer to Orbitra Trading Engine
             </p>
           </div>
         </div>

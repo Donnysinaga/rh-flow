@@ -608,7 +608,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
               <h3 className="text-sm font-bold text-zinc-100 tracking-wide flex items-center gap-2">
                 <span>Launch Token on Robinhood Chain</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 font-mono font-semibold">
-                  RH FLOW
+                  ORBITRA
                 </span>
               </h3>
             </div>
@@ -637,7 +637,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Robinhood Flow"
+                  placeholder="e.g. Orbitra"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs transition-colors"
@@ -650,7 +650,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. FLOW"
+                  placeholder="e.g. ORB"
                   value={symbol}
                   onChange={(e) => setSymbol(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-[#181a20] border border-zinc-800 focus:border-[#00C805]/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none text-xs uppercase transition-colors"

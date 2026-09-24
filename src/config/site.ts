@@ -1,7 +1,9 @@
 export const siteConfig = {
-  SITE_NAME: 'RH FLOW',
+  SITE_NAME: 'Orbitra',
+  TOKEN_NAME: 'Orbitra',
+  TOKEN_TICKER: 'ORB',
   TAGLINE: 'Real-time trading intelligence for Robinhood Chain.',
-  DESCRIPTION: 'Track tokens, wallets and market flow across Robinhood Chain using real on-chain data.',
+  DESCRIPTION: 'Track tokens, wallets and market flow across Robinhood Chain with Orbitra ($ORB).',
   LOGO_PNG: '/logo.png',
   FAVICON_PNG: '/favicon.ico',
   CONTRACT_ADDRESS: '', // Configurable token CA if any

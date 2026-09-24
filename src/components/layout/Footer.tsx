@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { RobinhoodFeatherLogo } from '@/components/ui/RobinhoodLogo';
 
 const XIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
@@ -31,10 +31,10 @@ export function Footer() {
           {/* Brand & Mission Statement */}
           <div className="md:col-span-6 space-y-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-[#00C805] font-mono text-lg font-black">RH</span>
-              <span className="text-white font-bold text-sm tracking-wider">FLOW TERMINAL</span>
+              <span className="text-[#00C805] font-mono text-lg font-black">ORBITRA</span>
+              <span className="text-white font-bold text-sm tracking-wider">TERMINAL</span>
               <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 font-semibold">
-                Robinhood Network
+                $ORB • Robinhood Chain
               </span>
             </div>
             <p className="text-zinc-400 text-xs font-sans leading-relaxed max-w-md">
@@ -56,8 +56,8 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
-                  <PonsLogo className="w-3 h-3" size={12} />
-                  <span>RH Flow Protocol Architecture ↗</span>
+                  <RobinhoodFeatherLogo className="w-3 h-3" size={12} />
+                  <span>Orbitra Protocol Architecture ↗</span>
                 </a>
               </li>
               <li>
@@ -114,7 +114,7 @@ export function Footer() {
         {/* Bottom Copyright & Disclaimer */}
         <div className="pt-4 border-t border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-2 text-zinc-500 text-[11px]">
           <div>
-            <span>© 2026 RH FLOW. All on-chain rights reserved.</span>
+            <span>© 2026 Orbitra ($ORB). All on-chain rights reserved.</span>
           </div>
           <div className="flex items-center gap-3 text-zinc-400">
             <span>Decentralized EVM Layer 2</span>

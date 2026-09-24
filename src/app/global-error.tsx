@@ -21,7 +21,7 @@ export default function GlobalError({
             !
           </div>
           <div className="space-y-1">
-            <h2 className="text-base font-bold text-zinc-100">RH FLOW — Page Error</h2>
+            <h2 className="text-base font-bold text-zinc-100">Orbitra — Page Error</h2>
             <p className="text-zinc-400 text-xs">
               {error?.message || 'An unexpected runtime error occurred. Please reload to resume.'}
             </p>

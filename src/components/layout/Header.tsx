@@ -35,9 +35,11 @@ export function Header() {
       <div className="flex items-center gap-4">
         <Link href="/" className="font-bold text-zinc-100 text-lg tracking-tight flex items-center gap-2.5 group cursor-pointer">
           <RobinhoodFeatherLogo className="w-6 h-6 transition-transform group-hover:scale-110" size={24} />
-          <div className="flex items-baseline gap-1 font-sans">
-            <span className="text-[#00C805] text-xl font-black tracking-tight">RH</span>
-            <span className="tracking-wider text-white font-bold text-base">FLOW</span>
+          <div className="flex items-center gap-1.5 font-sans">
+            <span className="text-[#00C805] text-xl font-black tracking-tight">ORBITRA</span>
+            <span className="px-1.5 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 text-[10px] font-mono font-bold tracking-wider">
+              $ORB
+            </span>
           </div>
         </Link>
         <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-[#0a0d12] border border-[#1a222d] rounded-full text-xs font-mono text-zinc-300">

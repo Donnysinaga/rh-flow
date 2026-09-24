@@ -871,7 +871,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                   <span className="text-[#00C805]">●</span> Robinhood Chain Verified
                 </h4>
                 <p className="text-[11px] text-zinc-400">
-                  RH FLOW automatically adds and connects to Robinhood Chain (ID: 4663) using ultra-fast RPC nodes.
+                  Orbitra automatically adds and connects to Robinhood Chain (ID: 4663) using ultra-fast RPC nodes.
                 </p>
               </div>
 

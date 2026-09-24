@@ -10,7 +10,7 @@ export const wagmiConfig = createConfig({
       shimDisconnect: true,
     }),
     coinbaseWallet({
-      appName: 'RH FLOW',
+      appName: 'Orbitra',
     }),
   ],
   transports: {
