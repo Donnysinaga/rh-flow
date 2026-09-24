@@ -548,13 +548,13 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           {isConnecting ? (
             <div className="py-10 flex flex-col items-center justify-center text-center space-y-4">
               <div className="relative">
-                <div className="w-18 h-18 rounded-2xl bg-[#1c1d22] border border-[#2e2f38] flex items-center justify-center p-3.5 shadow-2xl">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
                   {selectedWalletIcon ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img 
                       src={selectedWalletIcon} 
                       alt={selectedWalletName} 
-                      className="w-11 h-11 object-contain rounded-xl" 
+                      className="w-full h-full object-cover" 
                     />
                   ) : (
                     <span className="text-2xl">⚡</span>
@@ -641,12 +641,12 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                     className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#1c1d22] hover:bg-[#25262c] border border-transparent hover:border-[#343540] transition-all duration-150 group cursor-pointer text-left active:scale-[0.99]"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#141416] border border-[#2e2f38] flex items-center justify-center p-2 shrink-0 group-hover:border-[#3e404d] transition-colors">
+                      <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={wallet.icon}
                           alt={wallet.name}
-                          className="w-full h-full object-contain rounded-lg"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       <span className="font-semibold text-sm text-zinc-100 group-hover:text-white transition-colors">
@@ -657,11 +657,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                     <div className="flex items-center gap-2">
                       {wallet.badge && (
                         <span 
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                            wallet.badge === 'QR CODE'
-                              ? 'bg-[#0f2e1b] text-[#00C805] border border-[#00C805]/30'
-                              : 'bg-[#0f2e1b] text-[#00C805] border border-[#00C805]/30'
-                          }`}
+                          className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider bg-[#0f2e1b] text-[#00C805] border border-[#00C805]/30"
                         >
                           {wallet.badge}
                         </span>
@@ -679,7 +675,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#1c1d22] hover:bg-[#25262c] border border-transparent hover:border-[#343540] transition-all duration-150 group cursor-pointer text-left active:scale-[0.99]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#141416] border border-[#2e2f38] flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 transition-colors shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#282932] flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 transition-colors shrink-0">
                     <SearchIcon className="w-4 h-4" />
                   </div>
                   <span className="font-medium text-sm text-zinc-300 group-hover:text-white transition-colors">
@@ -736,40 +732,40 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                     href={getMetaMaskDeepLink(currentUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                    className="flex items-center gap-2.5 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={METAMASK_OFFICIAL_ICON} alt="MetaMask" className="w-5 h-5 object-contain" />
+                    <img src={METAMASK_OFFICIAL_ICON} alt="MetaMask" className="w-6 h-6 rounded-lg object-cover" />
                     <span className="text-xs text-zinc-300 group-hover:text-white font-medium">MetaMask</span>
                   </a>
                   <a
                     href={getOKXDeepLink(currentUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                    className="flex items-center gap-2.5 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={OKX_OFFICIAL_ICON} alt="OKX" className="w-5 h-5 object-contain" />
+                    <img src={OKX_OFFICIAL_ICON} alt="OKX" className="w-6 h-6 rounded-lg object-cover" />
                     <span className="text-xs text-zinc-300 group-hover:text-white font-medium">OKX Wallet</span>
                   </a>
                   <a
                     href={getPhantomDeepLink(currentUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                    className="flex items-center gap-2.5 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={PHANTOM_OFFICIAL_ICON} alt="Phantom" className="w-5 h-5 object-contain" />
+                    <img src={PHANTOM_OFFICIAL_ICON} alt="Phantom" className="w-6 h-6 rounded-lg object-cover" />
                     <span className="text-xs text-zinc-300 group-hover:text-white font-medium">Phantom</span>
                   </a>
                   <a
                     href={getTrustDeepLink(currentUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
+                    className="flex items-center gap-2.5 p-2.5 bg-[#1c1d22] hover:bg-[#25262c] rounded-xl border border-[#2e2f38] transition-colors group"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={TRUST_OFFICIAL_ICON} alt="Trust" className="w-5 h-5 object-contain" />
+                    <img src={TRUST_OFFICIAL_ICON} alt="Trust" className="w-6 h-6 rounded-lg object-cover" />
                     <span className="text-xs text-zinc-300 group-hover:text-white font-medium">Trust Wallet</span>
                   </a>
                 </div>
@@ -800,12 +796,12 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                       className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[#1c1d22] hover:bg-[#25262c] border border-transparent hover:border-[#343540] transition-colors group cursor-pointer text-left"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-[#141416] border border-[#2e2f38] flex items-center justify-center p-1.5 shrink-0">
+                        <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={wallet.icon}
                             alt={wallet.name}
-                            className="w-full h-full object-contain rounded"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                         <span className="font-medium text-xs text-zinc-200 group-hover:text-white">
