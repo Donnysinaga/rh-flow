@@ -201,6 +201,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
   const [telegram, setTelegram] = useState('');
   const [website, setWebsite] = useState('');
   const [creatorTaxBps, setCreatorTaxBps] = useState('100'); // 1% default
+  const [buybackEnabled, setBuybackEnabled] = useState(false); // Disabled by default
   const [selectedPair, setSelectedPair] = useState<PairedAsset>(PAIRED_ASSETS[0]);
   const [isPairDropdownOpen, setIsPairDropdownOpen] = useState(false);
   const [initialBuyEth, setInitialBuyEth] = useState('');
@@ -222,6 +223,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
     setTelegram('');
     setWebsite('');
     setCreatorTaxBps('100');
+    setBuybackEnabled(false);
     setInitialBuyEth('');
     setIsDeploying(false);
     setIsUploadingImage(false);
@@ -410,7 +412,7 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
         },
         creatorFeeRecipient: address as `0x${string}`,
         creatorTaxBps: parseInt(creatorTaxBps, 10) || 100,
-        buybackEnabled: true,
+        buybackEnabled: Boolean(buybackEnabled),
         expectedEconomics: '0x0000000000000000000000000000000000000000000000000000000000000000' as `0x${string}`,
         salt: randomSalt,
       };
@@ -924,6 +926,31 @@ export function LaunchTokenModal({ isOpen, onClose }: LaunchTokenModalProps) {
                       <option value="200">2.00% Tax</option>
                       <option value="300">3.00% Tax (Max)</option>
                     </select>
+                  </div>
+
+                  {/* Buyback Option (Default: Disabled / False) */}
+                  <div className="space-y-1 pt-2 border-t border-zinc-800/60">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="text-[11px] font-medium text-zinc-300 block">
+                          Automated Buyback Vault
+                        </label>
+                        <p className="text-[10px] text-zinc-500">
+                          {buybackEnabled ? 'Active (Buyback vault enabled)' : 'Disabled (No buyback vault applied)'}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setBuybackEnabled(!buybackEnabled)}
+                        className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer border ${
+                          buybackEnabled
+                            ? 'bg-[#00C805]/20 text-[#00C805] border-[#00C805]/40'
+                            : 'bg-zinc-800 text-zinc-400 border-zinc-700 hover:text-zinc-200'
+                        }`}
+                      >
+                        {buybackEnabled ? 'Active' : 'Off (No Buyback)'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
