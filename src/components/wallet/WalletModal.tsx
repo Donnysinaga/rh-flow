@@ -669,7 +669,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                         <img
                           src={wallet.icon}
                           alt={wallet.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       </div>
                       <span className="font-semibold text-sm text-zinc-100 group-hover:text-white transition-colors">
@@ -824,7 +824,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                           <img
                             src={wallet.icon}
                             alt={wallet.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <span className="font-medium text-xs text-zinc-200 group-hover:text-white">
