@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
-import { RobinhoodFeatherLogo } from '@/components/ui/RobinhoodLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 
 const XIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   // eslint-disable-next-line @next/next/no-img-element
@@ -28,7 +28,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           {/* Brand & Mission Statement */}
           <div className="md:col-span-6 space-y-2.5">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
+              <OrbitraLogo className="w-6 h-6" size={24} />
               <span className="text-[#00C805] font-mono text-lg font-black">ORBITRA</span>
               <span className="text-white font-bold text-sm tracking-wider">TERMINAL</span>
               <span className="text-[10px] px-2 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 font-semibold">
@@ -54,7 +55,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
-                  <RobinhoodFeatherLogo className="w-3 h-3" size={12} />
+                  <OrbitraLogo className="w-3.5 h-3.5" size={14} />
                   <span>Orbitra Protocol Architecture ↗</span>
                 </a>
               </li>

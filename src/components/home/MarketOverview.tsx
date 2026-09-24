@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 
 interface MarketOverviewProps {
   blockHeight?: string;
@@ -45,7 +45,7 @@ export function MarketOverview({
       <div className="bg-[#0a0d12] border border-[#1a222d] hover:border-[#00C805]/40 rounded-xl p-3.5 transition-all shadow-sm flex flex-col justify-between group">
         <div className="flex items-center justify-between text-zinc-400 text-[11px]">
           <span className="flex items-center gap-1.5">
-            <PonsLogo className="w-3.5 h-3.5" size={14} />
+            <OrbitraLogo className="w-3.5 h-3.5" size={14} />
             <span className="text-zinc-200 font-semibold">Orbitra Engine</span>
           </span>
           <span className="text-[10px] px-1.5 py-0.2 bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 rounded font-bold">Live</span>

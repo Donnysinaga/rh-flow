@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { WalletButton } from '../wallet/WalletButton';
 import { siteConfig } from '@/config/site';
 import { LaunchTokenModal } from '../launch/LaunchTokenModal';
-import { RobinhoodFeatherLogo } from '../ui/RobinhoodLogo';
+import { OrbitraLogo } from '../ui/OrbitraLogo';
 
 const XIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   // eslint-disable-next-line @next/next/no-img-element
@@ -31,7 +31,7 @@ export function Header() {
       {/* Brand Logo & Clean Network Pill */}
       <div className="flex items-center gap-4">
         <Link href="/" className="font-bold text-zinc-100 text-lg tracking-tight flex items-center gap-2.5 group cursor-pointer">
-          <RobinhoodFeatherLogo className="w-6 h-6 transition-transform group-hover:scale-110" size={24} />
+          <OrbitraLogo className="w-7 h-7 transition-transform group-hover:scale-110 shadow-sm" size={28} />
           <div className="flex items-center gap-1.5 font-sans">
             <span className="text-[#00C805] text-xl font-black tracking-tight">ORBITRA</span>
             <span className="px-1.5 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 text-[10px] font-mono font-bold tracking-wider">

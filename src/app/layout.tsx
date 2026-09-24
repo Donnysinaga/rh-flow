@@ -10,9 +10,19 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://orbitra.vercel.app'),
   title: 'Orbitra ($ORB) — Robinhood Chain Trading Intelligence',
-  description: 'Track tokens, wallets and market flow across Robinhood Chain using Orbitra ($ORB).',
-  icons: { icon: '/favicon.png' },
+  description: 'The premier decentralized liquidity terminal & fair-launch protocol on Robinhood Chain ($ORB).',
+  icons: { 
+    icon: '/favicon.png',
+    shortcut: '/favicon.ico',
+    apple: '/logo.png',
+  },
+  openGraph: {
+    title: 'Orbitra ($ORB) — Robinhood Chain Trading Intelligence',
+    description: 'Track tokens, wallets, and market liquidity across Robinhood Chain with Orbitra ($ORB).',
+    images: ['/orbitra-hero.jpg'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

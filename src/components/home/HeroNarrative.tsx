@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { PonsLogo } from '@/components/ui/PonsLogo';
+import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
 
 export function HeroNarrative() {
   const [activeTab, setActiveTab] = useState<'launches' | 'trading' | 'rwa'>('launches');
@@ -10,39 +10,39 @@ export function HeroNarrative() {
   const stories = {
     launches: {
       tag: 'FAIR LAUNCH PROTOCOL',
-      title: 'Orbitra Fair Curve & Automated Graduation',
-      lead: 'Every new token begins on a transparent mathematical bonding curve where the entire 1 Billion supply is minted into the contract with zero hidden dev allocations.',
+      title: 'Orbitra Bonding Engine & Autonomous Graduation',
+      lead: 'Every new token launched on Orbitra begins on a transparent mathematical bonding curve. 100% of the 1,000,000,000 token supply is locked into the automated contract with zero dev pre-mine and zero hidden team allocations.',
       details: [
-        'Deterministic Pricing: Token value grows predictably based strictly on real on-chain liquidity demand.',
-        'Automated Uniswap Migration: Upon hitting the funding milestone, the protocol locks all liquidity permanently into AMM pools.',
-        'Builder Incentives: Creator fee vaults and automated buybacks support sustainable project longevity.',
+        'Predictable Price Discovery: Token pricing is driven entirely by mathematical liquidity curves without artificial slippage or manual manipulation.',
+        'Autonomous AMM Graduation: Once the bonding target is fulfilled, liquidity is permanently migrated and locked into decentralized AMM pools.',
+        'Creator & Community Rewards: Built-in protocol fee distributions and automated liquidity locks preserve sustainable project longevity.',
       ],
-      icon: <PonsLogo className="w-4 h-4 shrink-0" size={16} />,
-      badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
+      icon: <OrbitraLogo className="w-4 h-4 shrink-0" size={16} />,
+      badgeColor: 'text-[#00C805] border-[#00C805]/30 bg-[#00C805]/10',
     },
     trading: {
-      tag: 'L2 EXECUTION',
-      title: 'High-Speed Non-Custodial Trading on Robinhood Chain',
-      lead: 'Execute swaps directly from your personal Web3 wallet with sub-second block confirmations and near-zero gas overhead.',
+      tag: 'L2 SPEED & FINALITY',
+      title: 'Sub-Second Non-Custodial Trading on Robinhood Chain',
+      lead: 'Execute swaps directly from your personal Web3 wallet (MetaMask, OKX, Phantom, WalletConnect, Binance, 1inch, Uniswap) with near-instant block finality and negligible gas costs.',
       details: [
-        'Non-Custodial Swaps: Your private keys and assets remain fully in your custody throughout every trade.',
-        'Anti-Bot Protection: Decaying opening tax protects genuine community participants against front-running algorithms.',
-        'Multi-Wallet Compatibility: Seamless plug-and-play support for MetaMask, OKX, Phantom, Coinbase, and mobile dApps.',
+        'Non-Custodial Swaps: Your private keys and digital assets remain exclusively under your control at all times.',
+        'Anti-MEV Front-Running Protection: Sequencer-level ordering safeguards community trades against predatory sandwich bots.',
+        'Universal Multi-Wallet Gateway: Instant plug-and-play connectivity supporting over 550+ Web3 wallet standards.',
       ],
-      icon: <span className="text-cyan-400 font-bold">⚡</span>,
-      badgeColor: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10',
+      icon: <span className="text-[#00C805] font-bold">⚡</span>,
+      badgeColor: 'text-[#00C805] border-[#00C805]/30 bg-[#00C805]/10',
     },
     rwa: {
-      tag: 'ECOSYSTEM EXPANSION',
-      title: 'Community Memecoins & Tokenized Real-World Assets',
-      lead: 'Robinhood Chain unifies rapid community token creation and tokenized equity assets into a single decentralized liquidity network.',
+      tag: 'CHAIN INTELLIGENCE',
+      title: 'Real-Time Flow Stream, Smart Money & On-Chain Analytics',
+      lead: 'Orbitra indexes the complete Robinhood Chain state in real time, delivering live transaction flows, whale movement alerts, and Blockscout-verified contract data directly to your dashboard.',
       details: [
-        'Community Innovations: Discover emerging tokens launched by creators and builders worldwide.',
-        'Decentralized Liquidity: Access price charts, depth, and transfer feeds as blocks are produced.',
-        'Unified Terminal: Track your personal portfolio, whale movements, and market volume in one streamlined interface.',
+        'Live Sequencer Stream: Monitor token transfers, mints, and DEX swaps the second blocks are minted by the L2 sequencer.',
+        'Smart Money Radar: Track high-performing addresses and detect fresh capital rotations across the Robinhood Chain ecosystem.',
+        'Unified Portfolio Manager: Real-time balance calculations, token valuations, and historical interaction logs in one terminal.',
       ],
-      icon: <span className="text-amber-400 font-bold">🏛️</span>,
-      badgeColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10',
+      icon: <span className="text-emerald-400 font-bold">🌐</span>,
+      badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
     },
   };
 
@@ -50,53 +50,87 @@ export function HeroNarrative() {
 
   return (
     <div className="w-full bg-[#0a0d12] border border-[#1a222d] rounded-2xl p-4 sm:p-5 font-mono text-xs transition-all shadow-sm">
-      {/* Header Bar with Narrative Tabs */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-[#1a222d] pb-3">
-        <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-[#00C805] animate-pulse" />
-          <span className="text-[11px] uppercase tracking-wider text-[#00C805] font-bold">
-            Ecosystem Architecture & Guidelines
-          </span>
+      {/* Visual Banner / Hero Header */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center pb-4 border-b border-[#1a222d]">
+        {/* Left Side: Artwork & Visual Emblem */}
+        <div className="lg:col-span-4 flex items-center gap-4 bg-[#0e1217] p-3.5 rounded-xl border border-[#1a222d]">
+          <div className="relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#00C805]/30 shadow-lg shadow-[#00C805]/10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/orbitra-hero.jpg"
+              alt="Orbitra Planet"
+              className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[#00C805] text-base sm:text-lg font-black tracking-tight font-sans">
+                ORBITRA
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/20 text-[10px] font-bold">
+                $ORB
+              </span>
+            </div>
+            <p className="text-[11px] text-zinc-400 font-sans leading-tight">
+              Decentralized Liquidity & Trading Terminal for Robinhood Chain
+            </p>
+            <div className="flex items-center gap-2 pt-0.5 text-[10px] text-zinc-500">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-[#00C805] animate-pulse" />
+              <span>Chain ID 4663 Active</span>
+            </div>
+          </div>
         </div>
 
-        {/* Narrative Category Switcher */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          <button
-            type="button"
-            onClick={() => setActiveTab('launches')}
-            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === 'launches'
-                ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
-            }`}
-          >
-            <PonsLogo className="w-3 h-3" size={12} />
-            <span>Fair Flow Launches</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('trading')}
-            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === 'trading'
-                ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
-            }`}
-          >
-            <span className="text-[#00C805]">⚡</span>
-            <span>Speed & Execution</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('rwa')}
-            className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === 'rwa'
-                ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
-            }`}
-          >
-            <span className="text-[#00C805]">🏛️</span>
-            <span>Ecosystem & Assets</span>
-          </button>
+        {/* Right Side: Narrative Category Switcher */}
+        <div className="lg:col-span-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <span className="text-[11px] uppercase tracking-wider text-[#00C805] font-bold flex items-center gap-1.5">
+              <span>●</span> Ecosystem Architecture
+            </span>
+            <p className="text-zinc-400 text-xs font-sans">
+              Explore the core protocols powering frictionless Web3 trading on Robinhood Chain.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 shrink-0">
+            <button
+              type="button"
+              onClick={() => setActiveTab('launches')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'launches'
+                  ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
+              }`}
+            >
+              <OrbitraLogo className="w-3.5 h-3.5" size={14} />
+              <span>Fair Launch</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('trading')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'trading'
+                  ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
+              }`}
+            >
+              <span className="text-[#00C805]">⚡</span>
+              <span>L2 Execution</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('rwa')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'rwa'
+                  ? 'bg-[#00C805]/10 text-[#00C805] border border-[#00C805]/30 font-bold shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-[#12171e]'
+              }`}
+            >
+              <span className="text-emerald-400">🌐</span>
+              <span>Chain Analytics</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -155,11 +189,11 @@ export function HeroNarrative() {
       {/* Clean Footer Metadata */}
       <div className="mt-3 pt-2.5 border-t border-[#1a222d] flex flex-wrap items-center justify-between gap-2 text-[10px] text-zinc-500 font-mono">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <span className="text-zinc-400">Pons v2 Fair Launchpad</span>
+          <span className="text-zinc-400">Orbitra ($ORB) Protocol</span>
           <span>•</span>
-          <span className="text-zinc-400">Robinhood Chain</span>
+          <span className="text-zinc-400">Robinhood Chain (EVM Layer 2)</span>
         </div>
-        <span className="text-zinc-400">Terminal v1.0.4</span>
+        <span className="text-zinc-400">Terminal v2.1.0</span>
       </div>
     </div>
   );
