@@ -40,6 +40,19 @@ export function Footer() {
               The premier decentralized trading terminal and intelligence hub for Robinhood Chain. 
               Built to provide fair launches, on-chain liquidity flow, and MEV-protected execution with zero simulated data.
             </p>
+            {siteConfig.CONTRACT_ADDRESS && (
+              <div className="pt-1 flex items-center gap-2">
+                <span className="text-zinc-500 font-mono text-[10px]">Official CA:</span>
+                <a
+                  href={`https://robinhoodchain.blockscout.com/token/${siteConfig.CONTRACT_ADDRESS}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-zinc-300 hover:text-[#00C805] font-mono text-[11px] transition-colors"
+                >
+                  {siteConfig.CONTRACT_ADDRESS} ↗
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Protocol & Resources Links */}

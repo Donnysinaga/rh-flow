@@ -2,10 +2,20 @@
 
 import { useState } from 'react';
 import { OrbitraLogo } from '@/components/ui/OrbitraLogo';
+import { siteConfig } from '@/config/site';
 
 export function HeroNarrative() {
   const [activeTab, setActiveTab] = useState<'launches' | 'trading' | 'rwa'>('launches');
   const [isExpanded, setIsExpanded] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const copyCA = () => {
+    if (siteConfig.CONTRACT_ADDRESS) {
+      navigator.clipboard.writeText(siteConfig.CONTRACT_ADDRESS);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const stories = {
     launches: {
@@ -52,8 +62,8 @@ export function HeroNarrative() {
     <div className="w-full bg-[#0a0d12] border border-[#1a222d] rounded-2xl p-4 sm:p-5 font-mono text-xs transition-all shadow-sm">
       {/* Visual Banner / Hero Header */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center pb-4 border-b border-[#1a222d]">
-        {/* Left Side: Artwork & Visual Emblem */}
-        <div className="lg:col-span-4 flex items-center gap-4 bg-[#0e1217] p-3.5 rounded-xl border border-[#1a222d]">
+        {/* Left Side: Artwork & Visual Emblem with Official CA */}
+        <div className="lg:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-[#0e1217] p-3.5 rounded-xl border border-[#1a222d]">
           <div className="relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#00C805]/30 shadow-lg shadow-[#00C805]/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -63,7 +73,7 @@ export function HeroNarrative() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-1.5 flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-[#00C805] text-base sm:text-lg font-black tracking-tight font-sans">
                 ORBITRA
@@ -75,15 +85,40 @@ export function HeroNarrative() {
             <p className="text-[11px] text-zinc-400 font-sans leading-tight">
               Decentralized Liquidity & Trading Terminal for Robinhood Chain
             </p>
-            <div className="flex items-center gap-2 pt-0.5 text-[10px] text-zinc-500">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-[#00C805] animate-pulse" />
-              <span>Chain ID 4663 Active</span>
-            </div>
+            
+            {/* Official Contract Address Pill */}
+            {siteConfig.CONTRACT_ADDRESS && (
+              <div className="pt-1 flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={copyCA}
+                  className="px-2 py-1 bg-[#141a22] hover:bg-[#1a232e] border border-[#1a222d] hover:border-[#00C805]/40 rounded-md text-[10px] font-mono text-zinc-300 flex items-center gap-1.5 transition-all cursor-pointer group"
+                  title="Click to copy full CA"
+                >
+                  <span className="text-[#00C805] font-bold">CA:</span>
+                  <span className="text-zinc-200">
+                    {siteConfig.CONTRACT_ADDRESS.slice(0, 6)}...{siteConfig.CONTRACT_ADDRESS.slice(-4)}
+                  </span>
+                  <span className="text-[#00C805] text-[10px]">
+                    {copied ? '✓ Copied' : '📋'}
+                  </span>
+                </button>
+                <a
+                  href={`https://robinhoodchain.blockscout.com/token/${siteConfig.CONTRACT_ADDRESS}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2 py-1 bg-[#141a22] hover:bg-[#1a232e] border border-[#1a222d] hover:border-[#00C805]/40 rounded-md text-[10px] font-mono text-zinc-400 hover:text-white transition-all flex items-center gap-1"
+                  title="View on Blockscout Explorer"
+                >
+                  <span>Blockscout ↗</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Right Side: Narrative Category Switcher */}
-        <div className="lg:col-span-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="lg:col-span-7 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[11px] uppercase tracking-wider text-[#00C805] font-bold flex items-center gap-1.5">
               <span>●</span> Ecosystem Architecture

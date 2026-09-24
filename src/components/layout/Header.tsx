@@ -43,6 +43,25 @@ export function Header() {
           <span className="w-1.5 h-1.5 rounded-full bg-[#00C805] animate-pulse"></span>
           <span>Robinhood Chain</span>
         </div>
+        {siteConfig.CONTRACT_ADDRESS && (
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(siteConfig.CONTRACT_ADDRESS);
+              const toast = document.createElement('div');
+              toast.className = 'fixed bottom-5 right-5 z-[99999] px-4 py-2 bg-[#00C805] text-black font-bold font-mono text-xs rounded-xl shadow-lg animate-in fade-in';
+              toast.textContent = 'Orbitra CA Copied to Clipboard!';
+              document.body.appendChild(toast);
+              setTimeout(() => toast.remove(), 2000);
+            }}
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-[#0a0d12] hover:bg-[#141a22] border border-[#1a222d] hover:border-[#00C805]/40 rounded-full text-[11px] font-mono text-zinc-300 transition-all cursor-pointer group"
+            title="Click to copy Orbitra ($ORB) Contract Address"
+          >
+            <span className="text-[#00C805] font-bold">CA:</span>
+            <span className="text-zinc-300">{`${siteConfig.CONTRACT_ADDRESS.slice(0, 6)}...${siteConfig.CONTRACT_ADDRESS.slice(-4)}`}</span>
+            <span className="text-zinc-500 group-hover:text-[#00C805] transition-colors text-[10px]">📋</span>
+          </button>
+        )}
       </div>
 
       {/* Right Navigation, Launch Button & Wallet */}

@@ -6,7 +6,7 @@ export const siteConfig = {
   DESCRIPTION: 'Track tokens, wallets and market flow across Robinhood Chain with Orbitra ($ORB).',
   LOGO_PNG: '/logo.png',
   FAVICON_PNG: '/favicon.ico',
-  CONTRACT_ADDRESS: '', // Configurable token CA if any
+  CONTRACT_ADDRESS: '0x2E7984bB885503ee21547F480DB0f3AEd3eD0249',
   X_URL: 'https://x.com/Orbitrawtf',
   TELEGRAM_URL: 'https://t.me/OrbitraHood',
   GITHUB_URL: '', // Configurable
